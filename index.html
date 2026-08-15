@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Arbab Advisory - Accounting &amp; Financial Advisory</title>
+<meta name="description" content="Arbab Advisory is the ACCA-qualified accounting and advisory practice of Abdur Rahman Khan - bookkeeping, tax, payroll, and business advice, handled personally." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500&display=swap" rel="stylesheet" />
+<script type="importmap">
+{ "imports": { "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm" } }
+</script>
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --background:#ffffff;
+  --foreground:#0a0a0a;
+  --brand:#2563c9;
+  --brand-deep:#0f2f63;
+  --brand-light:#5790e6;
+  --accent-teal:#0b6e97;
+  --surface:#f4f4f4;
+  --surface-card:#ffffff;
+  --ink:#0a0a0a;
+  --ink-soft:#717784;
+  --ghost:#d7dae1;
+  --hairline:#e6e8ec;
+  --on-brand:#ffffff;
+
+  --radius-card:1.5rem;
+  --radius-card-lg:2rem;
+  --radius-pill:62.5rem;
+  --radius-xl:0.75rem;
+
+  --ease-expo:cubic-bezier(.16,1,.3,1);
+  --ease-quart:cubic-bezier(.25,1,.5,1);
+  --ease-cubic:cubic-bezier(.65,0,.35,1);
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+*{margin:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+/* adaptive rem grid — scale down */
+@media (max-width:1920px){html{font-size:0.833333vw}}
+@media (max-width:1440px){html{font-size:1.111111vw}}
+@media (max-width:1024px){html{font-size:1.5625vw}}
+@media (max-width:640px) {html{font-size:4.444444vw}}
+
+body{
+  min-height:100vh;
+  background:var(--background);
+  color:var(--foreground);
+  font-family:"Onest",system-ui,sans-serif;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+img,svg,video{display:block;max-width:100%}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+ul,ol{list-style:none;padding:0}
+input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brand-light);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+html.is-locked{position:relative;overflow:hidden;height:100%}
+
+/* ============================================================
+   REVEAL PRIMITIVES
+   ============================================================ */
+.clip{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.14em}
+.clip>span{display:inline-block;transform:translateY(115%);opacity:0;will-change:transform,opacity}
+.clip.tight{padding-bottom:.12em}
+.clip.soft>span{transform:translateY(18px)}
+
+.inview{opacity:0;will-change:transform,opacity}
+
+/* ============================================================
+   PAGE SHELL
+   ============================================================ */
+main{width:100%;overflow-x:clip;padding:.5rem}
+@media (min-width:640px){main{padding:.75rem}}
+
+/* ============================================================
+   SHARED COMPONENTS
+   ============================================================ */
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.22em}
+.eyebrow::before{content:"";display:block;width:.375rem;height:.375rem;border-radius:var(--radius-pill)}
+.eyebrow.dark{color:var(--ink-soft)}
+.eyebrow.dark::before{background:var(--brand)}
+.eyebrow.light{color:rgba(255,255,255,.7)}
+.eyebrow.light::before{background:var(--brand-light)}
+
+.pill{
+  display:inline-flex;align-items:center;gap:.5rem;border-radius:var(--radius-pill);
+  padding:.875rem 1.75rem;font-size:.875rem;font-weight:500;text-transform:uppercase;
+  letter-spacing:.05em;transition:background-color .3s ease,color .3s ease,border-color .3s ease;
+}
+.pill svg{width:1rem;height:1rem;flex:none}
+.pill.light{background:#fff;color:var(--brand-deep)}
+.pill.light:hover{background:var(--brand-light);color:#fff}
+.pill.solid{background:var(--ink);color:#fff}
+.pill.solid:hover{background:var(--brand-deep)}
+.pill.outline{border:1px solid currentColor;color:var(--ink)}
+.pill.outline:hover{background:var(--ink);color:#fff}
+
+.arrow-btn{
+  display:grid;place-items:center;width:3rem;height:3rem;border-radius:var(--radius-pill);
+  border:1px solid transparent;transition:background-color .3s ease,border-color .3s ease,color .3s ease;
+}
+@media (min-width:640px){.arrow-btn{width:3.5rem;height:3.5rem}}
+.arrow-btn svg{width:1.25rem;height:1.25rem}
+.arrow-btn.outline{border-color:var(--hairline);background:transparent;color:var(--ink)}
+.arrow-btn.outline:hover{border-color:var(--ink)}
+.arrow-btn.solid{background:var(--ink);border-color:var(--ink);color:#fff}
+.arrow-btn.solid:hover{background:var(--brand-deep);border-color:var(--brand-deep)}
+.arrow-btn.prev svg{transform:scaleX(-1)}
+
+.dots{display:flex;align-items:center;gap:.5rem}
+.dots button{padding:.375rem;display:block}
+.dots button i{display:block;height:.375rem;width:.375rem;border-radius:var(--radius-pill);transition:width .35s var(--ease-expo),background-color .35s ease}
+.dots.dark button i{background:var(--ghost)}
+.dots.dark button[aria-current="true"] i{width:1.25rem;background:var(--ink)}
+.dots.light button i{background:rgba(255,255,255,.4)}
+.dots.light button[aria-current="true"] i{width:1.25rem;background:#fff}
+
+.wordmark{display:inline-flex;align-items:center}
+.brand-logo{height:6.5rem;width:auto;display:block}
+.brand-logo-white{filter:brightness(0) invert(1)}
+.brand-logo-lg{height:8rem}
+
+/* ============================================================
+   1) HEADER  (inside hero)
+   ============================================================ */
+.site-header{
+  position:relative;z-index:20;
+  display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;column-gap:1rem;
+  padding:1.5rem 1.5rem 0;font-size:.75rem;color:#fff;
+}
+@media (min-width:640px){.site-header{padding:2rem 2.5rem 0}}
+.hdr-nav{display:none;align-items:center;gap:1.5rem;justify-self:start;min-width:0}
+@media (min-width:1024px){.hdr-nav{display:flex}}
+.hdr-nav a{color:rgba(255,255,255,.9);transition:color .25s ease;white-space:nowrap}
+.hdr-nav a:hover{color:#fff}
+.hdr-brand{justify-self:center;display:flex;justify-content:center}
+.hdr-actions{justify-self:end;display:flex;align-items:center;gap:1rem;min-width:0}
+@media (min-width:640px){.hdr-actions{gap:1.25rem}}
+.hdr-cta{display:none;text-transform:uppercase;letter-spacing:.05em;color:#fff}
+.hdr-cta:hover{text-decoration:underline}
+@media (min-width:640px){.hdr-cta{display:inline-block}}
+.burger{
+  display:grid;place-items:center;gap:5px;width:2.5rem;height:2.5rem;border-radius:var(--radius-pill);
+  background:rgba(255,255,255,.22);
+  transition:background-color .3s ease;grid-auto-flow:row;align-content:center;
+}
+.burger:hover{background:rgba(255,255,255,.32)}
+.burger i{display:block;width:1rem;height:1px;background:#fff}
+
+/* ============================================================
+   2) HERO
+   ============================================================ */
+.hero{
+  position:relative;isolation:isolate;overflow:hidden;
+  border-radius:var(--radius-card-lg);
+  background:var(--brand-deep);color:var(--on-brand);
+  height:calc(100svh - 1rem);min-height:36rem;
+  display:flex;flex-direction:column;
+}
+@media (min-width:640px){.hero{height:calc(100svh - 1.5rem)}}
+.hero-bg{position:absolute;inset:0;z-index:-10;overflow:hidden}
+.hero-plate{position:absolute;left:0;right:0;top:-14%;height:112%;width:100%;will-change:transform}
+.hero-plate img{width:100%;height:100%;object-fit:cover}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,47,99,.1),rgba(15,47,99,0) 35%,rgba(15,47,99,.5))}
+
+.hero-title-wrap{padding:3.5rem 1.5rem 0}
+@media (min-width:640px){.hero-title-wrap{padding:5rem 2.5rem 0}}
+.hero-title{
+  font-size:clamp(2.5rem,10vw,7rem);font-weight:500;text-transform:uppercase;
+  line-height:.92;letter-spacing:-.02em;white-space:normal;max-width:56rem;
+  color:#fff;text-shadow:0 0.15rem 1.5rem rgba(15,47,99,.35);
+}
+
+.hero-bottom{
+  margin-top:auto;padding:0 1.5rem 2rem;
+  display:flex;flex-direction:column;gap:1.5rem;
+}
+@media (min-width:640px){
+  .hero-bottom{padding:0 2.5rem 2.5rem;flex-direction:row;justify-content:space-between;align-items:flex-end}
+}
+.hero-tagline{
+  font-size:2.4rem;font-weight:500;text-transform:uppercase;line-height:.95;
+  letter-spacing:-.02em;color:rgba(255,255,255,.85);
+}
+.hero-tagline .clip{display:block}
+
+.hero-cta-group{display:flex;flex-direction:column;align-items:flex-start;gap:1rem}
+@media (min-width:640px){.hero-cta-group{align-items:flex-end}}
+.glass{
+  border-radius:var(--radius-card);border:1px solid rgba(255,255,255,.18);
+  background:rgba(15,47,99,.35);padding:.75rem;
+  box-shadow:0 1.5rem 3rem rgba(15,47,99,.2);
+}
+.credential-chip{display:flex;gap:.75rem;align-items:center;will-change:transform,opacity}
+.credential-badge{
+  flex:none;width:3rem;height:3rem;border-radius:var(--radius-xl);overflow:hidden;background:#fff;
+}
+.credential-badge img{width:100%;height:100%;object-fit:cover;display:block}
+.credential-text{display:flex;flex-direction:column;gap:.1rem}
+.credential-text b{font-size:.8rem;font-weight:500}
+.credential-text span{font-size:.65rem;opacity:.8}
+
+/* ============================================================
+   3) TRUST
+   ============================================================ */
+.trust{
+  position:relative;isolation:isolate;overflow:hidden;
+  background:var(--background);padding:4rem 1.5rem;
+}
+@media (min-width:640px){.trust{padding:5rem 2.5rem 10rem}}
+.trust-top{position:relative;z-index:20;display:flex;flex-direction:column;gap:1.5rem}
+@media (min-width:640px){.trust-top{flex-direction:row;justify-content:space-between;align-items:flex-start}}
+.pct-badge{
+  width:7rem;height:7rem;border-radius:var(--radius-pill);background:var(--surface);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;
+  text-align:center;flex:none;will-change:transform,opacity;
+}
+@media (min-width:640px){.pct-badge{width:8rem;height:8rem}}
+.pct-badge img{width:2.5rem;height:2.5rem;border-radius:var(--radius-xl);object-fit:cover}
+@media (min-width:640px){.pct-badge img{width:2.75rem;height:2.75rem}}
+.pct-badge span{font-size:.6rem;color:var(--ink-soft);max-width:7em;line-height:1.35}
+
+.badge-card{
+  max-width:28rem;display:flex;gap:1rem;border-radius:var(--radius-card);
+  background:var(--surface);padding:1.25rem;will-change:transform,opacity;
+}
+@media (min-width:640px){.badge-card{gap:1.25rem;padding:1.5rem}}
+.badge-chip{
+  border-radius:var(--radius-xl);background:var(--background);padding:.75rem;
+  align-self:flex-start;flex:none;line-height:1;display:grid;place-items:center;
+}
+.badge-chip svg{width:1.5rem;height:1.5rem;color:var(--brand)}
+.badge-card h3{font-size:1.125rem;font-weight:500;line-height:1.3}
+.badge-card p{font-size:.75rem;color:var(--ink-soft);line-height:1.65;margin-top:.5rem}
+
+.ghost-title{
+  position:relative;z-index:0;pointer-events:none;user-select:none;
+  max-width:88rem;margin:3rem auto 0;
+  font-size:6.2vw;font-weight:500;text-transform:uppercase;line-height:1.05;letter-spacing:-.02em;
+  color:var(--ghost);
+}
+.ghost-row{display:flex;justify-content:space-between;align-items:baseline}
+.ghost-word{display:inline-block;will-change:transform}
+.ghost-word.ink{color:var(--ink)}
+
+.coach-holder{position:relative;z-index:10;display:flex;justify-content:center;margin-top:2.5rem}
+@media (min-width:640px){
+  .coach-holder{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin-top:0}
+}
+.coach-inview{width:14rem;will-change:transform,opacity}
+@media (min-width:640px){.coach-inview{width:17rem}}
+.coach-fig{
+  position:relative;aspect-ratio:3/4;
+  border-radius:var(--radius-card);background:var(--brand);overflow:hidden;
+  box-shadow:0 2rem 4rem rgba(15,47,99,.25);
+}
+.coach-fig img{width:100%;height:100%;object-fit:cover}
+.coach-cap{
+  position:absolute;left:.75rem;right:.75rem;bottom:.75rem;border-radius:var(--radius-xl);
+  background:rgba(15,47,99,.72);color:#fff;padding:.5rem .75rem;
+}
+.coach-cap b{display:block;font-size:.875rem;font-weight:500}
+.coach-cap span{display:block;font-size:.65rem;opacity:.8}
+
+.trust-controls{
+  position:relative;z-index:20;margin-top:3rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+@media (min-width:640px){.trust-controls{margin-top:6rem}}
+
+/* ============================================================
+   4) PROGRAMS
+   ============================================================ */
+.programs{background:var(--surface);padding:6rem 1.5rem}
+@media (min-width:640px){.programs{padding:6rem 2.5rem}}
+.programs h2,.stats h2,.testimonials h2{font-size:3rem;font-weight:500;line-height:.95;letter-spacing:-.02em;margin-top:1rem}
+.programs h2 .clip,.stats h2 .clip,.testimonials h2 .clip,.facilities h2 .clip{display:block}
+.services-banner{
+  position:relative;overflow:hidden;border-radius:var(--radius-card-lg);
+  height:26rem;display:flex;align-items:flex-end;will-change:transform,opacity;
+}
+@media (min-width:640px){.services-banner{height:36rem}}
+.services-banner-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.services-banner-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(15,47,99,.55), rgba(15,47,99,.1) 55%, rgba(15,47,99,0));
+}
+.services-banner-content{position:relative;z-index:1;padding:2rem}
+@media (min-width:640px){.services-banner-content{padding:2.5rem}}
+.services-banner-content h2{color:#fff;margin-top:0;text-shadow:0 0.15rem 1.5rem rgba(15,47,99,.45)}
+.program-list{margin-top:3.5rem}
+.program-row{border-top:1px solid var(--hairline);will-change:transform,opacity}
+.program-list li:last-child .program-row{border-bottom:1px solid var(--hairline)}
+.program-row a{
+  display:flex;align-items:center;gap:1.5rem;padding:1.75rem 0;
+  transition:background-color .3s ease;
+}
+.program-row a:focus-visible{background:var(--background)}
+.program-idx{width:2.5rem;flex:none;font-size:.875rem;font-weight:500;color:var(--ink-soft)}
+.program-body{flex:1;min-width:0}
+.program-body h3{font-size:1.5rem;font-weight:500;letter-spacing:-.02em;line-height:1.15}
+@media (min-width:640px){.program-body h3{font-size:1.875rem}}
+.program-body p{font-size:.875rem;color:var(--ink-soft);margin-top:.35rem}
+.program-arrow{
+  width:2.75rem;height:2.75rem;flex:none;border-radius:var(--radius-pill);
+  border:1px solid var(--hairline);display:grid;place-items:center;opacity:.55;will-change:transform,opacity;
+}
+.program-arrow svg{width:1rem;height:1rem}
+
+/* ============================================================
+   5) FACILITIES
+   ============================================================ */
+.facilities{
+  background:var(--background);border-radius:var(--radius-card-lg);
+  margin-top:-2.5rem;position:relative;z-index:1;
+  padding:4rem 1.5rem 5rem;
+}
+@media (min-width:640px){.facilities{padding:4rem 2.5rem 5rem}}
+.fac-grid{display:grid;grid-template-columns:1fr;align-items:end;gap:2.5rem}
+@media (min-width:768px){.fac-grid{grid-template-columns:1fr 1fr}}
+.fac-intro{max-width:24rem}
+.fac-icon-box{
+  width:4rem;height:4rem;border-radius:var(--radius-card);background:var(--brand-deep);
+  color:#fff;display:grid;place-items:center;will-change:transform,opacity;
+}
+.fac-icon-box svg{width:1.5rem;height:1.5rem}
+.facilities h2{font-size:3rem;font-weight:500;line-height:.95;letter-spacing:-.02em;margin-top:1.5rem}
+.fac-body{font-size:.875rem;color:var(--ink-soft);max-width:20rem;margin-top:1.5rem;line-height:1.65}
+.fac-cards{display:flex;align-items:flex-end;gap:1.25rem}
+.fac-card{flex:1;min-width:0;will-change:transform,opacity}
+.fac-card:nth-child(2){margin-bottom:2rem}
+.approach-tile{
+  border-radius:var(--radius-card);background:var(--surface);padding:1.75rem;
+  display:flex;flex-direction:column;gap:1rem;height:100%;will-change:transform;
+}
+.approach-icon{
+  width:2.75rem;height:2.75rem;border-radius:var(--radius-xl);background:var(--background);
+  color:var(--brand);display:grid;place-items:center;flex:none;
+}
+.approach-icon svg{width:1.25rem;height:1.25rem}
+.approach-tile h3{font-size:1.125rem;font-weight:500}
+.approach-tile p{font-size:.8125rem;color:var(--ink-soft);line-height:1.6}
+
+/* ============================================================
+   5b) PRICING
+   ============================================================ */
+.pricing{background:var(--surface);padding:5rem 1.5rem}
+@media (min-width:640px){.pricing{padding:6rem 2.5rem}}
+.pricing h2{font-size:3rem;font-weight:500;line-height:.95;letter-spacing:-.02em}
+.pricing h2 .clip{display:block}
+.pricing-sub{font-size:.9375rem;color:var(--ink-soft);max-width:32rem;margin-top:1.25rem;line-height:1.65}
+.pricing-note{font-size:.8125rem;color:var(--ink-soft);margin-top:2rem}
+.pricing-grid{display:grid;grid-template-columns:1fr;gap:1.25rem;margin-top:3rem}
+@media (min-width:768px){.pricing-grid{grid-template-columns:repeat(3,1fr)}}
+.price-card{
+  position:relative;display:flex;flex-direction:column;height:100%;
+  border-radius:var(--radius-card);background:var(--surface-card);padding:2rem;will-change:transform,opacity;
+}
+.price-card.featured{background:var(--brand-deep);color:#fff}
+.price-card .plan-badge{
+  position:absolute;top:-.75rem;right:2rem;background:var(--brand);color:#fff;
+  font-size:.65rem;font-weight:500;text-transform:uppercase;letter-spacing:.1em;
+  padding:.35rem .75rem;border-radius:var(--radius-pill);
+}
+.price-card h3{font-size:1.25rem;font-weight:500}
+.price-card .price{display:flex;align-items:baseline;gap:.35rem;margin-top:.75rem}
+.price-card .price b{font-size:2.5rem;font-weight:500;letter-spacing:-.02em}
+.price-card .price span{font-size:.8125rem;opacity:.65}
+.price-card .plan-desc{font-size:.8125rem;margin-top:.5rem;opacity:.7;line-height:1.5}
+.price-card:not(.featured) .plan-desc{color:var(--ink-soft);opacity:1}
+.price-card ul{margin-top:1.5rem;display:flex;flex-direction:column;gap:.75rem;flex:1}
+.price-card li{display:flex;align-items:flex-start;gap:.6rem;font-size:.8125rem;line-height:1.5}
+.price-card li svg{width:1rem;height:1rem;flex:none;margin-top:.15rem;color:var(--brand)}
+.price-card.featured li svg{color:var(--brand-light)}
+.price-card .pill{margin-top:1.75rem;justify-content:center;width:100%}
+
+/* ============================================================
+   6) STATS
+   ============================================================ */
+.stats{
+  background:var(--brand-deep);color:var(--on-brand);border-radius:var(--radius-card-lg);
+  margin-top:.75rem;padding:5rem 1.5rem;
+}
+@media (min-width:640px){.stats{padding:5rem 2.5rem}}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);column-gap:2rem;row-gap:3rem;margin-top:4rem}
+@media (min-width:1024px){.stat-grid{grid-template-columns:repeat(4,1fr)}}
+.stat-cell{border-top:1px solid rgba(255,255,255,.2);padding-top:1.25rem;will-change:transform,opacity}
+.stat-cell b{display:block;font-size:3.75rem;font-weight:500;line-height:1;letter-spacing:-.02em}
+@media (min-width:640px){.stat-cell b{font-size:4.5rem}}
+.stat-cell span{display:block;font-size:.875rem;color:rgba(255,255,255,.65);margin-top:.75rem}
+
+/* ============================================================
+   7) TESTIMONIALS
+   ============================================================ */
+.testimonials{background:var(--background);padding:5rem 1.5rem}
+@media (min-width:640px){.testimonials{padding:6rem 2.5rem}}
+.tgrid{display:grid;grid-template-columns:1fr;gap:1.25rem;margin-top:3.5rem}
+@media (min-width:768px){.tgrid{grid-template-columns:repeat(3,1fr)}}
+.tcard{
+  display:flex;flex-direction:column;justify-content:space-between;height:100%;
+  border-radius:var(--radius-card);background:var(--surface);padding:1.75rem;will-change:transform,opacity;
+}
+.tquote{font-size:2.25rem;color:var(--brand);line-height:1}
+.tcard blockquote{font-size:1.125rem;line-height:1.65;color:var(--ink);margin-top:1rem}
+.tcard figcaption{border-top:1px solid var(--hairline);padding-top:1rem;margin-top:1.5rem}
+.tcard figcaption b{display:block;font-weight:500}
+.tcard figcaption span{display:block;font-size:.875rem;color:var(--ink-soft)}
+
+/* ============================================================
+   8) FOOTER
+   ============================================================ */
+.site-footer{
+  background:var(--brand-deep);color:var(--on-brand);border-radius:var(--radius-card-lg);
+  margin-top:.75rem;padding:3.5rem 1.5rem;
+}
+@media (min-width:640px){.site-footer{padding:4rem 2.5rem}}
+.foot-cta{
+  border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:3.5rem;
+  display:flex;flex-direction:column;gap:2rem;
+}
+@media (min-width:640px){.foot-cta{flex-direction:row;justify-content:space-between;align-items:flex-end}}
+.foot-cta p{font-size:3.75rem;font-weight:500;line-height:.92;letter-spacing:-.02em}
+.foot-cta p .clip{display:block}
+.foot-cta .pill-wrap{will-change:transform,opacity}
+
+.foot-cols{display:grid;grid-template-columns:1fr;gap:2.5rem;padding:3.5rem 0}
+@media (min-width:768px){.foot-cols{grid-template-columns:1.4fr 1fr 1fr}}
+.foot-brand{max-width:20rem}
+.foot-brand .brand-logo{height:6rem}
+.foot-brand p{font-size:.875rem;color:rgba(255,255,255,.65);margin-top:1rem;line-height:1.65}
+.foot-brand address{font-style:normal;margin-top:1.5rem;color:rgba(255,255,255,.8);font-size:.875rem;display:flex;flex-direction:column;gap:.35rem}
+.foot-brand address a:hover{color:#fff;text-decoration:underline}
+.foot-brand address .muted{color:rgba(255,255,255,.55)}
+.foot-col h4{font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.5)}
+.foot-col ul{margin-top:1.25rem;display:flex;flex-direction:column;gap:.75rem;font-size:.875rem;color:rgba(255,255,255,.8)}
+.foot-col a:hover{color:#fff}
+
+.foot-bottom{
+  border-top:1px solid rgba(255,255,255,.15);padding-top:2rem;
+  font-size:.875rem;color:rgba(255,255,255,.6);
+  display:flex;flex-direction:column;gap:1.25rem;
+}
+@media (min-width:640px){.foot-bottom{flex-direction:row;justify-content:space-between;align-items:center}}
+.foot-bottom nav{display:flex;gap:1.25rem}
+.foot-bottom a:hover{color:#fff}
+
+/* ============================================================
+   MENU OVERLAY
+   ============================================================ */
+.menu{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;pointer-events:none}
+.menu.open{pointer-events:auto}
+.menu-backdrop{position:absolute;inset:0;background:var(--brand-deep);opacity:0;will-change:opacity}
+.menu-panel{
+  position:relative;display:flex;flex-direction:column;height:100%;color:#fff;
+  padding:.5rem;opacity:0;will-change:transform,opacity;
+}
+@media (min-width:640px){.menu-panel{padding:.75rem}}
+.menu-inner{display:flex;flex-direction:column;height:100%;padding:1.5rem}
+@media (min-width:640px){.menu-inner{padding:2rem 2.5rem}}
+.menu-top{display:flex;align-items:center;justify-content:space-between}
+.icon-btn{
+  width:2.5rem;height:2.5rem;display:grid;place-items:center;border-radius:var(--radius-pill);
+  background:rgba(255,255,255,.15);transition:background-color .3s ease;
+}
+.icon-btn:hover{background:rgba(255,255,255,.25)}
+.icon-btn svg{width:1.1rem;height:1.1rem;will-change:transform}
+.menu-nav{flex:1;display:flex;flex-direction:column;justify-content:center;gap:.5rem}
+.menu-nav a{
+  display:block;font-size:3rem;font-weight:500;letter-spacing:-.02em;line-height:1.05;
+  transition:color .25s ease;will-change:transform,opacity;
+}
+@media (min-width:640px){.menu-nav a{font-size:4.5rem}}
+.menu-nav a:hover{color:var(--brand-light)}
+.menu-bottom{
+  border-top:1px solid rgba(255,255,255,.15);padding-top:2rem;
+  display:flex;flex-direction:column;gap:1.5rem;
+}
+@media (min-width:640px){.menu-bottom{flex-direction:row;justify-content:space-between;align-items:center}}
+.menu-bottom nav{display:flex;gap:1.25rem;font-size:.875rem;color:rgba(255,255,255,.7)}
+.menu-bottom nav a:hover{color:#fff}
+
+/* ============================================================
+   CONTACT MODAL
+   ============================================================ */
+.modal{
+  position:fixed;inset:0;z-index:90;display:flex;justify-content:center;align-items:flex-end;
+  padding:.75rem;pointer-events:none;
+}
+@media (min-width:640px){.modal{align-items:center;padding:1.5rem}}
+.modal.open{pointer-events:auto}
+.modal-backdrop{
+  position:absolute;inset:0;background:rgba(15,47,99,.55);opacity:0;will-change:opacity;
+}
+.modal-panel{
+  position:relative;width:100%;max-height:92svh;overflow-y:auto;
+  border-radius:var(--radius-card-lg);background:var(--surface-card);color:var(--ink);
+  padding:1.5rem;opacity:0;will-change:transform,opacity;
+  box-shadow:0 2.5rem 5rem rgba(15,47,99,.35);
+}
+@media (min-width:640px){.modal-panel{max-width:32rem;padding:2rem}}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
+.modal-head h2{font-size:2.25rem;font-weight:500;line-height:.95;letter-spacing:-.02em;margin-top:.75rem}
+@media (min-width:640px){.modal-head h2{font-size:3rem}}
+.modal-head h2 .clip{display:block}
+.modal-close{
+  width:2.5rem;height:2.5rem;flex:none;display:grid;place-items:center;border-radius:var(--radius-pill);
+  background:var(--surface);transition:background-color .3s ease;
+}
+.modal-close:hover{background:var(--hairline)}
+.modal-close svg{width:1.1rem;height:1.1rem;will-change:transform}
+.modal-form{margin-top:1.75rem;display:flex;flex-direction:column;gap:1rem}
+.field{display:flex;flex-direction:column;gap:.5rem}
+.field label{font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.18em;color:var(--ink-soft)}
+.field input,.field textarea{
+  width:100%;border-radius:var(--radius-xl);border:1px solid var(--hairline);
+  background:var(--background);padding:.75rem 1rem;font-size:.875rem;resize:vertical;
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+.field input:focus,.field textarea:focus{
+  outline:none;border-color:var(--brand-light);box-shadow:0 0 0 2px rgba(87,144,230,.35);
+}
+.submit-btn{
+  align-self:flex-start;border-radius:var(--radius-pill);background:var(--ink);color:#fff;
+  padding:.875rem 1.75rem;font-size:.875rem;font-weight:500;text-transform:uppercase;letter-spacing:.05em;
+  transition:background-color .3s ease,opacity .3s ease;
+}
+.submit-btn:hover{background:var(--brand-deep)}
+.submit-btn[disabled]{opacity:.55;cursor:default}
+.modal-success{
+  margin-top:2rem;border-radius:var(--radius-card);background:var(--surface);
+  padding:1.5rem;text-align:center;display:none;flex-direction:column;align-items:center;gap:.75rem;
+}
+.modal-success.show{display:flex}
+.success-check{
+  width:3rem;height:3rem;border-radius:var(--radius-pill);background:var(--brand);
+  display:grid;place-items:center;color:#fff;
+}
+.success-check svg{width:1.35rem;height:1.35rem}
+.modal-success h3{font-size:1.125rem;font-weight:500}
+.modal-success p{font-size:.875rem;color:var(--ink-soft);line-height:1.6}
+.modal-success .pill{margin-top:.5rem}
+
+/* ============================================================
+   LOADER
+   ============================================================ */
+.loader{
+  position:fixed;inset:0;z-index:200;background:var(--brand-deep);color:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;
+  transform:translateY(0);will-change:transform;
+}
+.loader-mark{display:inline-flex;align-items:center;opacity:0;will-change:transform,opacity}
+.loader-track{width:10rem;height:1px;border-radius:var(--radius-pill);background:rgba(255,255,255,.2);overflow:hidden}
+.loader-fill{height:100%;width:100%;background:#fff;transform:scaleX(0);transform-origin:left}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="hero-plate" id="heroPlate">
+        <img src="images/arbab hero.png"
+             alt="Portrait against a clear blue sky" fetchpriority="high" decoding="async" />
+      </div>
+      <div class="hero-overlay"></div>
+    </div>
+
+    <header class="site-header">
+      <nav class="hdr-nav">
+        <a href="#about" data-scroll>About</a>
+        <a href="#services" data-scroll>Services</a>
+        <a href="#approach" data-scroll>Approach</a>
+        <a href="#pricing" data-scroll>Pricing</a>
+      </nav>
+      <div class="hdr-brand">
+        <span class="wordmark">
+          <img class="brand-logo" src="images/logo.png" alt="Arbab Advisory" />
+        </span>
+      </div>
+      <div class="hdr-actions">
+        <button type="button" class="hdr-cta" data-open-modal>Book a Consultation</button>
+        <button type="button" class="burger" data-open-menu aria-label="Open menu">
+          <i></i><i></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="hero-title-wrap">
+      <h1 class="hero-title" id="hero-title"></h1>
+    </div>
+
+    <div class="hero-bottom">
+      <p class="hero-tagline" id="hero-tagline"></p>
+
+      <div class="hero-cta-group">
+        <div class="glass credential-chip inview" id="credentialChip"
+             data-inview='{"from":{"opacity":0,"y":28},"to":{"opacity":1,"y":0},"config":{"tension":200,"friction":26},"delayIn":650}'>
+          <span class="credential-badge"><img src="images/ACCA_logo.svg" alt="ACCA logo" /></span>
+          <div class="credential-text">
+            <b>ACCA Qualified</b>
+            <span>Chartered Certified Accountant</span>
+          </div>
+        </div>
+
+        <div class="pill-wrap inview" id="heroCtaWrap"
+             data-inview='{"from":{"opacity":0,"y":20},"to":{"opacity":1,"y":0},"config":{"tension":200,"friction":24},"delayIn":780}'>
+          <button type="button" class="pill light" data-open-modal>
+            Book a Consultation
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="trust" id="about">
+    <div class="trust-top">
+      <div class="pct-badge inview" data-inview='{"from":{"opacity":0,"scale":0.9},"to":{"opacity":1,"scale":1},"config":{"tension":220,"friction":22}}'>
+        <img src="images/ACCA_logo.svg" alt="ACCA logo" /><span>Qualified Chartered Certified Accountant</span>
+      </div>
+      <article class="badge-card inview" data-inview='{"from":{"opacity":0,"y":24},"to":{"opacity":1,"y":0},"config":{"tension":200,"friction":26},"delayIn":120}'>
+        <div class="badge-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <div>
+          <h3>Straightforward accounting, personally handled</h3>
+          <p>Abdur Rahman Khan is an ACCA-qualified accountant supporting small businesses and individuals with bookkeeping, tax, and financial advice - no jargon, and no hand-offs to someone junior.</p>
+        </div>
+      </article>
+    </div>
+
+    <h2 class="ghost-title" id="trust-title">
+      <div class="ghost-row">
+        <span class="ghost-word" data-px="-3,3"></span>
+        <span class="ghost-word" data-px="3,-3"></span>
+      </div>
+      <div class="ghost-row">
+        <span class="ghost-word" data-px="-2,4"></span>
+        <span class="ghost-word" data-px="4,-3"></span>
+      </div>
+    </h2>
+
+    <div class="coach-holder">
+      <div class="coach-inview inview" data-inview='{"from":{"opacity":0,"y":60,"scale":0.92},"to":{"opacity":1,"y":0,"scale":1},"config":{"tension":170,"friction":26}}'>
+        <figure class="coach-fig">
+          <img src="images/arbab3.png" alt="Abdur Rahman Khan" loading="lazy" decoding="async" />
+          <figcaption class="coach-cap">
+            <b>Abdur Rahman Khan</b><span>ACCA Qualified Accountant</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICES ============ -->
+  <section class="programs" id="services">
+    <div class="services-banner inview"
+         data-inview='{"from":{"opacity":0,"scale":0.97},"to":{"opacity":1,"scale":1},"config":{"tension":200,"friction":24}}'>
+      <img class="services-banner-img" src="images/arbab2.png" alt="Accounting concepts illustrated around Abdur Rahman Khan" loading="lazy" decoding="async" />
+      <div class="services-banner-overlay"></div>
+      <div class="services-banner-content">
+        <h2 id="programs-title"></h2>
+      </div>
+    </div>
+    <ul class="program-list" id="programList"></ul>
+  </section>
+
+  <!-- ============ APPROACH ============ -->
+  <section class="facilities" id="approach">
+    <div class="fac-grid">
+      <div class="fac-intro">
+        <div class="fac-icon-box inview"
+             data-inview='{"from":{"opacity":0,"scale":0.85},"to":{"opacity":1,"scale":1},"config":{"tension":240,"friction":20}}'>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 6h7v7"/></svg>
+        </div>
+        <h2 id="facilities-title"></h2>
+        <p class="fac-body" id="facilities-body"></p>
+      </div>
+
+      <div class="fac-cards" id="facCards"></div>
+    </div>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section class="pricing" id="pricing">
+    <h2 id="pricing-title"></h2>
+    <p class="pricing-sub">Fixed monthly fees, agreed upfront — no surprise invoices. Every plan includes direct access to Abdur, not a call centre.</p>
+    <div class="pricing-grid" id="pricingGrid"></div>
+    <p class="pricing-note">Every business is different — the figures above are a starting point. Final pricing is confirmed after a free consultation.</p>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer" id="contact">
+    <div class="foot-cta">
+      <div>
+        <p id="footer-cta-title"></p>
+      </div>
+      <div class="pill-wrap inview" data-inview='{"from":{"opacity":0,"y":20},"to":{"opacity":1,"y":0},"config":{"tension":200,"friction":24},"delayIn":150}'>
+        <button type="button" class="pill light" data-open-modal>
+          Book a Consultation
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="foot-cols">
+      <div class="foot-brand">
+        <span class="wordmark">
+          <img class="brand-logo brand-logo-white" src="images/logo.png" alt="Arbab Advisory" />
+        </span>
+        <p>Arbab Advisory is the accounting and advisory practice of Abdur Rahman Khan, ACCA - bookkeeping, tax, payroll, and financial advice for small businesses and individuals.</p>
+        <address>
+          <a href="mailto:abdur@arbabadvisory.com">abdur@arbabadvisory.com</a>
+        </address>
+      </div>
+
+      <nav class="foot-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#bookkeeping">Bookkeeping &amp; Accounts</a></li>
+          <li><a href="#tax">Tax &amp; VAT Returns</a></li>
+          <li><a href="#payroll">Payroll Services</a></li>
+          <li><a href="#advisory">Business Advisory</a></li>
+        </ul>
+      </nav>
+      <nav class="foot-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#about" data-scroll>About</a></li>
+          <li><a href="#services" data-scroll>Services</a></li>
+          <li><a href="#approach" data-scroll>Approach</a></li>
+          <li><a href="#pricing" data-scroll>Pricing</a></li>
+          <li><a href="#contact" data-scroll>Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="foot-bottom">
+      <span>© 2026 Arbab Advisory. All rights reserved.</span>
+      <nav aria-label="Social">
+        <a href="#linkedin">LinkedIn</a>
+      </nav>
+      <nav aria-label="Legal">
+        <a href="#privacy">Privacy</a><a href="#terms">Terms</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<!-- ============ MENU OVERLAY ============ -->
+<div class="menu" id="menu" aria-hidden="true">
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+  <div class="menu-panel" id="menuPanel">
+    <div class="menu-inner">
+      <div class="menu-top">
+        <span class="wordmark">
+          <img class="brand-logo brand-logo-white" src="images/logo.png" alt="Arbab Advisory" />
+        </span>
+        <button type="button" class="icon-btn" id="menuClose" aria-label="Close menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+
+      <nav class="menu-nav" id="menuNav">
+        <a href="#about" data-scroll data-menu-link>About</a>
+        <a href="#services" data-scroll data-menu-link>Services</a>
+        <a href="#approach" data-scroll data-menu-link>Approach</a>
+        <a href="#pricing" data-scroll data-menu-link>Pricing</a>
+        <a href="#contact" data-scroll data-menu-link>Contact</a>
+      </nav>
+
+      <div class="menu-bottom">
+        <button type="button" class="pill light" id="menuBook">
+          Book a Consultation
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <nav aria-label="Social">
+          <a href="#instagram">Instagram</a><a href="#x">X</a><a href="#youtube">YouTube</a><a href="#linkedin">LinkedIn</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CONTACT MODAL ============ -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-backdrop" id="modalBackdrop"></div>
+  <div class="modal-panel" id="modalPanel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-head">
+      <div>
+        <span class="eyebrow dark">Book a consultation</span>
+        <h2 id="modal-title"></h2>
+      </div>
+      <button type="button" class="modal-close" id="modalClose" aria-label="Close dialog">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <form class="modal-form" id="modalForm" novalidate>
+      <div class="field">
+        <label for="f-name">Full name</label>
+        <input id="f-name" name="name" type="text" placeholder="Alex Rivera" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label for="f-email">Email</label>
+        <input id="f-email" name="email" type="email" placeholder="you@email.com" autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for="f-msg">What do you need help with?</label>
+        <textarea id="f-msg" name="message" rows="3" placeholder="I need help getting my accounts and tax return sorted before the deadline…"></textarea>
+      </div>
+      <button type="submit" class="submit-btn" id="submitBtn">Request a consultation</button>
+    </form>
+
+    <div class="modal-success" id="modalSuccess">
+      <div class="success-check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <h3>Request received</h3>
+      <p id="successText"></p>
+      <button type="button" class="pill solid" id="successDone">
+        Done
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ LOADER ============ -->
+<div class="loader" id="loader">
+  <span class="loader-mark" id="loaderMark">
+    <img class="brand-logo brand-logo-lg brand-logo-white" src="images/logo.png" alt="Arbab Advisory" />
+  </span>
+  <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
+</div>
+
+<script type="module">
+import Lenis from 'lenis';
+
+/* ============================================================
+   CONSTANTS
+   ============================================================ */
+const FONT_BASE = 16, BASE_W = 1920, COEF = 0.6666;
+const MIN_VISIBLE_MS = 1400, MAX_VISIBLE_MS = 2600, EXIT_MS = 850;
+const EASE = {
+  expo:  'cubic-bezier(.16,1,.3,1)',
+  quart: 'cubic-bezier(.25,1,.5,1)',
+  cubic: 'cubic-bezier(.65,0,.35,1)',
+};
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const canHover = () => window.innerWidth > 768;
+
+window.scrollTo(0, 0);
+
+/* ============================================================
+   ADAPTIVE REM GRID (scale-up above 1920)
+   ============================================================ */
+function applyRootFontSize(){
+  const root = document.documentElement;
+  const reduction = ((BASE_W - window.innerWidth) / BASE_W) * 100 * COEF;
+  const size = FONT_BASE - (FONT_BASE * reduction) / 100;
+  if (size > FONT_BASE) root.style.fontSize = size + 'px';
+  else root.style.removeProperty('font-size');
+}
+applyRootFontSize();
+window.addEventListener('resize', applyRootFontSize);
+
+/* ============================================================
+   LENIS
+   ============================================================ */
+const lenis = new Lenis({ smoothWheel: true });
+let locks = 0;
+function lockScroll(){
+  locks++;
+  lenis.stop();
+  document.documentElement.classList.add('is-locked');
+}
+function unlockScroll(){
+  locks = Math.max(0, locks - 1);
+  if (locks === 0){
+    lenis.start();
+    document.documentElement.classList.remove('is-locked');
+  }
+}
+
+/* ============================================================
+   SPRING ENGINE
+   ============================================================ */
+const springs = [];
+function springGroup(initial, config, render){
+  const keys = Object.keys(initial);
+  const x = { ...initial }, v = {}, target = { ...initial };
+  keys.forEach(k => v[k] = 0);
+  const obj = {
+    active: false,
+    x,
+    to(next){ Object.assign(target, next); obj.active = true; },
+    set(next){ Object.assign(x, next); Object.assign(target, next); keys.forEach(k => v[k] = 0); obj.active = false; render(x); },
+    update(dt){
+      if (!obj.active) return;
+      let steps = Math.max(1, Math.ceil(dt / (1/120)));
+      const h = dt / steps;
+      let moving = false;
+      while (steps--){
+        for (const k of keys){
+          const a = -config.tension * (x[k] - target[k]) - config.friction * v[k];
+          v[k] += a * h;
+          x[k] += v[k] * h;
+        }
+      }
+      for (const k of keys){
+        if (Math.abs(v[k]) > 0.02 || Math.abs(x[k] - target[k]) > 0.002) moving = true;
+      }
+      if (!moving){ for (const k of keys){ x[k] = target[k]; v[k] = 0; } obj.active = false; }
+      render(x);
+    }
+  };
+  render(x);
+  springs.push(obj);
+  return obj;
+}
+
+/* transform renderer helper */
+function tf(el, s){
+  const parts = [];
+  if ('x' in s) parts.push(`translateX(${s.x}px)`);
+  if ('y' in s) parts.push(`translateY(${s.y}px)`);
+  if ('scale' in s) parts.push(`scale(${s.scale})`);
+  if ('rotate' in s) parts.push(`rotate(${s.rotate}deg)`);
+  if (parts.length) el.style.transform = parts.join(' ');
+  if ('opacity' in s) el.style.opacity = s.opacity;
+}
+
+/* ============================================================
+   PARALLAX REGISTRY
+   ============================================================ */
+const parallaxItems = [];
+function registerParallax(section, apply){
+  const item = { section, apply, active: false };
+  const io = new IntersectionObserver((entries) => {
+    item.active = entries[0].isIntersecting;
+  }, { rootMargin: '25% 0px 25% 0px' });
+  io.observe(section);
+  parallaxItems.push(item);
+}
+function progressOf(section){
+  const r = section.getBoundingClientRect();
+  const vh = window.innerHeight;
+  const p = (vh - r.top) / (vh + r.height);
+  return Math.min(1, Math.max(0, p));
+}
+function updateParallax(){
+  for (const item of parallaxItems) if (item.active) item.apply(progressOf(item.section));
+}
+
+/* ============================================================
+   MAIN RAF LOOP
+   ============================================================ */
+let last = performance.now();
+function raf(t){
+  const dt = Math.min(0.05, (t - last) / 1000);
+  last = t;
+  lenis.raf(t);
+  for (const s of springs) s.update(dt);
+  updateParallax();
+  requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+/* ============================================================
+   TEXT REVEAL PRIMITIVES
+   ============================================================ */
+function buildClips(container, items, { block = false, tight = false, soft = false } = {}){
+  container.textContent = '';
+  items.forEach((text, i) => {
+    const clip = document.createElement('span');
+    clip.className = 'clip' + (tight ? ' tight' : '') + (soft ? ' soft' : '');
+    if (block) clip.style.display = 'block';
+    const inner = document.createElement('span');
+    inner.textContent = text;
+    clip.appendChild(inner);
+    container.appendChild(clip);
+    if (!block && i < items.length - 1) container.appendChild(document.createTextNode(' '));
+  });
+  return [...container.querySelectorAll('.clip')];
+}
+
+function playReveal(container, { stagger = 120, duration = 950, easing = EASE.expo, delay = 0, fromY = '115%' } = {}){
+  const clips = [...container.querySelectorAll('.clip')];
+  clips.forEach(c => {
+    const inner = c.firstElementChild;
+    inner.style.transition = 'none';
+    inner.style.transform = `translateY(${fromY})`;
+    inner.style.opacity = '0';
+  });
+  void container.offsetWidth; // reflow
+  clips.forEach((c, i) => {
+    const inner = c.firstElementChild;
+    const d = delay + i * stagger;
+    inner.style.transition = `transform ${duration}ms ${easing} ${d}ms, opacity ${duration}ms ${easing} ${d}ms`;
+    inner.style.transform = 'translateY(0)';
+    inner.style.opacity = '1';
+  });
+}
+
+/* ============================================================
+   INVIEW
+   ============================================================ */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    io.unobserve(entry.target);
+    const cfg = entry.target._inview;
+    setTimeout(() => cfg.spring.to(cfg.to), cfg.delayIn || 0);
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -5% 0px' });
+
+function setupInview(el, opts){
+  const from = opts.from, to = opts.to;
+  const spring = springGroup({ ...from }, opts.config || { tension: 200, friction: 26 }, (s) => tf(el, s));
+  el._inview = { spring, to, delayIn: opts.delayIn || 0 };
+  el.style.opacity = from.opacity ?? 1;
+  io.observe(el);
+  return spring;
+}
+function initInviewAttributes(root = document){
+  root.querySelectorAll('[data-inview]').forEach(el => {
+    if (el._inview) return;
+    setupInview(el, JSON.parse(el.getAttribute('data-inview')));
+  });
+}
+
+/* ============================================================
+   HOVER SPRING
+   ============================================================ */
+function hoverSpring(trigger, target, from, to, config){
+  const spring = springGroup({ ...from }, config, (s) => tf(target, s));
+  trigger.addEventListener('pointerenter', () => { if (canHover()) spring.to(to); });
+  trigger.addEventListener('pointerleave', () => { if (canHover()) spring.to(from); });
+  trigger.addEventListener('focusin', () => { if (canHover()) spring.to(to); });
+  trigger.addEventListener('focusout', () => { if (canHover()) spring.to(from); });
+  return spring;
+}
+
+const ARROW_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
+
+/* ============================================================
+   DATA
+   ============================================================ */
+const ABOUT_HEADLINE = ['Precise', 'Honest', 'Clear', 'Always'];
+
+const SERVICES = [
+  { idx:'01', name:'Bookkeeping & Accounts', desc:'Accurate books and year-end accounts, kept current all year round.', href:'#bookkeeping' },
+  { idx:'02', name:'Tax & VAT Returns',      desc:'Self-assessment, corporation tax, and VAT - filed on time, every time.', href:'#tax' },
+  { idx:'03', name:'Payroll Services',       desc:'Payroll runs, payslips, and pension compliance handled end-to-end.', href:'#payroll' },
+  { idx:'04', name:'Business Advisory',      desc:'Forecasts, structuring, and financial decisions you can act on with confidence.', href:'#advisory' },
+];
+
+const APPROACH_TILES = [
+  {
+    name:'Fixed-Fee Clarity',
+    desc:'Every engagement is scoped and quoted upfront, so there are no surprises on your invoice.',
+    icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/>'
+  },
+  {
+    name:'Deadlines, Owned',
+    desc:'Filing dates are tracked and chased on your behalf - you\'ll never miss a deadline again.',
+    icon:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M9 15l2 2 4-4"/>'
+  },
+];
+
+const PLANS = [
+  {
+    name: 'Sole Trader',
+    price: '£49', period: '/mo',
+    desc: 'For freelancers and sole traders who just need the basics covered.',
+    features: [
+      'Bookkeeping (up to 100 transactions/mo)',
+      'Annual accounts',
+      'Self-assessment tax return',
+      'Email & phone support',
+    ],
+    featured: false,
+  },
+  {
+    name: 'Limited Company',
+    price: '£99', period: '/mo',
+    desc: 'The most popular plan for small limited companies.',
+    features: [
+      'Everything in Sole Trader',
+      'Corporation tax return',
+      'Confirmation statement filing',
+      'VAT returns (quarterly)',
+      'Payroll for up to 3 employees',
+    ],
+    featured: true,
+  },
+  {
+    name: 'Growth & Advisory',
+    price: '£199', period: '/mo',
+    desc: 'For growing businesses that want a finance partner, not just a filer.',
+    features: [
+      'Everything in Limited Company',
+      'Monthly management accounts',
+      'Quarterly strategy calls',
+      'Payroll for up to 10 employees',
+      'Priority turnaround on requests',
+    ],
+    featured: false,
+  },
+];
+
+/* ============================================================
+   BUILD: HERO TEXT (gated on loader)
+   ============================================================ */
+const heroTitle = document.getElementById('hero-title');
+const heroTagline = document.getElementById('hero-tagline');
+buildClips(heroTitle, 'Numbers, Handled'.split(' '));
+buildClips(heroTagline, ['Clear Books,', 'Confident Growth'], { block: true });
+
+/* hero parallax plate: 0% -> 12% */
+const heroSection = document.getElementById('hero');
+const heroPlate = document.getElementById('heroPlate');
+registerParallax(heroSection, (p) => {
+  heroPlate.style.transform = `translateY(${(p * 12).toFixed(3)}%)`;
+});
+
+/* ============================================================
+   BUILD: ABOUT (ghost heading + credential photo)
+   ============================================================ */
+const trustSection = document.getElementById('about');
+const ghostWords = [...document.querySelectorAll('#trust-title .ghost-word')];
+
+/* ghost X parallax */
+ghostWords.forEach(w => {
+  const [from, to] = w.getAttribute('data-px').split(',').map(Number);
+  registerParallax(trustSection, (p) => {
+    w.style.transform = `translateX(${(from + (to - from) * p).toFixed(3)}%)`;
+  });
+});
+
+ABOUT_HEADLINE.forEach((word, n) => buildClips(ghostWords[n], [word], { tight: true }));
+
+/* fire ghost reveal when the heading scrolls in */
+const ghostIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    ghostIO.unobserve(e.target);
+    ghostWords.forEach((w, n) => playReveal(w, { duration: 700, easing: EASE.expo, stagger: 0, delay: n * 60 }));
+  });
+}, { threshold: 0.2 });
+ghostIO.observe(document.getElementById('trust-title'));
+
+/* ============================================================
+   BUILD: SECTION HEADINGS
+   ============================================================ */
+function stackedHeading(el, lines, opts = {}){
+  buildClips(el, lines, { block: true });
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      obs.unobserve(e.target);
+      playReveal(el, { stagger: opts.stagger ?? 120, duration: opts.duration ?? 950, easing: EASE.expo, delay: opts.delay ?? 0 });
+    });
+  }, { threshold: 0.25 });
+  obs.observe(el);
+}
+stackedHeading(document.getElementById('programs-title'), ['Accounting,', 'Made Simple']);
+stackedHeading(document.getElementById('facilities-title'), ['A Process', 'Built Around', 'You'], { stagger: 120 });
+stackedHeading(document.getElementById('pricing-title'), ['Simple,', 'Fixed-Fee Pricing']);
+stackedHeading(document.getElementById('footer-cta-title'), ['Ready to', 'get started']);
+
+/* facilities body word fade */
+const facBody = document.getElementById('facilities-body');
+buildClips(facBody, "From your first message to the moment your return is filed, every step is scoped, explained, and confirmed before it happens - no jargon, no surprise invoices.".split(' '), { soft: true });
+{
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      obs.unobserve(e.target);
+      playReveal(facBody, { stagger: 28, duration: 700, easing: EASE.quart, delay: 250, fromY: '18px' });
+    });
+  }, { threshold: 0.2 });
+  obs.observe(facBody);
+}
+
+/* ============================================================
+   BUILD: SERVICES
+   ============================================================ */
+const programList = document.getElementById('programList');
+SERVICES.forEach((p, i) => {
+  const li = document.createElement('li');
+  li.innerHTML = `
+    <div class="program-row">
+      <a href="${p.href}">
+        <span class="program-idx">${p.idx}</span>
+        <span class="program-body">
+          <h3>${p.name}</h3>
+          <p>${p.desc}</p>
+        </span>
+        <span class="program-arrow">${ARROW_SVG}</span>
+      </a>
+    </div>`;
+  programList.appendChild(li);
+  const row = li.querySelector('.program-row');
+  setupInview(row, {
+    from: { opacity: 0, y: 26 }, to: { opacity: 1, y: 0 },
+    config: { tension: 190, friction: 26 }, delayIn: i * 90
+  });
+  const arrow = li.querySelector('.program-arrow');
+  hoverSpring(li.querySelector('a'), arrow, { x: 0, opacity: 0.55 }, { x: 8, opacity: 1 }, { tension: 300, friction: 20 });
+});
+
+/* ============================================================
+   BUILD: APPROACH TILES
+   ============================================================ */
+const facCards = document.getElementById('facCards');
+APPROACH_TILES.forEach((t, i) => {
+  const fig = document.createElement('figure');
+  fig.className = 'fac-card';
+  fig.innerHTML = `
+    <div class="approach-tile">
+      <div class="approach-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${t.icon}</svg>
+      </div>
+      <h3>${t.name}</h3>
+      <p>${t.desc}</p>
+    </div>`;
+  facCards.appendChild(fig);
+  setupInview(fig, {
+    from: { opacity: 0, y: 48 }, to: { opacity: 1, y: 0 },
+    config: { tension: 180, friction: 26 }, delayIn: i * 140
+  });
+  hoverSpring(fig, fig.querySelector('.approach-tile'), { scale: 1 }, { scale: 1.03 }, { tension: 300, friction: 22 });
+});
+
+/* ============================================================
+   BUILD: PRICING
+   ============================================================ */
+const CHECK_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>`;
+const pricingGrid = document.getElementById('pricingGrid');
+PLANS.forEach((plan, i) => {
+  const card = document.createElement('div');
+  card.className = 'price-card' + (plan.featured ? ' featured' : '');
+  card.innerHTML = `
+    ${plan.featured ? '<span class="plan-badge">Most Popular</span>' : ''}
+    <h3>${plan.name}</h3>
+    <div class="price"><b>${plan.price}</b><span>${plan.period}</span></div>
+    <p class="plan-desc">${plan.desc}</p>
+    <ul>
+      ${plan.features.map(f => `<li>${CHECK_SVG}<span>${f}</span></li>`).join('')}
+    </ul>
+    <button type="button" class="pill ${plan.featured ? 'light' : 'solid'}" data-open-modal>
+      Get Started
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>`;
+  pricingGrid.appendChild(card);
+  setupInview(card, {
+    from: { opacity: 0, y: 40 }, to: { opacity: 1, y: 0 },
+    config: { tension: 180, friction: 26 }, delayIn: i * 120
+  });
+});
+
+/* ============================================================
+   PILL / ARROW HOVER SPRINGS
+   ============================================================ */
+document.querySelectorAll('.pill').forEach(pill => {
+  const svg = pill.querySelector('svg');
+  if (svg) hoverSpring(pill, svg, { x: 0 }, { x: 5 }, { tension: 320, friction: 20 });
+});
+
+initInviewAttributes();
+
+/* ============================================================
+   SMOOTH SCROLL ANCHORS
+   ============================================================ */
+document.querySelectorAll('a[data-scroll]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    lenis.scrollTo(target, { offset: 0 });
+  });
+});
+
+/* ============================================================
+   MENU OVERLAY
+   ============================================================ */
+const menu = document.getElementById('menu');
+const menuPanel = document.getElementById('menuPanel');
+const menuBackdrop = document.getElementById('menuBackdrop');
+const menuLinks = [...document.querySelectorAll('[data-menu-link]')];
+let menuOpen = false;
+
+const menuBackdropSpring = springGroup({ opacity: 0 }, { tension: 260, friction: 30 }, (s) => { menuBackdrop.style.opacity = s.opacity; });
+const menuPanelSpring = springGroup({ opacity: 0, y: -24 }, { tension: 220, friction: 28 }, (s) => tf(menuPanel, s));
+const menuLinkSprings = menuLinks.map(link =>
+  springGroup({ opacity: 0, y: 28 }, { tension: 200, friction: 26 }, (s) => tf(link, s))
+);
+
+function openMenu(){
+  if (menuOpen) return;
+  menuOpen = true;
+  menu.classList.add('open');
+  menu.setAttribute('aria-hidden', 'false');
+  lockScroll();
+  menuBackdropSpring.to({ opacity: 1 });
+  menuPanelSpring.to({ opacity: 1, y: 0 });
+  menuLinkSprings.forEach((s, i) => {
+    s.set({ opacity: 0, y: 28 });
+    setTimeout(() => s.to({ opacity: 1, y: 0 }), 120 + i * 70);
+  });
+}
+function closeMenu(){
+  if (!menuOpen) return;
+  menuOpen = false;
+  menu.classList.remove('open');
+  menu.setAttribute('aria-hidden', 'true');
+  menuBackdropSpring.to({ opacity: 0 });
+  menuPanelSpring.to({ opacity: 0, y: -24 });
+  unlockScroll();
+}
+document.querySelectorAll('[data-open-menu]').forEach(b => b.addEventListener('click', openMenu));
+document.getElementById('menuClose').addEventListener('click', closeMenu);
+menuBackdrop.addEventListener('click', closeMenu);
+menuLinks.forEach(l => l.addEventListener('click', () => closeMenu()));
+
+/* ============================================================
+   CONTACT MODAL
+   ============================================================ */
+const modal = document.getElementById('modal');
+const modalPanel = document.getElementById('modalPanel');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalForm = document.getElementById('modalForm');
+const modalSuccess = document.getElementById('modalSuccess');
+const successText = document.getElementById('successText');
+const submitBtn = document.getElementById('submitBtn');
+const nameInput = document.getElementById('f-name');
+let modalOpen = false;
+
+stackedHeading(document.getElementById('modal-title'), ["Let's Talk", 'Numbers'], { stagger: 90, duration: 800 });
+
+const modalBackdropSpring = springGroup({ opacity: 0 }, { tension: 240, friction: 30 }, (s) => { modalBackdrop.style.opacity = s.opacity; });
+const modalPanelSpring = springGroup({ opacity: 0, y: 28, scale: 0.96 }, { tension: 240, friction: 26 }, (s) => tf(modalPanel, s));
+
+hoverSpring(document.getElementById('modalClose'), document.querySelector('#modalClose svg'), { rotate: 0 }, { rotate: 90 }, { tension: 300, friction: 18 });
+hoverSpring(document.getElementById('menuClose'), document.querySelector('#menuClose svg'), { rotate: 0 }, { rotate: 90 }, { tension: 300, friction: 18 });
+
+function openModal(){
+  if (modalOpen) return;
+  modalOpen = true;
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  lockScroll();
+  modalBackdropSpring.to({ opacity: 1 });
+  modalPanelSpring.to({ opacity: 1, y: 0, scale: 1 });
+  playReveal(document.getElementById('modal-title'), { stagger: 90, duration: 800, easing: EASE.expo });
+  setTimeout(() => nameInput.focus(), 120);
+}
+function closeModal(){
+  if (!modalOpen) return;
+  modalOpen = false;
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+  modalBackdropSpring.to({ opacity: 0 });
+  modalPanelSpring.to({ opacity: 0, y: 28, scale: 0.96 });
+  unlockScroll();
+  setTimeout(() => {
+    modalForm.reset();
+    modalForm.style.display = '';
+    modalSuccess.classList.remove('show');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Request a consultation';
+  }, 350);
+}
+document.querySelectorAll('[data-open-modal]').forEach(b => b.addEventListener('click', openModal));
+document.getElementById('modalClose').addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', closeModal);
+document.getElementById('successDone').addEventListener('click', closeModal);
+document.getElementById('menuBook').addEventListener('click', () => { closeMenu(); setTimeout(openModal, 220); });
+
+modalForm.addEventListener('submit', (e) => {
+  e.preventDefault();                       // stub — never hits a network
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending…';
+  const first = (nameInput.value.trim().split(/\s+/)[0]) || 'there';
+  setTimeout(() => {
+    modalForm.style.display = 'none';
+    successText.textContent = `Thanks, ${first} — I'll be in touch shortly to schedule your consultation.`;
+    modalSuccess.classList.add('show');
+  }, 700);
+});
+
+/* ESC closes */
+window.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  if (modalOpen) closeModal();
+  else if (menuOpen) closeMenu();
+});
+
+/* ============================================================
+   LOADER
+   ============================================================ */
+const loader = document.getElementById('loader');
+const loaderMark = document.getElementById('loaderMark');
+const loaderFill = document.getElementById('loaderFill');
+const minVisible = REDUCED ? 200 : MIN_VISIBLE_MS;
+const exitMs = REDUCED ? 0 : EXIT_MS;
+
+lockScroll();
+
+/* wordmark spring-in */
+springGroup({ opacity: 0, y: 16 }, { tension: 200, friction: 22 }, (s) => tf(loaderMark, s)).to({ opacity: 1, y: 0 });
+
+/* progress fill */
+if (!REDUCED){
+  loaderFill.style.transition = `transform ${minVisible - 120}ms ${EASE.cubic} 120ms`;
+  requestAnimationFrame(() => { loaderFill.style.transform = 'scaleX(1)'; });
+} else {
+  loaderFill.style.transform = 'scaleX(1)';
+}
+
+let revealed = false;
+function revealSite(){
+  if (revealed) return;
+  revealed = true;
+
+  /* ready = true → play the gated hero animations */
+  playReveal(heroTitle,  { stagger: 140, duration: 1100, easing: EASE.expo });
+  playReveal(heroTagline,{ stagger: 110, duration: 900,  easing: EASE.expo, delay: 350 });
+
+  unlockScroll();
+
+  loader.style.transition = `transform ${exitMs}ms ${EASE.cubic}`;
+  requestAnimationFrame(() => { loader.style.transform = 'translateY(-105%)'; });
+  setTimeout(() => loader.remove(), exitMs + 30);
+}
+
+let countdownStarted = false;
+function startCountdown(){
+  if (countdownStarted) return;
+  countdownStarted = true;
+  setTimeout(revealSite, minVisible);
+}
+if (document.readyState === 'complete') startCountdown();
+else window.addEventListener('load', startCountdown);
+setTimeout(startCountdown, MAX_VISIBLE_MS);
+</script>
+</body>
+</html>
