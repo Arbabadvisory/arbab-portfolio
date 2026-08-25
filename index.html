@@ -7,7 +7,9 @@
 <meta name="description" content="Arbab Advisory is the ACCA-qualified accounting and advisory practice of Arbab Abdur Rahman - bookkeeping, tax, payroll, and business advice, handled personally." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="preload" as="image" href="images/arbab-hero.webp" fetchpriority="high" />
 <script type="importmap">
 { "imports": {
   "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm",
@@ -79,7 +81,11 @@ input,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--brand-light);outline-offset:2px}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-html.is-locked{position:relative;overflow:hidden;height:100%}
+/* reserve the scrollbar gutter permanently so locking the page does not
+   change the viewport width - that width change relaid out the whole
+   document on the first frame of the menu animation. */
+html{scrollbar-gutter:stable}
+html.is-locked{overflow:hidden}
 
 /* ============================================================
    REVEAL PRIMITIVES
@@ -653,7 +659,12 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 /* ============================================================
    MENU OVERLAY
    ============================================================ */
-.menu{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;pointer-events:none}
+/* while closed the overlay is taken out of rendering entirely - as a
+   full-viewport fixed layer it was being laid out and composited above
+   the whole page on every frame even at opacity 0. */
+.menu{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;
+  pointer-events:none;visibility:hidden;content-visibility:hidden}
+.menu.visible{visibility:visible;content-visibility:visible}
 .menu.open{pointer-events:auto}
 .menu-backdrop{position:absolute;inset:0;background:var(--brand-deep);opacity:0}
 .menu-panel{
@@ -690,9 +701,10 @@ main{width:100%;overflow-x:clip;padding:.5rem}
    ============================================================ */
 .modal{
   position:fixed;inset:0;z-index:90;display:flex;justify-content:center;align-items:flex-end;
-  padding:.75rem;pointer-events:none;
+  padding:.75rem;pointer-events:none;visibility:hidden;content-visibility:hidden;
 }
 @media (min-width:640px){.modal{align-items:center;padding:1.5rem}}
+.modal.visible{visibility:visible;content-visibility:visible}
 .modal.open{pointer-events:auto}
 .modal-backdrop{
   position:absolute;inset:0;background:rgba(15,47,99,.55);opacity:0;
@@ -886,7 +898,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   <section class="hero" id="hero">
     <div class="hero-bg">
       <div class="hero-plate" id="heroPlate">
-        <img src="images/arbab hero.png"
+        <img src="images/arbab-hero.webp" width="1492" height="1054"
              alt="Portrait against a clear blue sky" fetchpriority="high" decoding="async" />
       </div>
       <div class="hero-overlay"></div>
@@ -894,7 +906,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 
     <div class="hero-top">
       <span class="wordmark">
-        <img class="brand-logo" src="images/logo.png" alt="Arbab Advisory" />
+        <img class="brand-logo" src="images/logo.webp" width="612" height="408" alt="Arbab Advisory" />
       </span>
       <button type="button" class="burger" data-open-menu aria-label="Open menu">
         <i></i><i></i>
@@ -910,7 +922,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
       <div class="hero-cta-group">
         <div class="glass credential-chip inview" id="credentialChip"
              data-inview='{"from":{"opacity":0,"y":28},"to":{"opacity":1,"y":0},"config":{"tension":200,"friction":26},"delayIn":650}'>
-          <span class="credential-badge"><img src="images/ACCA_logo.svg" alt="ACCA logo" /></span>
+          <span class="credential-badge"><img src="images/ACCA_logo.svg" width="120" height="120" alt="ACCA logo" /></span>
           <div class="credential-text">
             <b>ACCA Qualified</b>
             <span>Chartered Certified Accountant</span>
@@ -955,7 +967,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
     <div class="coach-holder">
       <div class="coach-inview inview" data-inview='{"from":{"opacity":0,"y":60,"scale":0.92},"to":{"opacity":1,"y":0,"scale":1},"config":{"tension":170,"friction":26}}'>
         <figure class="coach-fig">
-          <img src="images/arbab3.png" alt="Arbab Abdur Rahman" loading="lazy" decoding="async" />
+          <img src="images/arbab3.webp" width="560" height="841" alt="Arbab Abdur Rahman" loading="lazy" decoding="async" />
           <figcaption class="coach-cap">
             <b>Arbab Abdur Rahman</b><span>ACCA Qualified Accountant</span>
           </figcaption>
@@ -968,7 +980,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   <section class="programs" id="services">
     <div class="services-banner inview"
          data-inview='{"from":{"opacity":0,"scale":0.97},"to":{"opacity":1,"scale":1},"config":{"tension":200,"friction":24}}'>
-      <img class="services-banner-img" src="images/arbab4.png" alt="Accounting concepts illustrated around Arbab Abdur Rahman" loading="lazy" decoding="async" />
+      <img class="services-banner-img" src="images/arbab4.webp" width="1536" height="1024" alt="Accounting concepts illustrated around Arbab Abdur Rahman" loading="lazy" decoding="async" />
       <div class="services-banner-overlay"></div>
       <div class="services-banner-content">
         <h2 id="programs-title"></h2>
@@ -1095,7 +1107,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
     <div class="foot-cols">
       <div class="foot-brand">
         <span class="wordmark">
-          <img class="brand-logo brand-logo-white" src="images/logo.png" alt="Arbab Advisory" />
+          <img class="brand-logo brand-logo-white" src="images/logo.webp" width="612" height="408" alt="Arbab Advisory" />
         </span>
         <p>Arbab Advisory is the accounting and advisory practice of Arbab Abdur Rahman, ACCA - bookkeeping, tax, payroll, and financial advice for small businesses and individuals.</p>
         <address>
@@ -1145,7 +1157,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
     <div class="menu-inner">
       <div class="menu-top">
         <span class="wordmark">
-          <img class="brand-logo brand-logo-white" src="images/logo.png" alt="Arbab Advisory" />
+          <img class="brand-logo brand-logo-white" src="images/logo.webp" width="612" height="408" alt="Arbab Advisory" />
         </span>
         <button type="button" class="icon-btn" id="menuClose" aria-label="Close menu">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -1219,7 +1231,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 <!-- ============ LOADER ============ -->
 <div class="loader" id="loader">
   <span class="loader-mark" id="loaderMark">
-    <img class="brand-logo brand-logo-lg brand-logo-white" src="images/logo.png" alt="Arbab Advisory" />
+    <img class="brand-logo brand-logo-lg brand-logo-white" src="images/logo.webp" width="612" height="408" alt="Arbab Advisory" />
   </span>
   <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
 </div>
@@ -1393,7 +1405,8 @@ function raf(t){
   const dt = Math.min(0.05, (t - last) / 1000);
   last = t;
   lenis.raf(t);
-  updateParallax();
+  if (!locks) updateParallax();   // page is frozen behind an overlay
+
   for (const s of springs) s.update(dt);
   requestAnimationFrame(raf);
 }
@@ -1925,11 +1938,26 @@ document.querySelectorAll('a[data-scroll]').forEach(a => {
 /* ============================================================
    MENU OVERLAY
    ============================================================ */
+/* 'visible' gates rendering, 'open' gates interaction: on close the overlay has
+   to stay rendered until the fade-out has actually finished. */
+const hideTimers = new WeakMap();
+function showOverlay(el){
+  clearTimeout(hideTimers.get(el));
+  el.classList.add('visible');
+  void el.offsetWidth;            // flush before the springs start animating
+  el.classList.add('open');
+}
+function hideOverlay(el, after = 520){
+  el.classList.remove('open');
+  hideTimers.set(el, setTimeout(() => el.classList.remove('visible'), after));
+}
+
 const menu = document.getElementById('menu');
 const menuPanel = document.getElementById('menuPanel');
 const menuBackdrop = document.getElementById('menuBackdrop');
 const menuLinks = [...document.querySelectorAll('[data-menu-link]')];
 let menuOpen = false;
+let menuLinkTimers = [];
 
 const menuBackdropSpring = springGroup({ opacity: 0 }, { tension: 260, friction: 30 }, (s) => { menuBackdrop.style.opacity = s.opacity; });
 const menuPanelSpring = springGroup({ opacity: 0, y: -24 }, { tension: 220, friction: 28 }, (s) => tf(menuPanel, s));
@@ -1940,20 +1968,21 @@ const menuLinkSprings = menuLinks.map(link =>
 function openMenu(){
   if (menuOpen) return;
   menuOpen = true;
-  menu.classList.add('open');
-  menu.setAttribute('aria-hidden', 'false');
   lockScroll();
+  showOverlay(menu);
+  menu.setAttribute('aria-hidden', 'false');
   menuBackdropSpring.to({ opacity: 1 });
   menuPanelSpring.to({ opacity: 1, y: 0 });
-  menuLinkSprings.forEach((s, i) => {
+  menuLinkTimers.forEach(clearTimeout);
+  menuLinkTimers = menuLinkSprings.map((s, i) => {
     s.set({ opacity: 0, y: 28 });
-    setTimeout(() => s.to({ opacity: 1, y: 0 }), 120 + i * 70);
+    return setTimeout(() => s.to({ opacity: 1, y: 0 }), 120 + i * 70);
   });
 }
 function closeMenu(){
   if (!menuOpen) return;
   menuOpen = false;
-  menu.classList.remove('open');
+  hideOverlay(menu);
   menu.setAttribute('aria-hidden', 'true');
   menuBackdropSpring.to({ opacity: 0 });
   menuPanelSpring.to({ opacity: 0, y: -24 });
@@ -1988,9 +2017,9 @@ hoverSpring(document.getElementById('menuClose'), document.querySelector('#menuC
 function openModal(){
   if (modalOpen) return;
   modalOpen = true;
-  modal.classList.add('open');
-  modal.setAttribute('aria-hidden', 'false');
   lockScroll();
+  showOverlay(modal);
+  modal.setAttribute('aria-hidden', 'false');
   modalBackdropSpring.to({ opacity: 1 });
   modalPanelSpring.to({ opacity: 1, y: 0, scale: 1 });
   playReveal(document.getElementById('modal-title'), { stagger: 90, duration: 800, easing: EASE.expo });
@@ -1999,7 +2028,7 @@ function openModal(){
 function closeModal(){
   if (!modalOpen) return;
   modalOpen = false;
-  modal.classList.remove('open');
+  hideOverlay(modal);
   modal.setAttribute('aria-hidden', 'true');
   modalBackdropSpring.to({ opacity: 0 });
   modalPanelSpring.to({ opacity: 0, y: 28, scale: 0.96 });
