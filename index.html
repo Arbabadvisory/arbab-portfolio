@@ -5,19 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Arbab Advisory - Accounting &amp; Financial Advisory</title>
 <meta name="description" content="Arbab Advisory is the ACCA-qualified accounting and advisory practice of Arbab Abdur Rahman - bookkeeping, tax, payroll, and business advice, handled personally." />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500&display=swap" rel="stylesheet" />
+<!-- font, scroll engine and hero all served from this origin: three cold
+     third-party origins (fonts.googleapis, fonts.gstatic, cdn.jsdelivr) were
+     what made the deployed first few seconds stutter while localhost, with
+     everything already in disk cache, felt fine. -->
+<link rel="preload" href="fonts/onest.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" as="image" href="images/arbab-hero.webp" fetchpriority="high" />
+<link rel="modulepreload" href="vendor/gsap.js" />
+<link rel="modulepreload" href="vendor/ScrollTrigger.js" />
+<link rel="modulepreload" href="vendor/lenis.js" />
 <script type="importmap">
 { "imports": {
-  "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm",
-  "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm",
-  "gsap/ScrollTrigger": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/ScrollTrigger.js/+esm"
+  "lenis": "./vendor/lenis.js",
+  "gsap": "./vendor/gsap.js",
+  "gsap/ScrollTrigger": "./vendor/ScrollTrigger.js"
 } }
 </script>
 <style>
+/* Onest latin is a variable font - one file covers the whole 400-500 range,
+   which is why Google served the same woff2 for both weights. */
+@font-face{
+  font-family:'Onest';font-style:normal;font-weight:400 500;font-display:swap;
+  src:url(fonts/onest.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,
+    U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,
+    U+FEFF,U+FFFD;
+}
+
 /* ============================================================
    TOKENS
    ============================================================ */
@@ -48,7 +62,7 @@
 }
 
 /* typed custom property so GSAP interpolates it numerically, not as a string */
-@property --rule-w{syntax:'<percentage>';inherits:false;initial-value:0%}
+@property --rule-w{syntax:'<number>';inherits:false;initial-value:0}
 
 /* ============================================================
    RESET
@@ -353,7 +367,9 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 /* accent bar that grows along the row as it scrolls through */
 .principle-row::before{
   content:"";position:absolute;left:0;bottom:-1px;height:1px;background:var(--brand);
-  width:var(--rule-w,0%);
+  /* scaleX rather than width: this is the one scrubbed animation on the page,
+     and animating width relaid out the row on every scroll frame. */
+  width:100%;transform:scaleX(var(--rule-w,0));transform-origin:left center;
 }
 .principle-word{
   display:flex;align-items:baseline;gap:1rem;min-width:0;
@@ -888,6 +904,15 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;animation-iteration-count:1!important}
 }
+
+/* Touch devices: drop the live blur. Both blurred elements sit in the hero over
+   the plate that translates on scroll, so the backdrop has to be re-sampled and
+   re-blurred every frame - by far the most expensive thing on the page for a
+   mobile GPU. The slightly denser flat fill reads almost identically at this size. */
+@media (pointer:coarse),(max-width:900px){
+  .burger{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(255,255,255,.2)}
+  .glass{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(15,47,99,.6)}
+}
 </style>
 </head>
 <body>
@@ -1400,17 +1425,20 @@ ScrollTrigger.addEventListener('refresh', measureParallax);
 /* ============================================================
    MAIN RAF LOOP
    ============================================================ */
+/* one frame loop for the whole page. this used to be a private
+   requestAnimationFrame running alongside gsap's own ticker - two independent
+   loops meant lenis, the springs and gsap's tweens could land in a different
+   order each frame, which reads as stutter. driving lenis from gsap's ticker is
+   also the integration lenis documents. */
 let last = performance.now();
-function raf(t){
+gsap.ticker.add((time) => {
+  const t = time * 1000;
   const dt = Math.min(0.05, (t - last) / 1000);
   last = t;
   lenis.raf(t);
   if (!locks) updateParallax();   // page is frozen behind an overlay
-
   for (const s of springs) s.update(dt);
-  requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
+});
 
 /* ============================================================
    TEXT REVEAL PRIMITIVES
@@ -1729,9 +1757,9 @@ PRINCIPLES.forEach((p, i) => {
 
   /* the rule under each row draws itself as that row travels up the viewport */
   gsap.fromTo(row,
-    { '--rule-w': '0%' },
+    { '--rule-w': 0 },
     {
-      '--rule-w': '100%', ease: 'none',
+      '--rule-w': 1, ease: 'none',
       scrollTrigger: { trigger: row, start: 'top 85%', end: 'bottom 55%', scrub: .6 }
     }
   );
