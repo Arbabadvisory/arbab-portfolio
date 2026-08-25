@@ -4,12 +4,16 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Arbab Advisory - Accounting &amp; Financial Advisory</title>
-<meta name="description" content="Arbab Advisory is the ACCA-qualified accounting and advisory practice of Abdur Rahman Khan - bookkeeping, tax, payroll, and business advice, handled personally." />
+<meta name="description" content="Arbab Advisory is the ACCA-qualified accounting and advisory practice of Arbab Abdur Rahman - bookkeeping, tax, payroll, and business advice, handled personally." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500&display=swap" rel="stylesheet" />
 <script type="importmap">
-{ "imports": { "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm" } }
+{ "imports": {
+  "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm",
+  "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm",
+  "gsap/ScrollTrigger": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/ScrollTrigger.js/+esm"
+} }
 </script>
 <style>
 /* ============================================================
@@ -22,6 +26,7 @@
   --brand-deep:#0f2f63;
   --brand-light:#5790e6;
   --accent-teal:#0b6e97;
+  --accent-gold:#f0b23e;
   --surface:#f4f4f4;
   --surface-card:#ffffff;
   --ink:#0a0a0a;
@@ -40,13 +45,16 @@
   --ease-cubic:cubic-bezier(.65,0,.35,1);
 }
 
+/* typed custom property so GSAP interpolates it numerically, not as a string */
+@property --rule-w{syntax:'<percentage>';inherits:false;initial-value:0%}
+
 /* ============================================================
    RESET
    ============================================================ */
 *,*::before,*::after{box-sizing:border-box}
 *{margin:0}
 html{font-size:16px;-webkit-text-size-adjust:100%}
-/* adaptive rem grid — scale down */
+/* adaptive rem grid: scale down */
 @media (max-width:1920px){html{font-size:0.833333vw}}
 @media (max-width:1440px){html{font-size:1.111111vw}}
 @media (max-width:1024px){html{font-size:clamp(13px,1.5625vw,16px)}}
@@ -98,37 +106,31 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 .eyebrow.light::before{background:var(--brand-light)}
 
 .pill{
-  display:inline-flex;align-items:center;gap:.5rem;border-radius:var(--radius-pill);
-  padding:.875rem 1.75rem;font-size:.875rem;font-weight:500;text-transform:uppercase;
-  letter-spacing:.05em;transition:background-color .3s ease,color .3s ease,border-color .3s ease;
+  position:relative;isolation:isolate;
+  display:inline-flex;align-items:center;gap:.75rem;border-radius:var(--radius-pill);
+  padding:.5rem .5rem .5rem 1.5rem;font-size:.8125rem;font-weight:500;text-transform:uppercase;
+  letter-spacing:.09em;white-space:nowrap;
+  transition:transform .5s var(--ease-expo),box-shadow .5s var(--ease-expo),
+             background-color .35s ease,color .35s ease,border-color .35s ease;
 }
-.pill svg{width:1rem;height:1rem;flex:none}
-.pill.light{background:#fff;color:var(--brand-deep)}
-.pill.light:hover{background:var(--brand-light);color:#fff}
-.pill.solid{background:var(--ink);color:#fff}
-.pill.solid:hover{background:var(--brand-deep)}
-.pill.outline{border:1px solid currentColor;color:var(--ink)}
-.pill.outline:hover{background:var(--ink);color:#fff}
-
-.arrow-btn{
-  display:grid;place-items:center;width:3rem;height:3rem;border-radius:var(--radius-pill);
-  border:1px solid transparent;transition:background-color .3s ease,border-color .3s ease,color .3s ease;
+.pill svg{
+  width:.9rem;height:.9rem;flex:none;box-sizing:content-box;
+  padding:.5rem;border-radius:var(--radius-pill);
+  transition:transform .5s var(--ease-expo),background-color .35s ease,color .35s ease;
 }
-@media (min-width:640px){.arrow-btn{width:3.5rem;height:3.5rem}}
-.arrow-btn svg{width:1.25rem;height:1.25rem}
-.arrow-btn.outline{border-color:var(--hairline);background:transparent;color:var(--ink)}
-.arrow-btn.outline:hover{border-color:var(--ink)}
-.arrow-btn.solid{background:var(--ink);border-color:var(--ink);color:#fff}
-.arrow-btn.solid:hover{background:var(--brand-deep);border-color:var(--brand-deep)}
-.arrow-btn.prev svg{transform:scaleX(-1)}
+.pill:hover{transform:translateY(-2px)}
+.pill:active{transform:translateY(0)}
 
-.dots{display:flex;align-items:center;gap:.5rem}
-.dots button{padding:.375rem;display:block}
-.dots button i{display:block;height:.375rem;width:.375rem;border-radius:var(--radius-pill);transition:width .35s var(--ease-expo),background-color .35s ease}
-.dots.dark button i{background:var(--ghost)}
-.dots.dark button[aria-current="true"] i{width:1.25rem;background:var(--ink)}
-.dots.light button i{background:rgba(255,255,255,.4)}
-.dots.light button[aria-current="true"] i{width:1.25rem;background:#fff}
+.pill.light{background:#fff;color:var(--brand-deep);box-shadow:0 .65rem 1.5rem rgba(15,47,99,.22)}
+.pill.light svg{background:rgba(15,47,99,.08);color:var(--brand-deep)}
+.pill.light:hover{box-shadow:0 1.1rem 2.25rem rgba(15,47,99,.3)}
+.pill.light:hover svg{background:var(--brand);color:#fff;transform:translateX(.15rem)}
+
+.pill.solid{background:var(--brand-deep);color:#fff;box-shadow:0 .65rem 1.5rem rgba(15,47,99,.28)}
+.pill.solid svg{background:rgba(255,255,255,.16)}
+.pill.solid:hover{background:var(--brand);box-shadow:0 1.1rem 2.25rem rgba(37,99,201,.34)}
+.pill.solid:hover svg{background:rgba(255,255,255,.28);transform:translateX(.15rem)}
+
 
 .wordmark{display:inline-flex;align-items:center}
 .brand-logo{height:8.75rem;width:auto;display:block}
@@ -136,32 +138,25 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 .brand-logo-lg{height:10.5rem}
 
 /* ============================================================
-   1) HEADER  (inside hero)
+   1) HERO TOP BAR
    ============================================================ */
-.site-header{
+.hero-top{
   position:relative;z-index:20;
-  display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;column-gap:1rem;
-  padding:1.5rem 1.5rem 0;font-size:.75rem;color:#fff;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:1.5rem 1.5rem 0;color:#fff;
 }
-@media (min-width:640px){.site-header{padding:2rem 2.5rem 0}}
-.hdr-nav{display:none;align-items:center;gap:1.5rem;justify-self:start;min-width:0}
-@media (min-width:1024px){.hdr-nav{display:flex}}
-.hdr-nav a{color:rgba(255,255,255,.9);transition:color .25s ease;white-space:nowrap}
-.hdr-nav a:hover{color:#fff}
-.hdr-brand{justify-self:center;display:flex;justify-content:center;min-width:0}
-.hdr-brand .brand-logo{max-width:100%;object-fit:contain}
-.hdr-actions{justify-self:end;display:flex;align-items:center;gap:1rem;min-width:0}
-@media (min-width:640px){.hdr-actions{gap:1.25rem}}
-.hdr-cta{display:none;text-transform:uppercase;letter-spacing:.05em;color:#fff}
-.hdr-cta:hover{text-decoration:underline}
-@media (min-width:640px){.hdr-cta{display:inline-block}}
+@media (min-width:640px){.hero-top{padding:2rem 2.5rem 0}}
+.hero-top .brand-logo{max-width:100%;object-fit:contain}
 .burger{
-  display:grid;place-items:center;gap:5px;width:2.5rem;height:2.5rem;border-radius:var(--radius-pill);
-  background:rgba(255,255,255,.22);
-  transition:background-color .3s ease;grid-auto-flow:row;align-content:center;
+  display:grid;place-items:center;gap:5px;width:3rem;height:3rem;flex:none;
+  border-radius:var(--radius-pill);border:1px solid rgba(255,255,255,.28);
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(.5rem);-webkit-backdrop-filter:blur(.5rem);
+  transition:background-color .35s ease,border-color .35s ease;
+  grid-auto-flow:row;align-content:center;
 }
-.burger:hover{background:rgba(255,255,255,.32)}
-.burger i{display:block;width:1rem;height:1px;background:#fff}
+.burger:hover{background:rgba(255,255,255,.26);border-color:rgba(255,255,255,.5)}
+.burger i{display:block;width:1.05rem;height:1.5px;border-radius:2px;background:#fff}
 
 /* ============================================================
    2) HERO
@@ -179,8 +174,8 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 .hero-plate img{width:100%;height:100%;object-fit:cover}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,47,99,.1),rgba(15,47,99,0) 35%,rgba(15,47,99,.5))}
 
-.hero-title-wrap{padding:3.5rem 1.5rem 0}
-@media (min-width:640px){.hero-title-wrap{padding:5rem 2.5rem 0}}
+.hero-title-wrap{padding:1.5rem 1.5rem 0}
+@media (min-width:640px){.hero-title-wrap{padding:2.25rem 2.5rem 0}}
 .hero-title{
   font-size:clamp(2.5rem,10vw,7rem);font-weight:500;text-transform:uppercase;
   line-height:.92;letter-spacing:-.02em;white-space:normal;max-width:56rem;
@@ -195,63 +190,52 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   .hero-bottom{padding:0 2.5rem 2.5rem;flex-direction:row;justify-content:space-between;align-items:flex-end}
 }
 .hero-tagline{
-  font-size:2.4rem;font-weight:500;text-transform:uppercase;line-height:.95;
-  letter-spacing:-.02em;color:rgba(255,255,255,.85);
+  margin-top:1.5rem;
+  font-size:1.35rem;font-weight:500;text-transform:uppercase;line-height:1.15;
+  letter-spacing:-.01em;color:rgba(255,255,255,.9);max-width:30rem;
+  text-shadow:0 .15rem 1.5rem rgba(15,47,99,.4);
 }
+@media (min-width:1024px){.hero-tagline{font-size:1.75rem;margin-top:1.85rem;max-width:36rem}}
+.hero-tagline .tagline-highlight{color:var(--accent-gold)}
 .hero-tagline .clip{display:block}
 
-.hero-cta-group{display:flex;flex-direction:column;align-items:flex-start;gap:1rem}
-@media (min-width:640px){.hero-cta-group{align-items:flex-end}}
+.hero-cta-group{
+  display:flex;flex-direction:column;align-items:flex-start;gap:1rem;width:100%;
+}
+@media (min-width:640px){
+  .hero-cta-group{flex-direction:row;align-items:center;justify-content:space-between;gap:1.5rem}
+}
 .glass{
-  border-radius:var(--radius-card);border:1px solid rgba(255,255,255,.18);
-  background:rgba(15,47,99,.35);padding:.75rem;
-  box-shadow:0 1.5rem 3rem rgba(15,47,99,.2);
+  border-radius:var(--radius-pill);border:1px solid rgba(255,255,255,.24);
+  background:rgba(15,47,99,.32);padding:.5rem 1.15rem .5rem .5rem;
+  backdrop-filter:blur(.75rem);-webkit-backdrop-filter:blur(.75rem);
+  box-shadow:0 1.25rem 2.5rem rgba(15,47,99,.28);
 }
-.credential-chip{display:flex;gap:.75rem;align-items:center;will-change:transform,opacity}
+.credential-chip{display:inline-flex;gap:.85rem;align-items:center;will-change:transform,opacity}
 .credential-badge{
-  flex:none;width:3rem;height:3rem;border-radius:var(--radius-xl);overflow:hidden;background:#fff;
+  flex:none;width:2.6rem;height:2.6rem;border-radius:var(--radius-pill);overflow:hidden;
+  background:#fff;display:grid;place-items:center;
 }
-.credential-badge img{width:100%;height:100%;object-fit:cover;display:block}
-.credential-text{display:flex;flex-direction:column;gap:.1rem}
-.credential-text b{font-size:.8rem;font-weight:500}
-.credential-text span{font-size:.65rem;opacity:.8}
+/* the source mark is a square red tile, so it has to be clipped round itself */
+.credential-badge img{
+  width:100%;height:100%;object-fit:cover;border-radius:var(--radius-pill);display:block;
+}
+.credential-text{display:flex;flex-direction:column;gap:.15rem}
+.credential-text b{font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.12em}
+.credential-text span{font-size:.65rem;opacity:.72;letter-spacing:.02em}
 
 /* ============================================================
    3) TRUST
    ============================================================ */
 .trust{
   position:relative;isolation:isolate;overflow:hidden;
-  background:var(--background);padding:4rem 1.5rem;
+  background:var(--background);padding:2rem 1.5rem 4rem;
 }
-@media (min-width:640px){.trust{padding:5rem 2.5rem 10rem}}
-.trust-top{position:relative;z-index:20;display:flex;flex-direction:column;gap:1.5rem}
-@media (min-width:640px){.trust-top{flex-direction:row;justify-content:space-between;align-items:flex-start}}
-.pct-badge{
-  width:7rem;height:7rem;border-radius:var(--radius-pill);background:var(--surface);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;
-  text-align:center;flex:none;will-change:transform,opacity;
-}
-@media (min-width:640px){.pct-badge{width:8rem;height:8rem}}
-.pct-badge img{width:2.5rem;height:2.5rem;border-radius:var(--radius-xl);object-fit:cover}
-@media (min-width:640px){.pct-badge img{width:2.75rem;height:2.75rem}}
-.pct-badge span{font-size:.6rem;color:var(--ink-soft);max-width:7em;line-height:1.35}
-
-.badge-card{
-  max-width:28rem;display:flex;gap:1rem;border-radius:var(--radius-card);
-  background:var(--surface);padding:1.25rem;will-change:transform,opacity;
-}
-@media (min-width:640px){.badge-card{gap:1.25rem;padding:1.5rem}}
-.badge-chip{
-  border-radius:var(--radius-xl);background:var(--background);padding:.75rem;
-  align-self:flex-start;flex:none;line-height:1;display:grid;place-items:center;
-}
-.badge-chip svg{width:1.5rem;height:1.5rem;color:var(--brand)}
-.badge-card h3{font-size:1.125rem;font-weight:500;line-height:1.3}
-.badge-card p{font-size:.75rem;color:var(--ink-soft);line-height:1.65;margin-top:.5rem}
+@media (min-width:640px){.trust{padding:3rem 2.5rem 8rem}}
 
 .ghost-title{
   position:relative;z-index:0;pointer-events:none;user-select:none;
-  max-width:88rem;margin:3rem auto 0;
+  max-width:88rem;margin:0 auto;
   font-size:6.2vw;font-weight:500;text-transform:uppercase;line-height:1.05;letter-spacing:-.02em;
   color:var(--ghost);
 }
@@ -278,19 +262,13 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 .coach-cap b{display:block;font-size:.875rem;font-weight:500}
 .coach-cap span{display:block;font-size:.65rem;opacity:.8}
 
-.trust-controls{
-  position:relative;z-index:20;margin-top:3rem;
-  display:flex;align-items:center;justify-content:space-between;
-}
-@media (min-width:640px){.trust-controls{margin-top:6rem}}
-
 /* ============================================================
    4) PROGRAMS
    ============================================================ */
 .programs{background:var(--surface);padding:6rem 1.5rem}
 @media (min-width:640px){.programs{padding:6rem 2.5rem}}
-.programs h2,.stats h2,.testimonials h2{font-size:3rem;font-weight:500;line-height:.95;letter-spacing:-.02em;margin-top:1rem}
-.programs h2 .clip,.stats h2 .clip,.testimonials h2 .clip,.facilities h2 .clip{display:block}
+.programs h2{font-size:3rem;font-weight:500;line-height:.95;letter-spacing:-.02em;margin-top:1rem}
+.programs h2 .clip,.facilities h2 .clip{display:block}
 .services-banner{
   position:relative;overflow:hidden;border-radius:var(--radius-card-lg);
   height:26rem;display:flex;align-items:flex-end;will-change:transform,opacity;
@@ -301,17 +279,29 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   position:absolute;inset:0;
   background:linear-gradient(to top, rgba(15,47,99,.55), rgba(15,47,99,.1) 55%, rgba(15,47,99,0));
 }
-.services-banner-content{position:relative;z-index:1;padding:2rem}
-@media (min-width:640px){.services-banner-content{padding:2.5rem}}
+.services-banner-content{position:relative;z-index:1;padding:2rem;width:100%}
+@media (min-width:640px){.services-banner-content{padding:3rem}}
 .services-banner-content h2{color:#fff;margin-top:0;text-shadow:0 0.15rem 1.5rem rgba(15,47,99,.45)}
+.services-banner-sub{
+  position:relative;color:rgba(255,255,255,.85);margin-top:2rem;max-width:26rem;
+  font-size:.9375rem;line-height:1.7;padding-left:1.25rem;
+}
+.services-banner-sub::before{
+  content:"";position:absolute;left:0;top:.35rem;bottom:.35rem;width:2px;
+  border-radius:var(--radius-pill);background:var(--brand-light);
+}
+.services-banner-sub b{
+  display:block;font-size:.75rem;font-weight:500;margin-bottom:.5rem;color:#fff;
+  text-transform:uppercase;letter-spacing:.2em;
+}
 .program-list{margin-top:3.5rem}
 .program-row{border-top:1px solid var(--hairline);will-change:transform,opacity}
 .program-list li:last-child .program-row{border-bottom:1px solid var(--hairline)}
-.program-row a{
-  display:flex;align-items:center;gap:1.5rem;padding:1.75rem 0;
+.program-row button{
+  display:flex;align-items:center;gap:1.5rem;padding:1.75rem 0;width:100%;text-align:left;
   transition:background-color .3s ease;
 }
-.program-row a:focus-visible{background:var(--background)}
+.program-row button:focus-visible{background:var(--background)}
 .program-idx{width:2.5rem;flex:none;font-size:.875rem;font-weight:500;color:var(--ink-soft)}
 .program-body{flex:1;min-width:0}
 .program-body h3{font-size:1.5rem;font-weight:500;letter-spacing:-.02em;line-height:1.15}
@@ -322,6 +312,57 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   border:1px solid var(--hairline);display:grid;place-items:center;opacity:.55;will-change:transform,opacity;
 }
 .program-arrow svg{width:1rem;height:1rem}
+
+/* ============================================================
+   4b) PRINCIPLES
+   ============================================================ */
+.principles{background:var(--background);padding:4.5rem 1.5rem 4rem}
+@media (min-width:640px){.principles{padding:7rem 2.5rem 5rem}}
+.principles-inner{max-width:88rem;margin:0 auto}
+.principles-head{max-width:34rem}
+.principles-head h2{
+  font-size:2.5rem;font-weight:500;line-height:1.05;letter-spacing:-.02em;
+}
+@media (min-width:640px){.principles-head h2{font-size:3rem}}
+
+.principles-list{margin-top:3.5rem;border-top:1px solid var(--hairline)}
+@media (min-width:768px){.principles-list{margin-top:5rem}}
+.principle-row{
+  position:relative;border-bottom:1px solid var(--hairline);
+  display:grid;grid-template-columns:1fr;gap:1rem;
+  padding:2.25rem 0;
+}
+@media (min-width:900px){
+  .principle-row{grid-template-columns:minmax(0,22rem) minmax(0,1fr);gap:4rem;padding:3.25rem 0}
+}
+/* accent bar that grows along the row as it scrolls through */
+.principle-row::before{
+  content:"";position:absolute;left:0;bottom:-1px;height:1px;background:var(--brand);
+  width:var(--rule-w,0%);
+}
+.principle-word{
+  display:flex;align-items:baseline;gap:1rem;min-width:0;
+}
+.principle-num{
+  font-size:.6875rem;font-weight:500;letter-spacing:.22em;color:var(--ghost);
+  flex:none;will-change:transform,opacity;
+}
+.principle-eyebrow{
+  font-size:2rem;font-weight:500;letter-spacing:-.02em;text-transform:uppercase;
+  line-height:1;color:var(--ink);will-change:transform;
+}
+@media (min-width:640px){.principle-eyebrow{font-size:2.75rem}}
+@media (min-width:1280px){.principle-eyebrow{font-size:3.25rem}}
+.principle-body{min-width:0;max-width:34rem}
+.principle-body h3{
+  font-size:1.25rem;font-weight:500;letter-spacing:-.01em;line-height:1.4;
+  will-change:transform,opacity;
+}
+@media (min-width:640px){.principle-body h3{font-size:1.5rem}}
+.principle-body p{
+  font-size:.9375rem;color:var(--ink-soft);margin-top:.85rem;line-height:1.75;
+  will-change:transform,opacity;
+}
 
 /* ============================================================
    5) APPROACH / PROCESS
@@ -396,77 +437,96 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 @media (min-width:640px){.process-card h3{font-size:1.375rem}}
 .process-card p{font-size:.875rem;color:var(--ink-soft);line-height:1.7}
 
-/* ============================================================
-   5c) EXPERIENCE
-   ============================================================ */
-.experience{
-  background:var(--brand-deep);color:var(--on-brand);
-  border-radius:var(--radius-card-lg);margin-top:.75rem;
-  padding:5rem 1.5rem;
+/* mess -> picture transform */
+.transform-block{max-width:88rem;margin:5rem auto 0}
+@media (min-width:768px){.transform-block{margin-top:7rem}}
+.transform-statement{max-width:44rem}
+.transform-statement h3{
+  font-size:2.125rem;font-weight:500;line-height:1.1;letter-spacing:-.02em;
 }
-@media (min-width:640px){.experience{padding:6rem 2.5rem}}
-.exp-head{display:flex;flex-direction:column;gap:1.5rem;max-width:88rem;margin:0 auto}
-@media (min-width:900px){
-  .exp-head{flex-direction:row;align-items:flex-end;justify-content:space-between;gap:4rem}
+@media (min-width:640px){.transform-statement h3{font-size:2.75rem}}
+@media (min-width:1024px){.transform-statement h3{font-size:3.25rem}}
+.transform-statement h3 .t-line{display:block;overflow:hidden}
+.transform-statement h3 .t-line > span{display:block;will-change:transform}
+.transform-statement h3 .t-accent{color:var(--brand)}
+.transform-statement p{
+  font-size:1rem;color:var(--ink-soft);line-height:1.75;margin-top:1.5rem;max-width:32rem;
+  will-change:transform,opacity;
 }
-.experience h2{font-size:3rem;font-weight:500;line-height:.95;letter-spacing:-.02em}
-.experience h2 .clip{display:block}
-.exp-note{font-size:.875rem;color:rgba(255,255,255,.6);line-height:1.7;max-width:24rem}
 
-.exp-timeline{position:relative;max-width:88rem;margin:3.5rem auto 0;padding-left:2.25rem}
-@media (min-width:640px){.exp-timeline{margin-top:4.5rem;padding-left:2.75rem}}
-.exp-timeline::before{
-  content:"";position:absolute;left:.4375rem;top:1.25rem;bottom:1.25rem;width:1px;
-  background:linear-gradient(to bottom,rgba(255,255,255,.12),rgba(255,255,255,.3) 45%,var(--brand-light));
+.transform-rail{
+  margin-top:3rem;display:grid;grid-template-columns:1fr;align-items:stretch;gap:1rem;
 }
-@media (min-width:640px){.exp-timeline::before{left:.5625rem}}
-.exp-item{position:relative;will-change:transform,opacity}
-.exp-item + .exp-item{margin-top:1rem}
-.exp-item::before{
-  content:"";position:absolute;left:-2.25rem;top:2rem;width:.9375rem;height:.9375rem;
-  border-radius:var(--radius-pill);background:var(--brand-deep);
-  border:1px solid rgba(255,255,255,.45);
+@media (min-width:768px){
+  .transform-rail{grid-template-columns:1fr auto 1fr;gap:1.75rem;margin-top:4rem}
 }
-@media (min-width:640px){.exp-item::before{left:-2.75rem;top:2.25rem}}
-.exp-item.is-current::before{background:var(--brand-light);border-color:var(--brand-light);box-shadow:0 0 0 .35rem rgba(87,144,230,.18)}
-.exp-card{
-  border-radius:var(--radius-card);background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.1);padding:1.5rem;
+.transform-panel{
+  position:relative;overflow:hidden;
+  border-radius:var(--radius-card-lg);padding:2rem 1.75rem;
   display:flex;flex-direction:column;gap:1.25rem;
-  transition:background-color .4s var(--ease-quart),border-color .4s var(--ease-quart);
 }
-@media (min-width:640px){
-  .exp-card{padding:1.75rem 2rem;flex-direction:row;align-items:center;justify-content:space-between;gap:2rem}
-}
-.exp-card:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.2)}
-.exp-main{display:flex;align-items:center;gap:1rem;min-width:0}
-.exp-mark{
-  flex:none;width:5.75rem;height:3.25rem;border-radius:var(--radius-xl);
-  background:#fff;display:grid;place-items:center;padding:.45rem .6rem;
-  color:var(--brand-deep);font-size:.8125rem;font-weight:500;letter-spacing:.06em;
-}
-@media (min-width:640px){.exp-mark{width:7rem;height:3.75rem;padding:.5rem .75rem;font-size:.875rem}}
-.exp-mark img{width:100%;height:100%;object-fit:contain}
-.exp-text{min-width:0}
-.exp-text h3{font-size:1.25rem;font-weight:500;letter-spacing:-.01em;line-height:1.25}
-@media (min-width:640px){.exp-text h3{font-size:1.5rem}}
-.exp-text p{font-size:.8125rem;color:rgba(255,255,255,.6);margin-top:.35rem;line-height:1.5}
-.exp-side{display:flex;align-items:center;gap:.75rem;flex:none;flex-wrap:wrap}
-.exp-term{font-size:.875rem;font-weight:500;color:rgba(255,255,255,.85)}
-.exp-tag{
-  display:inline-flex;align-items:center;gap:.45rem;border-radius:var(--radius-pill);
-  padding:.35rem .8rem;font-size:.6875rem;font-weight:500;text-transform:uppercase;letter-spacing:.14em;
-  background:rgba(255,255,255,.08);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.14);
-}
-.exp-tag::before{content:"";width:.375rem;height:.375rem;border-radius:var(--radius-pill);background:rgba(255,255,255,.5)}
-.exp-tag.live{background:rgba(87,144,230,.16);color:#dce8fb;border-color:rgba(87,144,230,.38)}
-.exp-tag.live::before{background:var(--brand-light);animation:pulseDot 2.2s var(--ease-quart) infinite}
-@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
-.exp-more{
-  margin:2rem auto 0;max-width:88rem;font-size:.8125rem;color:rgba(255,255,255,.45);
+@media (min-width:640px){.transform-panel{padding:2.5rem 2.25rem}}
+.transform-panel.mess{background:var(--surface);border:1px solid var(--hairline)}
+.transform-panel.picture{background:var(--brand-deep);color:#fff;box-shadow:0 1.5rem 3rem rgba(15,47,99,.22)}
+.transform-label{
+  font-size:.6875rem;font-weight:500;text-transform:uppercase;letter-spacing:.22em;
   display:flex;align-items:center;gap:.6rem;
 }
-.exp-more::before{content:"";width:1.5rem;height:1px;background:rgba(255,255,255,.25);flex:none}
+.transform-label::after{content:"";height:1px;flex:1;background:currentColor;opacity:.25}
+.transform-panel.mess .transform-label{color:var(--ink-soft)}
+.transform-panel.picture .transform-label{color:var(--brand-light)}
+
+/* plain-language lead line at the top of each panel */
+.transform-lead{font-size:.9375rem;line-height:1.7;max-width:26rem}
+.transform-panel.mess .transform-lead{color:var(--ink-soft)}
+.transform-panel.picture .transform-lead{color:rgba(255,255,255,.75)}
+.transform-lead b{font-weight:500;color:var(--ink)}
+.transform-panel.picture .transform-lead b{color:#fff}
+
+/* the mess side: loose, scattered chips */
+.transform-items{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:.35rem}
+.transform-items span{
+  display:inline-flex;align-items:center;border-radius:var(--radius-pill);
+  padding:.55rem 1rem;font-size:.8125rem;line-height:1.2;white-space:nowrap;
+  background:var(--surface-card);border:1px solid var(--hairline);color:var(--ink-soft);
+  will-change:transform,opacity;
+}
+.transform-foot{
+  font-size:.8125rem;line-height:1.6;color:var(--ink-soft);
+  margin-top:auto;padding-top:1.25rem;border-top:1px solid var(--hairline);
+}
+
+/* the picture side: three numbered, explained outputs */
+.picture-list{display:flex;flex-direction:column;gap:1.5rem;margin-top:.35rem}
+.picture-item{display:flex;gap:1rem;will-change:transform,opacity}
+.picture-num{
+  flex:none;font-size:.6875rem;font-weight:500;letter-spacing:.16em;
+  color:var(--brand-light);padding-top:.3rem;
+}
+.picture-item h4{font-size:1.0625rem;font-weight:500;line-height:1.35;color:#fff}
+@media (min-width:640px){.picture-item h4{font-size:1.125rem}}
+.picture-item p{font-size:.8125rem;line-height:1.65;color:rgba(255,255,255,.62);margin-top:.4rem}
+
+/* middle column: arrow plus a caption for what happens in between */
+.transform-mid{
+  display:flex;flex-direction:column;align-items:center;gap:.9rem;
+  align-self:center;justify-self:center;
+}
+.transform-mid-cap{
+  font-size:.625rem;font-weight:500;text-transform:uppercase;letter-spacing:.16em;
+  color:var(--ink-soft);text-align:center;max-width:8rem;line-height:1.6;
+  will-change:transform,opacity;
+}
+@media (max-width:767px){.transform-mid{flex-direction:row;gap:.85rem}.transform-mid-cap{text-align:left;max-width:none}}
+
+.transform-arrow{
+  position:relative;display:grid;place-items:center;flex:none;
+  width:3.25rem;height:3.25rem;border-radius:var(--radius-pill);
+  background:var(--brand);color:#fff;box-shadow:0 .75rem 1.5rem rgba(37,99,201,.3);
+  will-change:transform,opacity;
+}
+.transform-arrow svg{width:1.2rem;height:1.2rem}
+@media (max-width:767px){.transform-arrow svg{transform:rotate(90deg)}}
 
 /* ============================================================
    5b) PRICING
@@ -544,43 +604,11 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 .price-card .price span{font-size:.8125rem;opacity:.65}
 .price-card .plan-desc{font-size:.8125rem;margin-top:.5rem;opacity:.7;line-height:1.5}
 .price-card:not(.featured) .plan-desc{color:var(--ink-soft);opacity:1}
-.price-card ul{margin-top:1.5rem;display:flex;flex-direction:column;gap:.75rem;flex:1}
+.price-card ul{margin-top:1.5rem;margin-bottom:1.75rem;display:flex;flex-direction:column;gap:.75rem;flex:1}
 .price-card li{display:flex;align-items:flex-start;gap:.6rem;font-size:.8125rem;line-height:1.5}
 .price-card li svg{width:1rem;height:1rem;flex:none;margin-top:.15rem;color:var(--brand)}
 .price-card.featured li svg{color:var(--brand-light)}
-.price-card .pill{margin-top:1.75rem;justify-content:center;width:100%}
-
-/* ============================================================
-   6) STATS
-   ============================================================ */
-.stats{
-  background:var(--brand-deep);color:var(--on-brand);border-radius:var(--radius-card-lg);
-  margin-top:.75rem;padding:5rem 1.5rem;
-}
-@media (min-width:640px){.stats{padding:5rem 2.5rem}}
-.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);column-gap:2rem;row-gap:3rem;margin-top:4rem}
-@media (min-width:1024px){.stat-grid{grid-template-columns:repeat(4,1fr)}}
-.stat-cell{border-top:1px solid rgba(255,255,255,.2);padding-top:1.25rem;will-change:transform,opacity}
-.stat-cell b{display:block;font-size:3.75rem;font-weight:500;line-height:1;letter-spacing:-.02em}
-@media (min-width:640px){.stat-cell b{font-size:4.5rem}}
-.stat-cell span{display:block;font-size:.875rem;color:rgba(255,255,255,.65);margin-top:.75rem}
-
-/* ============================================================
-   7) TESTIMONIALS
-   ============================================================ */
-.testimonials{background:var(--background);padding:5rem 1.5rem}
-@media (min-width:640px){.testimonials{padding:6rem 2.5rem}}
-.tgrid{display:grid;grid-template-columns:1fr;gap:1.25rem;margin-top:3.5rem}
-@media (min-width:768px){.tgrid{grid-template-columns:repeat(3,1fr)}}
-.tcard{
-  display:flex;flex-direction:column;justify-content:space-between;height:100%;
-  border-radius:var(--radius-card);background:var(--surface);padding:1.75rem;will-change:transform,opacity;
-}
-.tquote{font-size:2.25rem;color:var(--brand);line-height:1}
-.tcard blockquote{font-size:1.125rem;line-height:1.65;color:var(--ink);margin-top:1rem}
-.tcard figcaption{border-top:1px solid var(--hairline);padding-top:1rem;margin-top:1.5rem}
-.tcard figcaption b{display:block;font-weight:500}
-.tcard figcaption span{display:block;font-size:.875rem;color:var(--ink-soft)}
+.price-card .pill{margin-top:auto;justify-content:center;width:100%;padding-left:1.5rem;padding-top:.55rem;padding-bottom:.55rem}
 
 /* ============================================================
    8) FOOTER
@@ -734,42 +762,45 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 @media (max-width:640px){
   main{padding:.4rem}
 
-  /* header + hero */
-  .site-header{padding:1rem 1.1rem 0;column-gap:.5rem}
+  /* hero */
   .brand-logo{height:6.75rem}
   .brand-logo-lg{height:8rem}
   .foot-brand .brand-logo{height:6.25rem}
-  .burger{width:2.75rem;height:2.75rem}
 
   .hero{border-radius:1.5rem;height:calc(100svh - .8rem);min-height:34rem}
-  .hero-title-wrap{padding:2.5rem 1.25rem 0}
+  .hero-top{padding:1.15rem 1.25rem 0;gap:1rem}
+  .hero-title-wrap{padding:2rem 1.25rem 0}
   .hero-title{font-size:3rem;line-height:.95}
   .hero-bottom{padding:0 1.25rem 1.5rem;gap:1.25rem}
-  .hero-tagline{font-size:1.85rem;line-height:1}
+  .hero-tagline{font-size:1.05rem;line-height:1.2;max-width:14rem}
   .hero-cta-group{width:100%;align-items:stretch;gap:.85rem}
   .credential-chip{width:100%}
-  .credential-badge{width:2.75rem;height:2.75rem}
-  .hero-cta-group .pill{width:100%;justify-content:center;padding:1rem 1.5rem}
+  .credential-badge{width:2.5rem;height:2.5rem}
+  .hero-cta-group .pill{width:100%;justify-content:center;padding:.6rem .6rem .6rem 1.5rem}
 
-  /* about */
-  .trust{padding:3.5rem 1.25rem}
-  .trust-top{gap:1.25rem}
-  .pct-badge{width:6.75rem;height:6.75rem;gap:.4rem}
-  .pct-badge img{width:2.25rem;height:2.25rem}
-  .pct-badge span{font-size:.575rem;max-width:6.5em}
-  .badge-card{padding:1.15rem;gap:.9rem}
-  .badge-card h3{font-size:1.0625rem}
-  .ghost-title{font-size:10.5vw;margin-top:2.25rem;letter-spacing:-.03em}
+  /* portrait */
+  .trust{padding:1.5rem 1.25rem 3rem}
+  .ghost-title{font-size:10.5vw;letter-spacing:-.03em}
   .coach-holder{margin-top:2rem}
   .coach-inview{width:15rem}
+
+  /* principles */
+  .principles{padding:3.5rem 1.25rem 2.5rem}
+  .principles-head h2{font-size:2.125rem;margin-top:1rem}
+  .principles-list{margin-top:2.5rem}
+  .principle-row{padding:1.85rem 0;gap:.85rem}
+  .principle-eyebrow{font-size:1.75rem}
+  .principle-body h3{font-size:1.125rem}
+  .principle-body p{font-size:.875rem;margin-top:.7rem}
 
   /* services */
   .programs{padding:3.75rem 1.25rem}
   .programs h2{font-size:2.5rem}
-  .services-banner{height:22rem;border-radius:1.5rem}
-  .services-banner-content{padding:1.5rem 1.25rem}
+  .services-banner{height:24rem;border-radius:1.5rem}
+  .services-banner-content{padding:1.75rem 1.35rem}
+  .services-banner-sub{margin-top:1.35rem;font-size:.875rem}
   .program-list{margin-top:2.5rem}
-  .program-row a{gap:.85rem;padding:1.35rem 0}
+  .program-row button{gap:.85rem;padding:1.35rem 0}
   .program-idx{width:1.75rem;font-size:.75rem}
   .program-body h3{font-size:1.25rem}
   .program-body p{font-size:.8125rem;line-height:1.5}
@@ -784,17 +815,20 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   .process-rail{margin-top:2.5rem}
   .process-card{padding:2rem 1.35rem 1.75rem;border-radius:1.5rem}
   .process-card::before{left:1.35rem}
-
-  /* experience */
-  .experience{border-radius:1.5rem;padding:3.75rem 1.25rem}
-  .experience h2{font-size:2.5rem}
-  .exp-timeline{margin-top:2.5rem;padding-left:1.85rem}
-  .exp-item::before{left:-1.85rem;top:1.6rem}
-  .exp-card{padding:1.25rem;gap:1rem}
-  .exp-main{gap:.85rem}
-  .exp-mark{width:5.25rem;height:3rem;font-size:.75rem}
-  .exp-text h3{font-size:1.1875rem}
-  .exp-side{width:100%;justify-content:flex-start;gap:.6rem;padding-left:6.1rem}
+  .transform-block{margin-top:3.5rem}
+  .transform-statement h3{font-size:1.85rem}
+  .transform-statement p{font-size:.9375rem;margin-top:1.1rem}
+  .transform-rail{margin-top:2rem;gap:1rem}
+  .transform-panel{padding:1.75rem 1.35rem;border-radius:1.5rem;gap:1rem}
+  .transform-lead{font-size:.875rem}
+  .transform-items span{font-size:.75rem;padding:.5rem .85rem;white-space:normal}
+  .transform-foot{font-size:.75rem;padding-top:1rem}
+  .transform-arrow{width:2.5rem;height:2.5rem}
+  .transform-mid-cap{font-size:.6rem}
+  .picture-list{gap:1.15rem}
+  .picture-item{gap:.85rem}
+  .picture-item h4{font-size:1rem}
+  .picture-item p{font-size:.78125rem}
 
   /* pricing */
   .pricing{padding:3.75rem 1.25rem}
@@ -807,7 +841,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   .price-card{padding:1.65rem 1.35rem;border-radius:1.5rem}
   .price-card .plan-badge{right:1.35rem}
   .price-card .price b{font-size:2.25rem}
-  .price-card .pill{margin-top:1.5rem;padding:.95rem 1.5rem}
+  .price-card .pill{padding:.6rem .6rem .6rem 1.5rem}
 
   /* footer */
   .site-footer{border-radius:1.5rem;padding:3rem 1.25rem}
@@ -833,7 +867,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 /* very small handsets */
 @media (max-width:360px){
   .hero-title{font-size:2.75rem}
-  .hero-tagline{font-size:1.7rem}
+  .hero-tagline{font-size:.95rem;max-width:12rem}
   .ghost-title{font-size:10vw}
 }
 
@@ -856,34 +890,21 @@ main{width:100%;overflow-x:clip;padding:.5rem}
       <div class="hero-overlay"></div>
     </div>
 
-    <header class="site-header">
-      <nav class="hdr-nav">
-        <a href="#about" data-scroll>About</a>
-        <a href="#services" data-scroll>Services</a>
-        <a href="#approach" data-scroll>Approach</a>
-        <a href="#experience" data-scroll>Experience</a>
-        <a href="#pricing" data-scroll>Pricing</a>
-      </nav>
-      <div class="hdr-brand">
-        <span class="wordmark">
-          <img class="brand-logo" src="images/logo.png" alt="Arbab Advisory" />
-        </span>
-      </div>
-      <div class="hdr-actions">
-        <button type="button" class="hdr-cta" data-open-modal>Book a Consultation</button>
-        <button type="button" class="burger" data-open-menu aria-label="Open menu">
-          <i></i><i></i>
-        </button>
-      </div>
-    </header>
+    <div class="hero-top">
+      <span class="wordmark">
+        <img class="brand-logo" src="images/logo.png" alt="Arbab Advisory" />
+      </span>
+      <button type="button" class="burger" data-open-menu aria-label="Open menu">
+        <i></i><i></i>
+      </button>
+    </div>
 
     <div class="hero-title-wrap">
       <h1 class="hero-title" id="hero-title"></h1>
+      <p class="hero-tagline" id="hero-tagline"></p>
     </div>
 
     <div class="hero-bottom">
-      <p class="hero-tagline" id="hero-tagline"></p>
-
       <div class="hero-cta-group">
         <div class="glass credential-chip inview" id="credentialChip"
              data-inview='{"from":{"opacity":0,"y":28},"to":{"opacity":1,"y":0},"config":{"tension":200,"friction":26},"delayIn":650}'>
@@ -897,7 +918,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
         <div class="pill-wrap inview" id="heroCtaWrap"
              data-inview='{"from":{"opacity":0,"y":20},"to":{"opacity":1,"y":0},"config":{"tension":200,"friction":24},"delayIn":780}'>
           <button type="button" class="pill light" data-open-modal>
-            Book a Consultation
+            Book a Free Consultation
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </button>
         </div>
@@ -905,23 +926,19 @@ main{width:100%;overflow-x:clip;padding:.5rem}
     </div>
   </section>
 
-  <!-- ============ ABOUT ============ -->
-  <section class="trust" id="about">
-    <div class="trust-top">
-      <div class="pct-badge inview" data-inview='{"from":{"opacity":0,"scale":0.9},"to":{"opacity":1,"scale":1},"config":{"tension":220,"friction":22}}'>
-        <img src="images/ACCA_logo.svg" alt="ACCA logo" /><span>Qualified Chartered Certified Accountant</span>
+  <!-- ============ PRINCIPLES ============ -->
+  <section class="principles" id="about">
+    <div class="principles-inner">
+      <div class="principles-head inview"
+           data-inview='{"from":{"opacity":0,"y":22},"to":{"opacity":1,"y":0},"config":{"tension":200,"friction":26}}'>
+        <h2>Four things you can count on.</h2>
       </div>
-      <article class="badge-card inview" data-inview='{"from":{"opacity":0,"y":24},"to":{"opacity":1,"y":0},"config":{"tension":200,"friction":26},"delayIn":120}'>
-        <div class="badge-chip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
-        </div>
-        <div>
-          <h3>Straightforward accounting, personally handled</h3>
-          <p>Abdur Rahman Khan is an ACCA-qualified accountant supporting small businesses and individuals with bookkeeping, tax, and financial advice - no jargon, and no hand-offs to someone junior.</p>
-        </div>
-      </article>
+      <div class="principles-list" id="principlesGrid"></div>
     </div>
+  </section>
 
+  <!-- ============ PORTRAIT ============ -->
+  <section class="trust">
     <h2 class="ghost-title" id="trust-title">
       <div class="ghost-row">
         <span class="ghost-word" data-px="-3,3"></span>
@@ -936,9 +953,9 @@ main{width:100%;overflow-x:clip;padding:.5rem}
     <div class="coach-holder">
       <div class="coach-inview inview" data-inview='{"from":{"opacity":0,"y":60,"scale":0.92},"to":{"opacity":1,"y":0,"scale":1},"config":{"tension":170,"friction":26}}'>
         <figure class="coach-fig">
-          <img src="images/arbab3.png" alt="Abdur Rahman Khan" loading="lazy" decoding="async" />
+          <img src="images/arbab3.png" alt="Arbab Abdur Rahman" loading="lazy" decoding="async" />
           <figcaption class="coach-cap">
-            <b>Abdur Rahman Khan</b><span>ACCA Qualified Accountant</span>
+            <b>Arbab Abdur Rahman</b><span>ACCA Qualified Accountant</span>
           </figcaption>
         </figure>
       </div>
@@ -949,10 +966,11 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   <section class="programs" id="services">
     <div class="services-banner inview"
          data-inview='{"from":{"opacity":0,"scale":0.97},"to":{"opacity":1,"scale":1},"config":{"tension":200,"friction":24}}'>
-      <img class="services-banner-img" src="images/arbab4.png" alt="Accounting concepts illustrated around Abdur Rahman Khan" loading="lazy" decoding="async" />
+      <img class="services-banner-img" src="images/arbab4.png" alt="Accounting concepts illustrated around Arbab Abdur Rahman" loading="lazy" decoding="async" />
       <div class="services-banner-overlay"></div>
       <div class="services-banner-content">
         <h2 id="programs-title"></h2>
+        <p class="services-banner-sub"><b>Tax-Ready Books</b>Accurate, organized books ready for your tax preparer when filing season arrives.</p>
       </div>
     </div>
     <ul class="program-list" id="programList"></ul>
@@ -976,20 +994,62 @@ main{width:100%;overflow-x:clip;padding:.5rem}
     </div>
 
     <div class="process-rail" id="facCards"></div>
-  </section>
 
-  <!-- ============ EXPERIENCE ============ -->
-  <section class="experience" id="experience">
-    <div class="exp-head">
-      <div>
-        <h2 id="experience-title"></h2>
+    <div class="transform-block" id="transformBlock">
+      <div class="transform-statement">
+        <h3>
+          <span class="t-line"><span>Give us the mess.</span></span>
+          <span class="t-line"><span class="t-accent">We'll give you the picture.</span></span>
+        </h3>
+        <p>You shouldn't need to understand your books to understand your business.</p>
       </div>
-      <p class="exp-note">A snapshot of the practices and organisations behind the advice. More roles and detail will be added here as this section grows.</p>
+
+      <div class="transform-rail">
+        <div class="transform-panel mess">
+          <span class="transform-label">The mess: what you hand over</span>
+          <p class="transform-lead"><b>Whatever state it's in.</b> A folder of receipts, a spreadsheet that stopped making sense in March, a bank feed nobody has touched all year. You don't need to sort or label anything first.</p>
+          <div class="transform-items">
+            <span>Transactions</span><span>Invoices</span><span>Bills</span><span>Payroll</span><span>Bank feeds</span><span>Receipts</span><span>Statements</span>
+          </div>
+          <p class="transform-foot">Send it however suits you: a shared folder, an accounting login, or a pile of photos on your phone.</p>
+        </div>
+
+        <div class="transform-mid">
+          <div class="transform-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+          <span class="transform-mid-cap">We sort, match &amp; reconcile</span>
+        </div>
+
+        <div class="transform-panel picture">
+          <span class="transform-label">The picture: what you get back</span>
+          <p class="transform-lead"><b>Three plain answers, every month.</b> No jargon, no 40-page pack you'll never open.</p>
+          <div class="picture-list">
+            <div class="picture-item">
+              <span class="picture-num">01</span>
+              <div>
+                <h4>Where your money came from</h4>
+                <p>Income broken down by source, so you can see which clients, products, or services are actually paying you, and which only look like they are.</p>
+              </div>
+            </div>
+            <div class="picture-item">
+              <span class="picture-num">02</span>
+              <div>
+                <h4>Where it went</h4>
+                <p>Every cost grouped and named: stock, wages, software, tax, the lot. You can see exactly what's quietly creeping up month after month.</p>
+              </div>
+            </div>
+            <div class="picture-item">
+              <span class="picture-num">03</span>
+              <div>
+                <h4>What you made</h4>
+                <p>Your real profit once everything is accounted for. Not the balance sitting in your bank account, which still owes tax, wages, and suppliers.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <ol class="exp-timeline" id="expTimeline"></ol>
-
-    <p class="exp-more">Further experience to be added</p>
   </section>
 
   <!-- ============ PRICING ============ -->
@@ -997,7 +1057,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
     <div class="pricing-head">
       <div class="pricing-head-left">
         <h2 id="pricing-title"></h2>
-        <p class="pricing-sub">Fixed monthly fees, agreed upfront — no surprise invoices. Every plan includes direct access to Abdur, not a call centre.</p>
+        <p class="pricing-sub">Fixed monthly fees, agreed upfront. No surprise invoices. Every plan includes direct access to Arbab, not a call centre.</p>
       </div>
 
       <div class="currency" id="currency">
@@ -1024,7 +1084,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
       </div>
       <div class="pill-wrap inview" data-inview='{"from":{"opacity":0,"y":20},"to":{"opacity":1,"y":0},"config":{"tension":200,"friction":24},"delayIn":150}'>
         <button type="button" class="pill light" data-open-modal>
-          Book a Consultation
+          Start the Conversation
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
       </div>
@@ -1035,7 +1095,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
         <span class="wordmark">
           <img class="brand-logo brand-logo-white" src="images/logo.png" alt="Arbab Advisory" />
         </span>
-        <p>Arbab Advisory is the accounting and advisory practice of Abdur Rahman Khan, ACCA - bookkeeping, tax, payroll, and financial advice for small businesses and individuals.</p>
+        <p>Arbab Advisory is the accounting and advisory practice of Arbab Abdur Rahman, ACCA - bookkeeping, tax, payroll, and financial advice for small businesses and individuals.</p>
         <address>
           <a href="mailto:abdur@arbabadvisory.com">abdur@arbabadvisory.com</a>
         </address>
@@ -1044,10 +1104,11 @@ main{width:100%;overflow-x:clip;padding:.5rem}
       <nav class="foot-col">
         <h4>Services</h4>
         <ul>
-          <li><a href="#bookkeeping">Bookkeeping &amp; Accounts</a></li>
-          <li><a href="#tax">Tax &amp; VAT Returns</a></li>
-          <li><a href="#payroll">Payroll Services</a></li>
-          <li><a href="#advisory">Business Advisory</a></li>
+          <li><a href="#services" data-scroll>Monthly Bookkeeping</a></li>
+          <li><a href="#services" data-scroll>Financial Reporting</a></li>
+          <li><a href="#services" data-scroll>Payroll Services</a></li>
+          <li><a href="#services" data-scroll>Tax &amp; VAT Returns</a></li>
+          <li><a href="#services" data-scroll>Business Advisory</a></li>
         </ul>
       </nav>
       <nav class="foot-col">
@@ -1056,7 +1117,6 @@ main{width:100%;overflow-x:clip;padding:.5rem}
           <li><a href="#about" data-scroll>About</a></li>
           <li><a href="#services" data-scroll>Services</a></li>
           <li><a href="#approach" data-scroll>Approach</a></li>
-          <li><a href="#experience" data-scroll>Experience</a></li>
           <li><a href="#pricing" data-scroll>Pricing</a></li>
           <li><a href="#contact" data-scroll>Contact</a></li>
         </ul>
@@ -1094,14 +1154,13 @@ main{width:100%;overflow-x:clip;padding:.5rem}
         <a href="#about" data-scroll data-menu-link>About</a>
         <a href="#services" data-scroll data-menu-link>Services</a>
         <a href="#approach" data-scroll data-menu-link>Approach</a>
-        <a href="#experience" data-scroll data-menu-link>Experience</a>
         <a href="#pricing" data-scroll data-menu-link>Pricing</a>
         <a href="#contact" data-scroll data-menu-link>Contact</a>
       </nav>
 
       <div class="menu-bottom">
         <button type="button" class="pill light" id="menuBook">
-          Book a Consultation
+          Get in Touch
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
         <nav aria-label="Social">
@@ -1118,7 +1177,6 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   <div class="modal-panel" id="modalPanel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal-head">
       <div>
-        <span class="eyebrow dark">Book a consultation</span>
         <h2 id="modal-title"></h2>
       </div>
       <button type="button" class="modal-close" id="modalClose" aria-label="Close dialog">
@@ -1166,6 +1224,10 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 
 <script type="module">
 import Lenis from 'lenis';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 /* ============================================================
    CONSTANTS
@@ -1199,6 +1261,8 @@ window.addEventListener('resize', applyRootFontSize);
    LENIS
    ============================================================ */
 const lenis = new Lenis({ smoothWheel: true });
+/* keep ScrollTrigger in step with Lenis' smoothed scroll position */
+lenis.on('scroll', ScrollTrigger.update);
 let locks = 0;
 function lockScroll(){
   locks++;
@@ -1307,7 +1371,7 @@ function buildClips(container, items, { block = false, tight = false, soft = fal
     clip.className = 'clip' + (tight ? ' tight' : '') + (soft ? ' soft' : '');
     if (block) clip.style.display = 'block';
     const inner = document.createElement('span');
-    inner.textContent = text;
+    inner.innerHTML = text;
     clip.appendChild(inner);
     container.appendChild(clip);
     if (!block && i < items.length - 1) container.appendChild(document.createTextNode(' '));
@@ -1377,13 +1441,21 @@ const ARROW_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 /* ============================================================
    DATA
    ============================================================ */
-const ABOUT_HEADLINE = ['Precise', 'Honest', 'Clear', 'Always'];
+const ABOUT_HEADLINE = ['Precise', 'Reliable', 'Clear', 'Timely'];
+
+const PRINCIPLES = [
+  { word:'Precise', title:'Bank reconciliations that actually reconcile.', desc:'Every transaction accounted for, exceptions identified, and balances tied out.' },
+  { word:'Timely', title:'Your month doesn’t wait for your accountant.', desc:'Books maintained on an agreed monthly schedule, with reports delivered when promised.' },
+  { word:'Clear', title:'No accounting-language gymnastics.', desc:'Your P&L and balance sheet explained in terms you can actually use.' },
+  { word:'Reliable', title:'One person accountable for your books.', desc:'No bouncing between junior staff, salespeople, and account managers.' },
+];
 
 const SERVICES = [
-  { idx:'01', name:'Bookkeeping & Accounts', desc:'Accurate books and year-end accounts, kept current all year round.', href:'#bookkeeping' },
-  { idx:'02', name:'Tax & VAT Returns',      desc:'Self-assessment, corporation tax, and VAT - filed on time, every time.', href:'#tax' },
-  { idx:'03', name:'Payroll Services',       desc:'Payroll runs, payslips, and pension compliance handled end-to-end.', href:'#payroll' },
-  { idx:'04', name:'Business Advisory',      desc:'Forecasts, structuring, and financial decisions you can act on with confidence.', href:'#advisory' },
+  { idx:'01', name:'Monthly Bookkeeping',         desc:'Accurate, up-to-date books maintained every month.' },
+  { idx:'02', name:'Financial Reporting',         desc:'Profit & Loss • Balance sheet • Cashflow • Management reports' },
+  { idx:'03', name:'Payroll Services',            desc:'Payroll processing, tax withholding, payroll tax payments, and payroll reporting.' },
+  { idx:'04', name:'Tax & VAT Returns (UK Only)', desc:'UK tax and VAT returns prepared from well-maintained books.' },
+  { idx:'05', name:'Business Advisory',           desc:'Budgeting • Forecasting • Cash-flow analysis • Profitability analysis • Financial controls' },
 ];
 
 const APPROACH_TILES = [
@@ -1401,25 +1473,6 @@ const APPROACH_TILES = [
   },
 ];
 
-const EXPERIENCE = [
-  {
-    mark:'BT',
-    logo:'images/baker.png',
-    company:'Baker Tilly',
-    role:'Company Audit',
-    term:'1 year',
-    ongoing:false,
-  },
-  {
-    mark:'RMI',
-    logo:'images/RMI-Logo.png',
-    company:'RMI - Rehman Medical Institute',
-    role:'',
-    term:'Ongoing',
-    ongoing:true,
-  },
-];
-
 const CURRENCIES = [
   {
     id:'gbp', flag:'UK', name:'United Kingdom (\u00a3)', region:'United Kingdom',
@@ -1433,7 +1486,7 @@ const CURRENCIES = [
   },
 ];
 
-const PRICING_NOTE = 'Every business is different \u2014 the figures above are a starting point. Final pricing is confirmed after a free consultation.';
+const PRICING_NOTE = 'Every business is different. The figures above are a starting point, and final pricing is confirmed after a free consultation.';
 
 const PLANS = [
   {
@@ -1482,7 +1535,7 @@ const PLANS = [
 const heroTitle = document.getElementById('hero-title');
 const heroTagline = document.getElementById('hero-tagline');
 buildClips(heroTitle, 'Numbers, Handled'.split(' '));
-buildClips(heroTagline, ['Clear Books,', 'Confident Growth'], { block: true });
+buildClips(heroTagline, ['From daily transactions to', '<span class="tagline-highlight">$32M+</span> yearly businesses'], { block: true });
 
 /* hero parallax plate: 0% -> 12% */
 const heroSection = document.getElementById('hero');
@@ -1533,7 +1586,6 @@ function stackedHeading(el, lines, opts = {}){
 }
 stackedHeading(document.getElementById('programs-title'), ['Accounting,', 'Made Simple']);
 stackedHeading(document.getElementById('facilities-title'), ['A Process', 'Built Around', 'You'], { stagger: 120 });
-stackedHeading(document.getElementById('experience-title'), ['Experience', 'That Counts']);
 stackedHeading(document.getElementById('pricing-title'), ['Simple,', 'Fixed-Fee Pricing']);
 stackedHeading(document.getElementById('footer-cta-title'), ['Ready to', 'get started']);
 
@@ -1557,16 +1609,17 @@ buildClips(facBody, "From your first message to the moment your return is filed,
 const programList = document.getElementById('programList');
 SERVICES.forEach((p, i) => {
   const li = document.createElement('li');
+  /* no per-service pages exist, so each row opens the consultation form */
   li.innerHTML = `
     <div class="program-row">
-      <a href="${p.href}">
+      <button type="button" data-open-modal aria-label="Enquire about ${p.name}">
         <span class="program-idx">${p.idx}</span>
         <span class="program-body">
           <h3>${p.name}</h3>
           <p>${p.desc}</p>
         </span>
         <span class="program-arrow">${ARROW_SVG}</span>
-      </a>
+      </button>
     </div>`;
   programList.appendChild(li);
   const row = li.querySelector('.program-row');
@@ -1575,7 +1628,54 @@ SERVICES.forEach((p, i) => {
     config: { tension: 190, friction: 26 }, delayIn: i * 90
   });
   const arrow = li.querySelector('.program-arrow');
-  hoverSpring(li.querySelector('a'), arrow, { x: 0, opacity: 0.55 }, { x: 8, opacity: 1 }, { tension: 300, friction: 20 });
+  hoverSpring(li.querySelector('button'), arrow, { x: 0, opacity: 0.55 }, { x: 8, opacity: 1 }, { tension: 300, friction: 20 });
+});
+
+/* ============================================================
+   BUILD: PRINCIPLES
+   ============================================================ */
+const principlesGrid = document.getElementById('principlesGrid');
+PRINCIPLES.forEach((p, i) => {
+  const row = document.createElement('div');
+  row.className = 'principle-row';
+  row.innerHTML = `
+    <div class="principle-word">
+      <span class="principle-num">${String(i + 1).padStart(2, '0')}</span>
+      <span class="principle-eyebrow">${p.word}</span>
+    </div>
+    <div class="principle-body">
+      <h3>${p.title}</h3>
+      <p>${p.desc}</p>
+    </div>`;
+  principlesGrid.appendChild(row);
+
+  if (REDUCED) return;
+
+  const num  = row.querySelector('.principle-num');
+  const word = row.querySelector('.principle-eyebrow');
+  const head = row.querySelector('h3');
+  const body = row.querySelector('p');
+
+  /* the word leads, then the sentence, then the detail, staggered on entry */
+  gsap.set([num, word], { xPercent: -8, opacity: 0 });
+  gsap.set(head, { y: 26, opacity: 0 });
+  gsap.set(body, { y: 20, opacity: 0 });
+
+  gsap.timeline({
+    scrollTrigger: { trigger: row, start: 'top 82%', once: true }
+  })
+    .to([num, word], { xPercent: 0, opacity: 1, duration: .9, ease: 'expo.out', stagger: .06 })
+    .to(head,        { y: 0, opacity: 1, duration: .85, ease: 'expo.out' }, '-=.62')
+    .to(body,        { y: 0, opacity: 1, duration: .8,  ease: 'expo.out' }, '-=.6');
+
+  /* the rule under each row draws itself as that row travels up the viewport */
+  gsap.fromTo(row,
+    { '--rule-w': '0%' },
+    {
+      '--rule-w': '100%', ease: 'none',
+      scrollTrigger: { trigger: row, start: 'top 85%', end: 'bottom 55%', scrub: .6 }
+    }
+  );
 });
 
 /* ============================================================
@@ -1605,35 +1705,51 @@ APPROACH_TILES.forEach((t, i) => {
 });
 
 /* ============================================================
-   BUILD: EXPERIENCE
+   BUILD: MESS -> PICTURE
+   a single quiet reveal, left to right: the statement, then what
+   you hand over, then what you get back
    ============================================================ */
-const expTimeline = document.getElementById('expTimeline');
-EXPERIENCE.forEach((x, i) => {
-  const li = document.createElement('li');
-  li.className = 'exp-item' + (x.ongoing ? ' is-current' : '');
-  li.innerHTML = `
-    <div class="exp-card">
-      <div class="exp-main">
-        <span class="exp-mark">${x.logo
-          ? `<img src="${x.logo}" alt="${x.company} logo" loading="lazy" decoding="async" />`
-          : x.mark}</span>
-        <div class="exp-text">
-          <h3>${x.company}</h3>
-          ${x.role ? `<p>${x.role}</p>` : ''}
-        </div>
-      </div>
-      <div class="exp-side">
-        ${x.ongoing
-          ? `<span class="exp-tag live">${x.term}</span>`
-          : `<span class="exp-term">${x.term}</span>`}
-      </div>
-    </div>`;
-  expTimeline.appendChild(li);
-  setupInview(li, {
-    from: { opacity: 0, y: 32 }, to: { opacity: 1, y: 0 },
-    config: { tension: 190, friction: 26 }, delayIn: i * 110
-  });
-});
+{
+  const block = document.getElementById('transformBlock');
+  const lines = block.querySelectorAll('.t-line > span');
+  const lead  = block.querySelector('.transform-statement p');
+
+  const messPanel = block.querySelector('.transform-panel.mess');
+  const messLead  = messPanel.querySelector('.transform-lead');
+  const messChips = messPanel.querySelectorAll('.transform-items span');
+  const messFoot  = messPanel.querySelector('.transform-foot');
+
+  const arrow  = block.querySelector('.transform-arrow');
+  const midCap = block.querySelector('.transform-mid-cap');
+
+  const picPanel = block.querySelector('.transform-panel.picture');
+  const picLead  = picPanel.querySelector('.transform-lead');
+  const picItems = picPanel.querySelectorAll('.picture-item');
+
+  if (!REDUCED) {
+    gsap.set(lines, { yPercent: 115 });
+    gsap.set([lead, messLead, picLead, messFoot, midCap, arrow], { y: 14, opacity: 0 });
+    gsap.set([messPanel, picPanel], { y: 28, opacity: 0 });
+    gsap.set(messChips, { y: 10, opacity: 0 });
+    gsap.set(picItems, { y: 14, opacity: 0 });
+
+    const ease = 'expo.out';
+
+    gsap.timeline({
+      scrollTrigger: { trigger: block, start: 'top 75%', once: true }
+    })
+      .to(lines, { yPercent: 0, duration: 1.1, ease, stagger: .1 })
+      .to(lead,  { y: 0, opacity: 1, duration: .8, ease }, '-=.7')
+      .to(messPanel, { y: 0, opacity: 1, duration: .8, ease }, '-=.5')
+      .to(messLead,  { y: 0, opacity: 1, duration: .7, ease }, '-=.55')
+      .to(messChips, { y: 0, opacity: 1, duration: .55, ease, stagger: .045 }, '-=.45')
+      .to(messFoot,  { y: 0, opacity: 1, duration: .6, ease }, '-=.3')
+      .to([arrow, midCap], { y: 0, opacity: 1, duration: .55, ease, stagger: .08 }, '-=.35')
+      .to(picPanel, { y: 0, opacity: 1, duration: .8, ease }, '-=.3')
+      .to(picLead,  { y: 0, opacity: 1, duration: .7, ease }, '-=.55')
+      .to(picItems, { y: 0, opacity: 1, duration: .65, ease, stagger: .1 }, '-=.45');
+  }
+}
 
 /* ============================================================
    BUILD: PRICING
@@ -1857,13 +1973,13 @@ document.getElementById('successDone').addEventListener('click', closeModal);
 document.getElementById('menuBook').addEventListener('click', () => { closeMenu(); setTimeout(openModal, 220); });
 
 modalForm.addEventListener('submit', (e) => {
-  e.preventDefault();                       // stub — never hits a network
+  e.preventDefault();                       // stub: never hits a network
   submitBtn.disabled = true;
   submitBtn.textContent = 'Sending…';
   const first = (nameInput.value.trim().split(/\s+/)[0]) || 'there';
   setTimeout(() => {
     modalForm.style.display = 'none';
-    successText.textContent = `Thanks, ${first} — I'll be in touch shortly to schedule your consultation.`;
+    successText.textContent = `Thanks, ${first}. I'll be in touch shortly to schedule your consultation.`;
     modalSuccess.classList.add('show');
   }, 700);
 });
