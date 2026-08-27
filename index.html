@@ -254,28 +254,62 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 .credential-text span{font-size:.65rem;opacity:.72;letter-spacing:.02em}
 
 /* ============================================================
-   3) TRUST
+   3) ABOUT / TRUST
    ============================================================ */
 .trust{
   position:relative;isolation:isolate;overflow:hidden;
-  background:var(--background);padding:2rem 1.5rem 4rem;
+  background:var(--background);padding:4.5rem 1.5rem 4.5rem;
 }
-@media (min-width:640px){.trust{padding:3rem 2.5rem 8rem}}
+@media (min-width:640px){.trust{padding:7rem 2.5rem 7rem}}
 
-.ghost-title{
-  position:relative;z-index:0;pointer-events:none;user-select:none;
+.trust-head{max-width:88rem;margin:0 auto 3.5rem}
+.trust-head h2{
+  font-size:2.25rem;font-weight:500;line-height:1.05;letter-spacing:-.02em;max-width:20ch;
+}
+@media (min-width:640px){.trust-head h2{font-size:3rem}}
+
+/* two columns of pillars with the portrait sitting in the middle lane, so each
+   giant word carries its own explanation instead of pointing at a list below */
+.trust-grid{
   max-width:88rem;margin:0 auto;
-  font-size:6.2vw;font-weight:500;text-transform:uppercase;line-height:1.05;letter-spacing:-.02em;
-  color:var(--ghost);
+  display:grid;grid-template-columns:1fr;gap:2.75rem;
 }
-.ghost-row{display:flex;justify-content:space-between;align-items:baseline}
-.ghost-word{display:inline-block;will-change:transform}
-.ghost-word.ink{color:var(--ink)}
+@media (min-width:1024px){
+  .trust-grid{
+    grid-template-columns:minmax(0,1fr) 17rem minmax(0,1fr);
+    column-gap:3.5rem;row-gap:6rem;align-items:start;
+  }
+  .trust-cell:nth-child(1){grid-column:1;grid-row:1}
+  .trust-cell:nth-child(2){grid-column:3;grid-row:1}
+  .trust-cell:nth-child(4){grid-column:1;grid-row:2}
+  .trust-cell:nth-child(5){grid-column:3;grid-row:2}
+  .coach-holder{grid-column:2;grid-row:1 / span 2;align-self:center}
+}
 
-.coach-holder{position:relative;z-index:10;display:flex;justify-content:center;margin-top:2.5rem}
-@media (min-width:640px){
-  .coach-holder{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin-top:0}
+.trust-cell{position:relative;min-width:0;padding-top:1.25rem;border-top:1px solid var(--hairline)}
+.trust-cell::before{
+  content:"";position:absolute;left:0;top:-1px;height:1px;background:var(--brand);
+  /* scaleX rather than width: this is the one scrubbed animation on the page,
+     and animating width relaid out the cell on every scroll frame. */
+  width:100%;transform:scaleX(var(--rule-w,0));transform-origin:left center;
 }
+.trust-num{
+  display:block;font-size:.6875rem;font-weight:500;letter-spacing:.22em;color:var(--ghost);
+}
+.ghost-word{
+  display:block;margin-top:.5rem;
+  font-size:clamp(2.5rem,7vw,5.25rem);font-weight:500;text-transform:uppercase;
+  line-height:1;letter-spacing:-.03em;color:var(--ghost);
+  will-change:transform;
+}
+.ghost-word.ink{color:var(--ink)}
+.trust-copy{max-width:30rem;margin-top:1.25rem}
+.trust-copy p{
+  font-size:1rem;color:var(--ink-soft);line-height:1.75;
+}
+@media (min-width:640px){.trust-copy p{font-size:1.0625rem}}
+
+.coach-holder{position:relative;z-index:10;display:flex;justify-content:center;margin:.5rem 0}
 .coach-inview{width:14rem}
 @media (min-width:640px){.coach-inview{width:17rem}}
 .coach-fig{
@@ -341,57 +375,6 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   border:1px solid var(--hairline);display:grid;place-items:center;opacity:.55;
 }
 .program-arrow svg{width:1rem;height:1rem}
-
-/* ============================================================
-   4b) PRINCIPLES
-   ============================================================ */
-.principles{background:var(--background);padding:4.5rem 1.5rem 4rem}
-@media (min-width:640px){.principles{padding:7rem 2.5rem 5rem}}
-.principles-inner{max-width:88rem;margin:0 auto}
-.principles-head{max-width:34rem}
-.principles-head h2{
-  font-size:2.5rem;font-weight:500;line-height:1.05;letter-spacing:-.02em;
-}
-@media (min-width:640px){.principles-head h2{font-size:3rem}}
-
-.principles-list{margin-top:3.5rem;border-top:1px solid var(--hairline)}
-@media (min-width:768px){.principles-list{margin-top:5rem}}
-.principle-row{
-  position:relative;border-bottom:1px solid var(--hairline);
-  display:grid;grid-template-columns:1fr;gap:1rem;
-  padding:2.25rem 0;
-}
-@media (min-width:900px){
-  .principle-row{grid-template-columns:minmax(0,22rem) minmax(0,1fr);gap:4rem;padding:3.25rem 0}
-}
-/* accent bar that grows along the row as it scrolls through */
-.principle-row::before{
-  content:"";position:absolute;left:0;bottom:-1px;height:1px;background:var(--brand);
-  /* scaleX rather than width: this is the one scrubbed animation on the page,
-     and animating width relaid out the row on every scroll frame. */
-  width:100%;transform:scaleX(var(--rule-w,0));transform-origin:left center;
-}
-.principle-word{
-  display:flex;align-items:baseline;gap:1rem;min-width:0;
-}
-.principle-num{
-  font-size:.6875rem;font-weight:500;letter-spacing:.22em;color:var(--ghost);
-  flex:none;
-}
-.principle-eyebrow{
-  font-size:2rem;font-weight:500;letter-spacing:-.02em;text-transform:uppercase;
-  line-height:1;color:var(--ink);
-}
-@media (min-width:640px){.principle-eyebrow{font-size:2.75rem}}
-@media (min-width:1280px){.principle-eyebrow{font-size:3.25rem}}
-.principle-body{min-width:0;max-width:34rem}
-.principle-body h3{
-  font-size:1.25rem;font-weight:500;letter-spacing:-.01em;line-height:1.4;
-}
-@media (min-width:640px){.principle-body h3{font-size:1.5rem}}
-.principle-body p{
-  font-size:.9375rem;color:var(--ink-soft);margin-top:.85rem;line-height:1.75;
-}
 
 /* ============================================================
    5) APPROACH / PROCESS
@@ -483,75 +466,53 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 }
 
 .transform-rail{
-  margin-top:3rem;display:grid;grid-template-columns:1fr;align-items:stretch;gap:1rem;
+  margin-top:3rem;display:flex;flex-direction:column;align-items:center;gap:1.25rem;
 }
-@media (min-width:768px){
-  .transform-rail{grid-template-columns:1fr auto 1fr;gap:1.75rem;margin-top:4rem}
-}
-.transform-panel{
-  position:relative;overflow:hidden;
-  border-radius:var(--radius-card-lg);padding:2rem 1.75rem;
-  display:flex;flex-direction:column;gap:1.25rem;
-}
-@media (min-width:640px){.transform-panel{padding:2.5rem 2.25rem}}
-.transform-panel.mess{background:var(--surface);border:1px solid var(--hairline)}
-.transform-panel.picture{background:var(--brand-deep);color:#fff;box-shadow:0 1.5rem 3rem rgba(15,47,99,.22)}
-.transform-label{
-  font-size:.6875rem;font-weight:500;text-transform:uppercase;letter-spacing:.22em;
-  display:flex;align-items:center;gap:.6rem;
-}
-.transform-label::after{content:"";height:1px;flex:1;background:currentColor;opacity:.25}
-.transform-panel.mess .transform-label{color:var(--ink-soft)}
-.transform-panel.picture .transform-label{color:var(--brand-light)}
+@media (min-width:768px){.transform-rail{margin-top:4rem;gap:2rem}}
 
-/* plain-language lead line at the top of each panel */
-.transform-lead{font-size:.9375rem;line-height:1.7;max-width:26rem}
-.transform-panel.mess .transform-lead{color:var(--ink-soft)}
-.transform-panel.picture .transform-lead{color:rgba(255,255,255,.75)}
-.transform-lead b{font-weight:500;color:var(--ink)}
-.transform-panel.picture .transform-lead b{color:#fff}
+/* each half is one full frame: what you hand over, then what you get back */
+.transform-shot{
+  position:relative;width:100%;max-width:74rem;
+  border-radius:var(--radius-card-lg);overflow:hidden;cursor:zoom-in;
+  background:var(--surface-card);border:1px solid var(--hairline);
+  box-shadow:0 1.25rem 2.75rem rgba(15,47,99,.10);
+  transition:box-shadow .45s ease,border-color .45s ease;
+}
+.transform-shot.picture{box-shadow:0 1.75rem 3.25rem rgba(15,47,99,.16)}
+.transform-shot:hover{box-shadow:0 2rem 4rem rgba(15,47,99,.20);border-color:#d8dce4}
+.transform-shot img{
+  display:block;width:100%;height:auto;
+  transition:transform .7s cubic-bezier(.2,.8,.2,1);
+}
+.transform-shot:hover img{transform:scale(1.012)}
+.transform-shot:focus-visible{outline:2px solid var(--brand-light);outline-offset:4px}
 
-/* the mess side: loose, scattered chips */
-.transform-items{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:.35rem}
-.transform-items span{
-  display:inline-flex;align-items:center;border-radius:var(--radius-pill);
-  padding:.55rem 1rem;font-size:.8125rem;line-height:1.2;white-space:nowrap;
-  background:var(--surface-card);border:1px solid var(--hairline);color:var(--ink-soft);
+/* quiet affordance: the frame opens full size */
+.shot-zoom{
+  position:absolute;right:1rem;bottom:1rem;display:flex;align-items:center;gap:.5rem;
+  border-radius:var(--radius-pill);padding:.5rem .9rem;
+  background:rgba(255,255,255,.88);border:1px solid var(--hairline);color:var(--ink-soft);
+  font-size:.625rem;font-weight:500;text-transform:uppercase;letter-spacing:.16em;
+  opacity:0;transform:translateY(.35rem);transition:opacity .3s ease,transform .3s ease;
+  pointer-events:none;
 }
-.transform-foot{
-  font-size:.8125rem;line-height:1.6;color:var(--ink-soft);
-  margin-top:auto;padding-top:1.25rem;border-top:1px solid var(--hairline);
-}
+.shot-zoom svg{width:.85rem;height:.85rem}
+.transform-shot:hover .shot-zoom,
+.transform-shot:focus-visible .shot-zoom{opacity:1;transform:translateY(0)}
+@media (hover:none){.shot-zoom{opacity:1;transform:none}}
 
-/* the picture side: three numbered, explained outputs */
-.picture-list{display:flex;flex-direction:column;gap:1.5rem;margin-top:.35rem}
-.picture-item{display:flex;gap:1rem}
-.picture-num{
-  flex:none;font-size:.6875rem;font-weight:500;letter-spacing:.16em;
-  color:var(--brand-light);padding-top:.3rem;
-}
-.picture-item h4{font-size:1.0625rem;font-weight:500;line-height:1.35;color:#fff}
-@media (min-width:640px){.picture-item h4{font-size:1.125rem}}
-.picture-item p{font-size:.8125rem;line-height:1.65;color:rgba(255,255,255,.62);margin-top:.4rem}
-
-/* middle column: arrow plus a caption for what happens in between */
-.transform-mid{
-  display:flex;flex-direction:column;align-items:center;gap:.9rem;
-  align-self:center;justify-self:center;
-}
+/* between the two frames: what happens in the middle */
+.transform-mid{display:flex;align-items:center;gap:.85rem;padding:.25rem 0}
 .transform-mid-cap{
   font-size:.625rem;font-weight:500;text-transform:uppercase;letter-spacing:.16em;
-  color:var(--ink-soft);text-align:center;max-width:8rem;line-height:1.6;
+  color:var(--ink-soft);line-height:1.6;
 }
-@media (max-width:767px){.transform-mid{flex-direction:row;gap:.85rem}.transform-mid-cap{text-align:left;max-width:none}}
-
 .transform-arrow{
   position:relative;display:grid;place-items:center;flex:none;
   width:3.25rem;height:3.25rem;border-radius:var(--radius-pill);
   background:var(--brand);color:#fff;box-shadow:0 .75rem 1.5rem rgba(37,99,201,.3);
 }
-.transform-arrow svg{width:1.2rem;height:1.2rem}
-@media (max-width:767px){.transform-arrow svg{transform:rotate(90deg)}}
+.transform-arrow svg{width:1.2rem;height:1.2rem;transform:rotate(90deg)}
 
 /* ============================================================
    5b) PRICING
@@ -775,6 +736,41 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 .modal-success .pill{margin-top:.5rem}
 
 /* ============================================================
+   FRAME VIEWER (mess / picture, full size)
+   ============================================================ */
+.lightbox{
+  position:fixed;inset:0;z-index:95;display:flex;align-items:center;justify-content:center;
+  padding:1rem;pointer-events:none;visibility:hidden;content-visibility:hidden;
+}
+.lightbox.visible{visibility:visible;content-visibility:visible}
+.lightbox.open{pointer-events:auto}
+.lightbox-backdrop{position:absolute;inset:0;background:rgba(8,18,38,.88);opacity:0}
+.lightbox-stage{
+  position:relative;width:100%;max-width:92rem;max-height:92svh;
+  overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  border-radius:1.25rem;opacity:0;
+}
+.lightbox-stage img{display:block;width:100%;height:auto;border-radius:1.25rem;background:#fff}
+@media (max-width:900px){
+  .lightbox-stage{border-radius:.75rem}
+  .lightbox-stage img{width:58rem;max-width:none;border-radius:.75rem}
+}
+.lightbox-close{
+  position:fixed;top:1rem;right:1rem;z-index:2;
+  width:2.75rem;height:2.75rem;display:grid;place-items:center;
+  border-radius:var(--radius-pill);color:#fff;
+  border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.12);
+}
+.lightbox-close:hover{background:rgba(255,255,255,.2)}
+.lightbox-close svg{width:1.1rem;height:1.1rem}
+.lightbox-hint{
+  position:fixed;left:50%;bottom:1.15rem;transform:translateX(-50%);
+  font-size:.625rem;font-weight:500;text-transform:uppercase;letter-spacing:.16em;
+  color:rgba(255,255,255,.55);pointer-events:none;white-space:nowrap;
+}
+@media (min-width:901px){.lightbox-hint{display:none}}
+
+/* ============================================================
    LOADER
    ============================================================ */
 .loader{
@@ -808,20 +804,16 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   .credential-badge{width:2.5rem;height:2.5rem}
   .hero-cta-group .pill{width:100%;justify-content:center;padding:.6rem .6rem .6rem 1.5rem}
 
-  /* portrait */
-  .trust{padding:1.5rem 1.25rem 3rem}
-  .ghost-title{font-size:10.5vw;letter-spacing:-.03em}
-  .coach-holder{margin-top:2rem}
+  /* about */
+  .trust{padding:3.5rem 1.25rem 3rem}
+  .trust-head{margin-bottom:2.5rem}
+  .trust-head h2{font-size:2.125rem}
+  .trust-grid{gap:2rem}
+  .trust-cell{padding-top:1rem}
+  .ghost-word{font-size:2.75rem;letter-spacing:-.03em}
+  .trust-copy{margin-top:.9rem}
+  .trust-copy p{font-size:.9375rem}
   .coach-inview{width:15rem}
-
-  /* principles */
-  .principles{padding:3.5rem 1.25rem 2.5rem}
-  .principles-head h2{font-size:2.125rem;margin-top:1rem}
-  .principles-list{margin-top:2.5rem}
-  .principle-row{padding:1.85rem 0;gap:.85rem}
-  .principle-eyebrow{font-size:1.75rem}
-  .principle-body h3{font-size:1.125rem}
-  .principle-body p{font-size:.875rem;margin-top:.7rem}
 
   /* services */
   .programs{padding:3.75rem 1.25rem}
@@ -849,16 +841,11 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   .transform-statement h3{font-size:1.85rem}
   .transform-statement p{font-size:.9375rem;margin-top:1.1rem}
   .transform-rail{margin-top:2rem;gap:1rem}
-  .transform-panel{padding:1.75rem 1.35rem;border-radius:1.5rem;gap:1rem}
-  .transform-lead{font-size:.875rem}
-  .transform-items span{font-size:.75rem;padding:.5rem .85rem;white-space:normal}
-  .transform-foot{font-size:.75rem;padding-top:1rem}
+  .transform-shot{border-radius:1.25rem}
   .transform-arrow{width:2.5rem;height:2.5rem}
+  .transform-arrow svg{width:1rem;height:1rem}
   .transform-mid-cap{font-size:.6rem}
-  .picture-list{gap:1.15rem}
-  .picture-item{gap:.85rem}
-  .picture-item h4{font-size:1rem}
-  .picture-item p{font-size:.78125rem}
+  .shot-zoom{right:.65rem;bottom:.65rem;padding:.45rem .75rem;letter-spacing:.12em}
 
   /* pricing */
   .pricing{padding:3.75rem 1.25rem}
@@ -898,11 +885,13 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 @media (max-width:360px){
   .hero-title{font-size:2.75rem}
   .hero-tagline{font-size:.95rem;max-width:12rem}
-  .ghost-title{font-size:10vw}
+  .ghost-word{font-size:2.4rem}
 }
 
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;animation-iteration-count:1!important}
+  .transform-shot img,.transform-shot,.shot-zoom{transition:none}
+  .transform-shot:hover img{transform:none}
 }
 
 /* Touch devices: drop the live blur. Both blurred elements sit in the hero over
@@ -965,38 +954,23 @@ main{width:100%;overflow-x:clip;padding:.5rem}
     </div>
   </section>
 
-  <!-- ============ PRINCIPLES ============ -->
-  <section class="principles" id="about">
-    <div class="principles-inner">
-      <div class="principles-head inview"
-           data-inview='{"from":{"opacity":0,"y":22},"to":{"opacity":1,"y":0},"config":{"tension":200,"friction":26}}'>
-        <h2>Four things you can count on.</h2>
-      </div>
-      <div class="principles-list" id="principlesGrid"></div>
+  <!-- ============ ABOUT ============ -->
+  <section class="trust" id="about">
+    <div class="trust-head inview"
+         data-inview='{"from":{"opacity":0,"y":22},"to":{"opacity":1,"y":0},"config":{"tension":200,"friction":26}}'>
+      <h2>Four things you can count on.</h2>
     </div>
-  </section>
 
-  <!-- ============ PORTRAIT ============ -->
-  <section class="trust">
-    <h2 class="ghost-title" id="trust-title">
-      <div class="ghost-row">
-        <span class="ghost-word" data-px="-3,3"></span>
-        <span class="ghost-word" data-px="3,-3"></span>
-      </div>
-      <div class="ghost-row">
-        <span class="ghost-word" data-px="-2,4"></span>
-        <span class="ghost-word" data-px="4,-3"></span>
-      </div>
-    </h2>
-
-    <div class="coach-holder">
-      <div class="coach-inview inview" data-inview='{"from":{"opacity":0,"y":60,"scale":0.92},"to":{"opacity":1,"y":0,"scale":1},"config":{"tension":170,"friction":26}}'>
-        <figure class="coach-fig">
-          <img src="images/arbab3.webp" width="560" height="841" alt="Arbab Abdur Rahman" loading="lazy" decoding="async" />
-          <figcaption class="coach-cap">
-            <b>Arbab Abdur Rahman</b><span>ACCA Qualified Accountant</span>
-          </figcaption>
-        </figure>
+    <div class="trust-grid" id="trustGrid">
+      <div class="coach-holder">
+        <div class="coach-inview inview" data-inview='{"from":{"opacity":0,"y":60,"scale":0.92},"to":{"opacity":1,"y":0,"scale":1},"config":{"tension":170,"friction":26}}'>
+          <figure class="coach-fig">
+            <img src="images/arbab3.webp" width="560" height="841" alt="Arbab Abdur Rahman" loading="lazy" decoding="async" />
+            <figcaption class="coach-cap">
+              <b>Arbab Abdur Rahman</b><span>ACCA Qualified Accountant</span>
+            </figcaption>
+          </figure>
+        </div>
       </div>
     </div>
   </section>
@@ -1044,14 +1018,16 @@ main{width:100%;overflow-x:clip;padding:.5rem}
       </div>
 
       <div class="transform-rail">
-        <div class="transform-panel mess">
-          <span class="transform-label">The mess: what you hand over</span>
-          <p class="transform-lead"><b>Whatever state it's in.</b> A folder of receipts, a spreadsheet that stopped making sense in March, a bank feed nobody has touched all year. You don't need to sort or label anything first.</p>
-          <div class="transform-items">
-            <span>Transactions</span><span>Invoices</span><span>Bills</span><span>Payroll</span><span>Bank feeds</span><span>Receipts</span><span>Statements</span>
-          </div>
-          <p class="transform-foot">Send it however suits you: a shared folder, an accounting login, or a pile of photos on your phone.</p>
-        </div>
+        <figure class="transform-shot mess" role="button" tabindex="0"
+                data-shot="images/mess.webp"
+                aria-label="View full size: the mess, what you hand over">
+          <img src="images/mess.webp" width="1508" height="996" loading="lazy" decoding="async"
+               alt="The mess: what you hand over. Whatever state it's in - transactions, invoices, bills, payroll, bank feeds, receipts and statements, sent however suits you." />
+          <figcaption class="shot-zoom">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M11 8v6M8 11h6"/></svg>
+            View full size
+          </figcaption>
+        </figure>
 
         <div class="transform-mid">
           <div class="transform-arrow">
@@ -1060,33 +1036,16 @@ main{width:100%;overflow-x:clip;padding:.5rem}
           <span class="transform-mid-cap">We sort, match &amp; reconcile</span>
         </div>
 
-        <div class="transform-panel picture">
-          <span class="transform-label">The picture: what you get back</span>
-          <p class="transform-lead"><b>Three plain answers, every month.</b> No jargon, no 40-page pack you'll never open.</p>
-          <div class="picture-list">
-            <div class="picture-item">
-              <span class="picture-num">01</span>
-              <div>
-                <h4>Where your money came from</h4>
-                <p>Income broken down by source, so you can see which clients, products, or services are actually paying you, and which only look like they are.</p>
-              </div>
-            </div>
-            <div class="picture-item">
-              <span class="picture-num">02</span>
-              <div>
-                <h4>Where it went</h4>
-                <p>Every cost grouped and named: stock, wages, software, tax, the lot. You can see exactly what's quietly creeping up month after month.</p>
-              </div>
-            </div>
-            <div class="picture-item">
-              <span class="picture-num">03</span>
-              <div>
-                <h4>What you made</h4>
-                <p>Your real profit once everything is accounted for. Not the balance sitting in your bank account, which still owes tax, wages, and suppliers.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <figure class="transform-shot picture" role="button" tabindex="0"
+                data-shot="images/picture.webp"
+                aria-label="View full size: the picture, what you get back">
+          <img src="images/picture.webp" width="1508" height="996" loading="lazy" decoding="async"
+               alt="The picture: what you get back. Three plain answers every month - where your money came from, where it went, and what you made." />
+          <figcaption class="shot-zoom">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M11 8v6M8 11h6"/></svg>
+            View full size
+          </figcaption>
+        </figure>
       </div>
     </div>
   </section>
@@ -1211,6 +1170,18 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 </div>
 
 <!-- ============ CONTACT MODAL ============ -->
+<!-- ============ FRAME VIEWER ============ -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
+  <div class="lightbox-stage" id="lightboxStage" role="dialog" aria-modal="true" aria-label="Full size view">
+    <img id="lightboxImg" src="" alt="" />
+  </div>
+  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close full size view">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <span class="lightbox-hint">Drag to explore</span>
+</div>
+
 <div class="modal" id="modal" aria-hidden="true">
   <div class="modal-backdrop" id="modalBackdrop"></div>
   <div class="modal-panel" id="modalPanel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -1430,10 +1401,16 @@ ScrollTrigger.addEventListener('refresh', measureParallax);
    loops meant lenis, the springs and gsap's tweens could land in a different
    order each frame, which reads as stutter. driving lenis from gsap's ticker is
    also the integration lenis documents. */
-let last = performance.now();
+/* gsap's ticker clock starts at zero when the library loads, so it shares no
+   epoch with performance.now(). seeding `last` from performance.now() handed
+   the first frame a large negative dt, which threw every spring backwards -
+   the loader wordmark got flung off-screen, leaving a bare blue panel. the
+   later the module evaluates (a reload deeper down the page is slower to get
+   there), the bigger the throw. seed from the first tick instead. */
+let last = null;
 gsap.ticker.add((time) => {
   const t = time * 1000;
-  const dt = Math.min(0.05, (t - last) / 1000);
+  const dt = last === null ? 0 : Math.min(0.05, Math.max(0, (t - last) / 1000));
   last = t;
   lenis.raf(t);
   if (!locks) updateParallax();   // page is frozen behind an overlay
@@ -1528,13 +1505,13 @@ const ARROW_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 /* ============================================================
    DATA
    ============================================================ */
-const ABOUT_HEADLINE = ['Precise', 'Reliable', 'Clear', 'Timely'];
-
-const PRINCIPLES = [
-  { word:'Precise', title:'Bank reconciliations that actually reconcile.', desc:'Every transaction accounted for, exceptions identified, and balances tied out.' },
-  { word:'Timely', title:'Your month doesn’t wait for your accountant.', desc:'Books maintained on an agreed monthly schedule, with reports delivered when promised.' },
-  { word:'Clear', title:'No accounting-language gymnastics.', desc:'Your P&L and balance sheet explained in terms you can actually use.' },
-  { word:'Reliable', title:'One person accountable for your books.', desc:'No bouncing between junior staff, salespeople, and account managers.' },
+/* reading order is left-col / right-col, row by row, with the portrait in the
+   middle lane - the copy under each word is that word's whole explanation. */
+const PILLARS = [
+  { word:'Precise',  desc:'Every transaction accounted for, exceptions identified, and balances tied out.' },
+  { word:'Reliable', desc:'One person on your books — no bouncing between junior staff, salespeople, and account managers.' },
+  { word:'Clear',    desc:'Your P&L and balance sheet explained in terms you can actually use.' },
+  { word:'Timely',   desc:'Books maintained on an agreed monthly schedule, with reports delivered when promised.' },
 ];
 
 const SERVICES = [
@@ -1632,30 +1609,66 @@ registerParallax(heroSection, (p) => {
 });
 
 /* ============================================================
-   BUILD: ABOUT (ghost heading + credential photo)
+   BUILD: ABOUT (pillars + credential photo)
    ============================================================ */
 const trustSection = document.getElementById('about');
-const ghostWords = [...document.querySelectorAll('#trust-title .ghost-word')];
+const trustGrid    = document.getElementById('trustGrid');
+const coachHolder  = trustGrid.querySelector('.coach-holder');
 
-/* ghost X parallax */
-ghostWords.forEach(w => {
-  const [from, to] = w.getAttribute('data-px').split(',').map(Number);
+/* each ghost word drifts sideways a little as the section passes through */
+const PILLAR_PX = [[-3, 3], [3, -3], [-2, 4], [4, -3]];
+
+PILLARS.forEach((item, i) => {
+  const cell = document.createElement('article');
+  cell.className = 'trust-cell';
+  cell.innerHTML = `
+    <span class="trust-num">${String(i + 1).padStart(2, '0')}</span>
+    <h3 class="ghost-word"></h3>
+    <div class="trust-copy">
+      <p>${item.desc}</p>
+    </div>`;
+  /* portrait lives between the top and bottom pair on narrow screens */
+  trustGrid.insertBefore(cell, i < 2 ? coachHolder : null);
+
+  const word = cell.querySelector('.ghost-word');
+  buildClips(word, [item.word], { tight: true });
+
+  const [from, to] = PILLAR_PX[i];
   registerParallax(trustSection, (p) => {
-    w.style.transform = `translateX(${(from + (to - from) * p).toFixed(3)}%)`;
+    word.style.transform = `translateX(${(from + (to - from) * p).toFixed(3)}%)`;
   });
+
+  /* the word lands first, then its sentence, then the detail */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      playReveal(word, { duration: 700, easing: EASE.expo, stagger: 0 });
+    });
+  }, { threshold: 0.2 });
+  io.observe(cell);
+
+  if (REDUCED) return;
+
+  const num  = cell.querySelector('.trust-num');
+  const body = cell.querySelector('.trust-copy p');
+
+  gsap.set(num,  { xPercent: -8, opacity: 0 });
+  gsap.set(body, { y: 22, opacity: 0 });
+
+  gsap.timeline({ scrollTrigger: { trigger: cell, start: 'top 82%', once: true } })
+    .to(num,  { xPercent: 0, opacity: 1, duration: .9, ease: 'expo.out' })
+    .to(body, { y: 0, opacity: 1, duration: .8, ease: 'expo.out' }, '-=.55');
+
+  /* the rule above each cell draws itself as that cell travels up the viewport */
+  gsap.fromTo(cell,
+    { '--rule-w': 0 },
+    {
+      '--rule-w': 1, ease: 'none',
+      scrollTrigger: { trigger: cell, start: 'top 85%', end: 'bottom 60%', scrub: .6 }
+    }
+  );
 });
-
-ABOUT_HEADLINE.forEach((word, n) => buildClips(ghostWords[n], [word], { tight: true }));
-
-/* fire ghost reveal when the heading scrolls in */
-const ghostIO = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    ghostIO.unobserve(e.target);
-    ghostWords.forEach((w, n) => playReveal(w, { duration: 700, easing: EASE.expo, stagger: 0, delay: n * 60 }));
-  });
-}, { threshold: 0.2 });
-ghostIO.observe(document.getElementById('trust-title'));
 
 /* ============================================================
    BUILD: SECTION HEADINGS
@@ -1719,53 +1732,6 @@ SERVICES.forEach((p, i) => {
 });
 
 /* ============================================================
-   BUILD: PRINCIPLES
-   ============================================================ */
-const principlesGrid = document.getElementById('principlesGrid');
-PRINCIPLES.forEach((p, i) => {
-  const row = document.createElement('div');
-  row.className = 'principle-row';
-  row.innerHTML = `
-    <div class="principle-word">
-      <span class="principle-num">${String(i + 1).padStart(2, '0')}</span>
-      <span class="principle-eyebrow">${p.word}</span>
-    </div>
-    <div class="principle-body">
-      <h3>${p.title}</h3>
-      <p>${p.desc}</p>
-    </div>`;
-  principlesGrid.appendChild(row);
-
-  if (REDUCED) return;
-
-  const num  = row.querySelector('.principle-num');
-  const word = row.querySelector('.principle-eyebrow');
-  const head = row.querySelector('h3');
-  const body = row.querySelector('p');
-
-  /* the word leads, then the sentence, then the detail, staggered on entry */
-  gsap.set([num, word], { xPercent: -8, opacity: 0 });
-  gsap.set(head, { y: 26, opacity: 0 });
-  gsap.set(body, { y: 20, opacity: 0 });
-
-  gsap.timeline({
-    scrollTrigger: { trigger: row, start: 'top 82%', once: true }
-  })
-    .to([num, word], { xPercent: 0, opacity: 1, duration: .9, ease: 'expo.out', stagger: .06 })
-    .to(head,        { y: 0, opacity: 1, duration: .85, ease: 'expo.out' }, '-=.62')
-    .to(body,        { y: 0, opacity: 1, duration: .8,  ease: 'expo.out' }, '-=.6');
-
-  /* the rule under each row draws itself as that row travels up the viewport */
-  gsap.fromTo(row,
-    { '--rule-w': 0 },
-    {
-      '--rule-w': 1, ease: 'none',
-      scrollTrigger: { trigger: row, start: 'top 85%', end: 'bottom 55%', scrub: .6 }
-    }
-  );
-});
-
-/* ============================================================
    BUILD: APPROACH TILES
    ============================================================ */
 const facCards = document.getElementById('facCards');
@@ -1801,24 +1767,15 @@ APPROACH_TILES.forEach((t, i) => {
   const lines = block.querySelectorAll('.t-line > span');
   const lead  = block.querySelector('.transform-statement p');
 
-  const messPanel = block.querySelector('.transform-panel.mess');
-  const messLead  = messPanel.querySelector('.transform-lead');
-  const messChips = messPanel.querySelectorAll('.transform-items span');
-  const messFoot  = messPanel.querySelector('.transform-foot');
-
-  const arrow  = block.querySelector('.transform-arrow');
-  const midCap = block.querySelector('.transform-mid-cap');
-
-  const picPanel = block.querySelector('.transform-panel.picture');
-  const picLead  = picPanel.querySelector('.transform-lead');
-  const picItems = picPanel.querySelectorAll('.picture-item');
+  const messShot = block.querySelector('.transform-shot.mess');
+  const picShot  = block.querySelector('.transform-shot.picture');
+  const arrow    = block.querySelector('.transform-arrow');
+  const midCap   = block.querySelector('.transform-mid-cap');
 
   if (!REDUCED) {
     gsap.set(lines, { yPercent: 115 });
-    gsap.set([lead, messLead, picLead, messFoot, midCap, arrow], { y: 14, opacity: 0 });
-    gsap.set([messPanel, picPanel], { y: 28, opacity: 0 });
-    gsap.set(messChips, { y: 10, opacity: 0 });
-    gsap.set(picItems, { y: 14, opacity: 0 });
+    gsap.set([lead, midCap, arrow], { y: 14, opacity: 0 });
+    gsap.set([messShot, picShot], { y: 40, opacity: 0, scale: .985, transformOrigin: '50% 50%' });
 
     const ease = 'expo.out';
 
@@ -1827,15 +1784,70 @@ APPROACH_TILES.forEach((t, i) => {
     })
       .to(lines, { yPercent: 0, duration: 1.1, ease, stagger: .1 })
       .to(lead,  { y: 0, opacity: 1, duration: .8, ease }, '-=.7')
-      .to(messPanel, { y: 0, opacity: 1, duration: .8, ease }, '-=.5')
-      .to(messLead,  { y: 0, opacity: 1, duration: .7, ease }, '-=.55')
-      .to(messChips, { y: 0, opacity: 1, duration: .55, ease, stagger: .045 }, '-=.45')
-      .to(messFoot,  { y: 0, opacity: 1, duration: .6, ease }, '-=.3')
-      .to([arrow, midCap], { y: 0, opacity: 1, duration: .55, ease, stagger: .08 }, '-=.35')
-      .to(picPanel, { y: 0, opacity: 1, duration: .8, ease }, '-=.3')
-      .to(picLead,  { y: 0, opacity: 1, duration: .7, ease }, '-=.55')
-      .to(picItems, { y: 0, opacity: 1, duration: .65, ease, stagger: .1 }, '-=.45');
+      .to(messShot, { y: 0, opacity: 1, scale: 1, duration: 1, ease }, '-=.5')
+      .to([arrow, midCap], { y: 0, opacity: 1, duration: .55, ease, stagger: .08 }, '-=.45')
+      .to(picShot, { y: 0, opacity: 1, scale: 1, duration: 1, ease }, '-=.3');
   }
+}
+
+/* ============================================================
+   FRAME VIEWER: open either frame at full size
+   ============================================================ */
+{
+  const lightbox = document.getElementById('lightbox');
+  const lbBackdrop = document.getElementById('lightboxBackdrop');
+  const lbStage = document.getElementById('lightboxStage');
+  const lbImg = document.getElementById('lightboxImg');
+  const lbClose = document.getElementById('lightboxClose');
+  const shots = [...document.querySelectorAll('.transform-shot')];
+  let lightboxOpen = false;
+  let lastShot = null;
+
+  const lbBackdropSpring = springGroup({ opacity: 0 }, { tension: 240, friction: 30 }, (s) => { lbBackdrop.style.opacity = s.opacity; });
+  const lbStageSpring = springGroup({ opacity: 0, y: 20, scale: 0.97 }, { tension: 240, friction: 26 }, (s) => tf(lbStage, s));
+
+  function openShot(fig){
+    if (lightboxOpen) return;
+    lightboxOpen = true;
+    lastShot = fig;
+    const img = fig.querySelector('img');
+    lbImg.src = fig.dataset.shot;
+    lbImg.alt = img ? img.alt : '';
+    lbStage.scrollTop = 0;
+    lbStage.scrollLeft = 0;
+    lockScroll();
+    showOverlay(lightbox);
+    lightbox.setAttribute('aria-hidden', 'false');
+    lbBackdropSpring.to({ opacity: 1 });
+    lbStageSpring.to({ opacity: 1, y: 0, scale: 1 });
+    setTimeout(() => {
+      /* centre the frame horizontally where it overflows on small screens */
+      lbStage.scrollLeft = Math.max(0, (lbStage.scrollWidth - lbStage.clientWidth) / 2);
+      lbClose.focus();
+    }, 60);
+  }
+  function closeShot(){
+    if (!lightboxOpen) return;
+    lightboxOpen = false;
+    hideOverlay(lightbox);
+    lightbox.setAttribute('aria-hidden', 'true');
+    lbBackdropSpring.to({ opacity: 0 });
+    lbStageSpring.to({ opacity: 0, y: 20, scale: 0.97 });
+    unlockScroll();
+    if (lastShot) lastShot.focus();
+  }
+
+  shots.forEach(fig => {
+    fig.addEventListener('click', () => openShot(fig));
+    fig.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openShot(fig); }
+    });
+  });
+  lbClose.addEventListener('click', closeShot);
+  lbBackdrop.addEventListener('click', closeShot);
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightboxOpen) closeShot();
+  });
 }
 
 /* ============================================================
