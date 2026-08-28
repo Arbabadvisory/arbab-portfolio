@@ -1,0 +1,157 @@
+/* ============================================================
+   Shared styling for the standalone legal pages (privacy, terms).
+
+   Deliberately self-contained: these pages carry no GSAP, no Lenis and no
+   scroll machinery, because a document somebody may need to read carefully
+   or print should load instantly and behave predictably. The design tokens
+   below mirror index.html so the pages still feel part of the same site.
+   ============================================================ */
+
+@font-face{
+  font-family:'Onest';font-style:normal;font-weight:400 500;font-display:swap;
+  src:url(fonts/onest.woff2) format('woff2');
+}
+
+:root{
+  --background:#ffffff;
+  --brand:#2563c9;
+  --brand-deep:#0f2f63;
+  --surface:#f4f4f4;
+  --surface-card:#ffffff;
+  --ink:#0a0a0a;
+  --ink-soft:#717784;
+  --ghost:#d7dae1;
+  --hairline:#e6e8ec;
+  --radius-card:1.5rem;
+  --radius-card-lg:2rem;
+  --radius-pill:62.5rem;
+  --radius-xl:.75rem;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scrollbar-gutter:stable}
+body{
+  margin:0;background:var(--surface);color:var(--ink);
+  font-family:'Onest',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--brand);text-decoration:underline;text-underline-offset:.15em}
+a:hover{color:var(--brand-deep)}
+img{max-width:100%;height:auto;display:block}
+
+/* ---------- header ---------- */
+.legal-top{
+  background:var(--brand-deep);color:#fff;padding:1.25rem 1.5rem;
+}
+@media (min-width:640px){.legal-top{padding:1.5rem 2.5rem}}
+.legal-top-inner{
+  max-width:52rem;margin:0 auto;display:flex;align-items:center;
+  justify-content:space-between;gap:1.5rem;
+}
+.legal-top img{height:3.25rem;width:auto}
+.legal-back{
+  color:rgba(255,255,255,.85);text-decoration:none;font-size:.875rem;
+  display:inline-flex;align-items:center;gap:.5rem;flex:none;
+  border:1px solid rgba(255,255,255,.25);border-radius:var(--radius-pill);
+  padding:.5rem 1rem;transition:background-color .25s ease,border-color .25s ease,color .25s ease;
+}
+.legal-back:hover{background:rgba(255,255,255,.12);border-color:transparent;color:#fff}
+.legal-back svg{width:.85rem;height:.85rem;flex:none}
+
+/* ---------- document ---------- */
+.legal-wrap{max-width:52rem;margin:0 auto;padding:2rem 1.5rem 4rem}
+@media (min-width:640px){.legal-wrap{padding:3rem 2.5rem 5rem}}
+.legal-doc{
+  background:var(--surface-card);border-radius:var(--radius-card-lg);
+  padding:2rem 1.5rem;
+}
+@media (min-width:640px){.legal-doc{padding:3.5rem 3rem}}
+
+.legal-kicker{
+  font-size:.6875rem;font-weight:500;text-transform:uppercase;letter-spacing:.22em;
+  color:var(--ink-soft);margin:0;
+}
+.legal-doc h1{
+  font-size:2.25rem;font-weight:500;line-height:1.05;letter-spacing:-.02em;
+  margin:.75rem 0 0;
+}
+@media (min-width:640px){.legal-doc h1{font-size:3rem}}
+.legal-meta{
+  font-size:.8125rem;color:var(--ink-soft);margin:1rem 0 0;
+  padding-bottom:2rem;border-bottom:1px solid var(--hairline);
+}
+.legal-lead{font-size:1.0625rem;line-height:1.65;margin:2rem 0 0}
+
+.legal-doc h2{
+  font-size:1.25rem;font-weight:500;letter-spacing:-.01em;line-height:1.3;
+  margin:3rem 0 0;padding-top:2rem;border-top:1px solid var(--hairline);
+  display:flex;gap:.85rem;align-items:baseline;
+}
+.legal-doc h2 .num{
+  color:var(--brand);font-variant-numeric:tabular-nums;flex:none;font-size:.9375rem;
+}
+.legal-doc h3{font-size:.9375rem;font-weight:500;margin:1.75rem 0 0}
+.legal-doc p{margin:1rem 0 0;font-size:.9375rem}
+.legal-doc ul{margin:1rem 0 0;padding-left:0;list-style:none}
+.legal-doc li{
+  position:relative;padding-left:1.25rem;margin-top:.6rem;font-size:.9375rem;
+}
+.legal-doc li::before{
+  content:"";position:absolute;left:0;top:.65em;
+  width:.3125rem;height:.3125rem;border-radius:50%;background:var(--ghost);
+}
+.legal-doc li b{font-weight:500}
+.legal-doc strong{font-weight:500}
+
+/* a definition-style row, used for the data tables */
+.legal-rows{margin:1.25rem 0 0;border-top:1px solid var(--hairline)}
+.legal-rows > div{
+  display:grid;grid-template-columns:1fr;gap:.25rem;
+  padding:1rem 0;border-bottom:1px solid var(--hairline);
+}
+@media (min-width:640px){
+  .legal-rows > div{grid-template-columns:14rem 1fr;gap:1.5rem}
+}
+.legal-rows dt,.legal-rows .k{font-weight:500;font-size:.875rem}
+.legal-rows dd,.legal-rows .v{margin:0;font-size:.875rem;color:var(--ink-soft);line-height:1.6}
+
+/* callout for the things that genuinely matter */
+.legal-note{
+  margin:1.5rem 0 0;background:var(--surface);border-radius:var(--radius-xl);
+  padding:1.25rem 1.35rem;border-left:3px solid var(--brand);
+}
+.legal-note p{margin:0;font-size:.875rem;line-height:1.65}
+.legal-note p + p{margin-top:.75rem}
+
+/* contents */
+.legal-toc{margin:2rem 0 0;background:var(--surface);border-radius:var(--radius-xl);padding:1.35rem 1.5rem}
+.legal-toc h2{
+  font-size:.6875rem;font-weight:500;text-transform:uppercase;letter-spacing:.22em;
+  color:var(--ink-soft);margin:0;padding:0;border:0;display:block;
+}
+.legal-toc ol{margin:.85rem 0 0;padding-left:1.1rem;font-size:.875rem}
+.legal-toc li{margin-top:.4rem;padding-left:.25rem}
+.legal-toc li::before{display:none}
+.legal-toc a{color:var(--ink);text-decoration:none}
+.legal-toc a:hover{color:var(--brand);text-decoration:underline}
+
+/* ---------- footer ---------- */
+.legal-foot{
+  max-width:52rem;margin:0 auto;padding:0 1.5rem 3rem;
+  display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;
+  font-size:.8125rem;color:var(--ink-soft);
+}
+@media (min-width:640px){.legal-foot{padding:0 2.5rem 4rem}}
+.legal-foot nav{display:flex;gap:1.25rem}
+.legal-foot a{color:var(--ink-soft)}
+.legal-foot a:hover{color:var(--brand)}
+
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:.25rem}
+
+@media print{
+  body{background:#fff}
+  .legal-top,.legal-back,.legal-toc{display:none}
+  .legal-doc{padding:0;border-radius:0}
+  .legal-wrap{padding:0;max-width:none}
+  a{color:inherit;text-decoration:none}
+}

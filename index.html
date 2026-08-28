@@ -99,6 +99,20 @@ input,textarea{font:inherit;color:inherit}
    change the viewport width - that width change relaid out the whole
    document on the first frame of the menu animation. */
 html{scrollbar-gutter:stable}
+/* lockScroll() adds this. Lenis is stopped at the same time, but that only
+   stops smoothed wheel scrolling - without this the page still scrolls behind
+   an open dialog on touch and with the keyboard. The stable gutter above is
+   what stops this shifting the layout. */
+html.is-locked{overflow:hidden}
+/* the page scrollbar, in the same palette as the modal's */
+html{scrollbar-width:thin;scrollbar-color:var(--ghost) var(--surface)}
+::-webkit-scrollbar{width:.625rem;height:.625rem}
+::-webkit-scrollbar-track{background:var(--surface)}
+::-webkit-scrollbar-thumb{
+  background:var(--ghost);border-radius:var(--radius-pill);
+  border:.1875rem solid var(--surface);background-clip:padding-box;
+}
+::-webkit-scrollbar-thumb:hover{background:var(--ink-soft);background-clip:padding-box}
 html.is-locked{overflow:hidden}
 
 /* ============================================================
@@ -331,7 +345,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 .programs{background:var(--surface);padding:6rem 1.5rem}
 @media (min-width:640px){.programs{padding:6rem 2.5rem}}
 .programs h2{font-size:3rem;font-weight:500;line-height:.95;letter-spacing:-.02em;margin-top:1rem}
-.programs h2 .clip,.facilities h2 .clip{display:block}
+.programs h2 .clip{display:block}
 .services-banner{
   position:relative;overflow:hidden;border-radius:var(--radius-card-lg);
   height:26rem;display:flex;align-items:flex-end;
@@ -385,72 +399,9 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   padding:4.5rem 1.5rem 5rem;
 }
 @media (min-width:640px){.facilities{padding:5.5rem 2.5rem 6rem}}
-.approach-head{display:flex;flex-direction:column;gap:2rem;max-width:88rem;margin:0 auto}
-@media (min-width:900px){
-  .approach-head{flex-direction:row;align-items:flex-end;justify-content:space-between;gap:4rem}
-}
-.approach-head-left{max-width:34rem}
-.fac-icon-box{
-  width:3.5rem;height:3.5rem;border-radius:var(--radius-xl);background:var(--brand-deep);
-  color:#fff;display:grid;place-items:center;
-}
-.fac-icon-box svg{width:1.35rem;height:1.35rem}
-.facilities h2{font-size:3rem;font-weight:500;line-height:.95;letter-spacing:-.02em;margin-top:1.5rem}
-.approach-head-right{max-width:26rem;display:flex;flex-direction:column;gap:1.25rem}
-.approach-rule{height:1px;width:100%;background:linear-gradient(to right,var(--brand),var(--hairline))}
-.fac-body{font-size:.9375rem;color:var(--ink-soft);max-width:26rem;line-height:1.7}
-
-.process-rail{
-  position:relative;max-width:88rem;margin:3.5rem auto 0;
-  display:grid;grid-template-columns:1fr;gap:1rem;
-}
-@media (min-width:768px){
-  .process-rail{grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));gap:1.25rem;margin-top:4.5rem}
-}
-.fac-card{display:flex;min-width:0}
-.process-card{
-  position:relative;isolation:isolate;overflow:hidden;width:100%;
-  border-radius:var(--radius-card-lg);background:var(--surface);
-  border:1px solid transparent;padding:2.25rem 1.75rem 2rem;
-  display:flex;flex-direction:column;gap:1rem;
-  transition:background-color .45s var(--ease-quart),border-color .45s var(--ease-quart),box-shadow .45s var(--ease-quart);
-}
-@media (min-width:640px){.process-card{padding:2.5rem 2rem 2.25rem}}
-.process-card::before{
-  content:"";position:absolute;left:1.75rem;top:0;width:2.75rem;height:.1875rem;
-  border-radius:var(--radius-pill);background:var(--brand);
-  transition:width .5s var(--ease-expo);
-}
-@media (min-width:640px){.process-card::before{left:2rem}}
-.process-card::after{
-  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;
-  background:linear-gradient(155deg,rgba(37,99,201,.10),rgba(37,99,201,0) 58%);
-  transition:opacity .5s var(--ease-quart);
-}
-.process-card:hover{background:var(--surface-card);border-color:var(--hairline);box-shadow:0 1.5rem 3rem rgba(15,47,99,.10)}
-.process-card:hover::after{opacity:1}
-.process-card:hover::before{width:5rem}
-@media (min-width:640px){
-  .process-card{flex-direction:row;gap:1.75rem;align-items:flex-start}
-}
-.process-body{min-width:0;display:flex;flex-direction:column;gap:.55rem}
-.process-icon{
-  width:2.75rem;height:2.75rem;border-radius:var(--radius-xl);background:var(--background);
-  color:var(--brand);display:grid;place-items:center;flex:none;
-  transition:background-color .45s var(--ease-quart),color .45s var(--ease-quart);
-}
-.process-card:hover .process-icon{background:var(--brand);color:#fff}
-.process-icon svg{width:1.25rem;height:1.25rem}
-.process-step{
-  font-size:.6875rem;font-weight:500;text-transform:uppercase;letter-spacing:.22em;
-  color:var(--ink-soft);
-}
-.process-card h3{font-size:1.25rem;font-weight:500;letter-spacing:-.01em;line-height:1.25}
-@media (min-width:640px){.process-card h3{font-size:1.375rem}}
-.process-card p{font-size:.875rem;color:var(--ink-soft);line-height:1.7}
-
 /* mess -> picture transform */
 .transform-block{max-width:88rem;margin:5rem auto 0}
+.facilities > .transform-block:first-child{margin-top:0}
 @media (min-width:768px){.transform-block{margin-top:7rem}}
 .transform-statement{max-width:44rem}
 .transform-statement h3{
@@ -597,6 +548,225 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 .price-card .pill{margin-top:auto;justify-content:center;width:100%;padding-left:1.5rem;padding-top:.55rem;padding-bottom:.55rem}
 
 /* ============================================================
+   5c) SAVINGS CALCULATOR
+   ============================================================ */
+/* region notice: a small dismissible strip, deliberately not a popup - it
+   never blocks the page, never covers the content, and goes away for good
+   once someone has confirmed or changed their region */
+.region-note{
+  position:fixed;left:1rem;bottom:1rem;z-index:60;max-width:min(24rem,calc(100vw - 2rem));
+  display:flex;align-items:flex-start;gap:.85rem;
+  background:var(--brand-deep);color:#fff;border-radius:var(--radius-xl);
+  padding:.9rem 1rem;box-shadow:0 1rem 2.5rem rgba(15,47,99,.32);
+  opacity:0;transform:translateY(.75rem);pointer-events:none;
+  transition:opacity .5s var(--ease-quart),transform .5s var(--ease-expo);
+}
+.region-note[hidden]{display:none}   /* the class sets display:flex, which would otherwise beat the hidden attribute */
+.region-note.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.region-note-flag{
+  flex:none;font-size:.625rem;font-weight:500;letter-spacing:.06em;
+  background:rgba(255,255,255,.16);border-radius:.4rem;padding:.3rem .45rem;margin-top:.1rem;
+}
+.region-note-body{flex:1;min-width:0;font-size:.8125rem;line-height:1.5}
+.region-note-body button{
+  color:var(--accent-gold);font:inherit;text-decoration:underline;
+  text-underline-offset:.15em;margin-top:.25rem;display:block;
+}
+.region-note-body button:hover{color:#fff}
+.region-note-close{
+  flex:none;width:1.5rem;height:1.5rem;display:grid;place-items:center;border-radius:.35rem;
+  color:rgba(255,255,255,.6);transition:color .3s ease,background-color .3s ease;
+}
+.region-note-close:hover{color:#fff;background:rgba(255,255,255,.12)}
+.region-note-close svg{width:.8rem;height:.8rem}
+.region-note button:focus-visible,.region-note-close:focus-visible{outline:2px solid #fff;outline-offset:2px}
+@media (max-width:520px){
+  .region-note{left:.75rem;right:.75rem;bottom:.75rem;max-width:none}
+}
+
+.calc{background:var(--background);padding:5rem 1.5rem}
+@media (min-width:640px){.calc{padding:6rem 2.5rem}}
+.calc-inner{max-width:88rem;margin:0 auto}
+.calc-head{max-width:38rem}
+.calc h2{font-size:3rem;font-weight:500;line-height:.95;letter-spacing:-.02em}
+.calc h2 .clip{display:block}
+.calc-sub{font-size:.9375rem;color:var(--ink-soft);margin-top:1.25rem;line-height:1.65}
+
+.calc-grid{display:grid;grid-template-columns:1fr;gap:1.25rem;margin-top:3rem;align-items:start}
+@media (min-width:1000px){.calc-grid{grid-template-columns:1fr 1.05fr;gap:1.5rem}}
+
+/* ---------- left: the questions ---------- */
+.calc-panel{
+  background:var(--surface);border-radius:var(--radius-card-lg);
+  padding:2rem 1.5rem;display:flex;flex-direction:column;gap:1.75rem;
+}
+@media (min-width:640px){.calc-panel{padding:2.5rem}}
+.calc-panel-title{
+  font-size:.6875rem;font-weight:500;text-transform:uppercase;letter-spacing:.22em;color:var(--ink-soft);
+}
+.calc-q{display:flex;flex-direction:column;gap:.85rem}
+.calc-q-label{font-size:.9375rem;font-weight:500;line-height:1.4}
+.calc-hint{font-size:.8125rem;color:var(--ink-soft);line-height:1.55}
+
+/* segmented business-type control */
+.calc-seg{display:grid;grid-template-columns:1fr;gap:.5rem}
+@media (min-width:520px){.calc-seg{grid-template-columns:repeat(3,1fr)}}
+.calc-seg label{
+  position:relative;display:flex;flex-direction:column;gap:.2rem;cursor:pointer;
+  border:1px solid var(--hairline);background:var(--surface-card);
+  border-radius:var(--radius-xl);padding:.85rem .9rem;
+  transition:border-color .35s var(--ease-quart),box-shadow .35s var(--ease-quart);
+}
+.calc-seg label:hover{border-color:var(--ghost)}
+.calc-seg input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.calc-seg b{font-size:.875rem;font-weight:500;line-height:1.3}
+.calc-seg span{font-size:.75rem;color:var(--ink-soft);line-height:1.4}
+.calc-seg label.is-on{
+  border-color:var(--brand);
+  box-shadow:0 0 0 2px rgba(37,99,201,.14);
+}
+.calc-seg label.is-on b{color:var(--brand-deep)}
+.calc-seg label:focus-within{outline:2px solid var(--brand);outline-offset:2px}
+
+/* sliders */
+.calc-row{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
+.calc-val{
+  font-size:1.125rem;font-weight:500;color:var(--brand-deep);
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+.calc-range{
+  -webkit-appearance:none;appearance:none;width:100%;height:.375rem;
+  border-radius:var(--radius-pill);background:var(--ghost);outline:none;cursor:pointer;
+}
+.calc-range::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:1.15rem;height:1.15rem;border-radius:50%;
+  background:var(--brand-deep);border:.2rem solid #fff;cursor:pointer;
+  box-shadow:0 .25rem .65rem rgba(15,47,99,.3);
+  transition:transform .25s var(--ease-expo);
+}
+.calc-range::-webkit-slider-thumb:hover{transform:scale(1.12)}
+.calc-range::-moz-range-thumb{
+  width:1.15rem;height:1.15rem;border-radius:50%;
+  background:var(--brand-deep);border:.2rem solid #fff;cursor:pointer;
+  box-shadow:0 .25rem .65rem rgba(15,47,99,.3);
+}
+.calc-range:focus-visible{outline:2px solid var(--brand);outline-offset:.35rem}
+
+/* optional "already paying someone" */
+.calc-check{display:flex;align-items:flex-start;gap:.7rem;cursor:pointer}
+.calc-check input{
+  appearance:none;-webkit-appearance:none;flex:none;
+  width:1.25rem;height:1.25rem;margin:.05rem 0 0;padding:0;
+  border:1.5px solid var(--ghost);border-radius:.4rem;background:var(--surface-card);cursor:pointer;
+  display:grid;place-items:center;
+  transition:background-color .25s var(--ease-quart),border-color .25s var(--ease-quart);
+}
+.calc-check:hover input{border-color:var(--brand-light)}
+.calc-check input::after{
+  content:"";width:.55rem;height:.3rem;border-left:2px solid #fff;border-bottom:2px solid #fff;
+  transform:rotate(-45deg) scale(.4);opacity:0;
+  transition:opacity .2s ease,transform .3s var(--ease-expo);
+  margin-top:-.1rem;
+}
+.calc-check input:checked{background:var(--brand-deep);border-color:var(--brand-deep)}
+.calc-check input:checked::after{opacity:1;transform:rotate(-45deg) scale(1)}
+.calc-check input:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.calc-check-text{font-size:.875rem;line-height:1.45}
+.calc-sub-field{
+  margin-top:.85rem;padding-left:1.85rem;display:none;flex-direction:column;gap:.5rem;
+}
+.calc-sub-field.show{display:flex}
+.calc-money-input{
+  display:flex;align-items:center;gap:.4rem;background:var(--surface-card);
+  border:1px solid var(--hairline);border-radius:var(--radius-xl);padding:.6rem .85rem;max-width:12rem;
+  transition:border-color .3s var(--ease-quart),box-shadow .3s var(--ease-quart);
+}
+.calc-money-input:focus-within{border-color:var(--brand);box-shadow:0 0 0 2px rgba(37,99,201,.14)}
+.calc-money-input span{color:var(--ink-soft);font-size:.9375rem}
+.calc-money-input input{
+  border:0;background:transparent;outline:none;width:100%;font:inherit;font-size:.9375rem;
+  font-variant-numeric:tabular-nums;color:var(--ink);
+}
+.calc-money-input input::-webkit-outer-spin-button,
+.calc-money-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.calc-money-input input[type=number]{-moz-appearance:textfield}
+
+/* ---------- right: the result ---------- */
+.calc-result{
+  background:var(--brand-deep);color:#fff;border-radius:var(--radius-card-lg);
+  padding:2rem 1.5rem;display:flex;flex-direction:column;gap:1.75rem;
+}
+@media (min-width:640px){.calc-result{padding:2.5rem}}
+.calc-kicker{
+  font-size:.6875rem;font-weight:500;text-transform:uppercase;letter-spacing:.22em;
+  color:rgba(255,255,255,.6);
+}
+.calc-headline{margin-top:.65rem}
+.calc-headline b{
+  display:block;font-size:3.25rem;font-weight:500;line-height:1;letter-spacing:-.02em;
+  color:var(--accent-gold);font-variant-numeric:tabular-nums;
+}
+@media (min-width:640px){.calc-headline b{font-size:4rem}}
+.calc-headline p{font-size:.9375rem;color:rgba(255,255,255,.75);margin-top:.65rem;line-height:1.55}
+.calc-headline p strong{color:#fff;font-weight:500}
+
+/* comparison bars */
+.calc-bars{display:flex;flex-direction:column;gap:1.15rem}
+.calc-bar-head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:.5rem}
+.calc-bar-name{font-size:.875rem;color:rgba(255,255,255,.8)}
+.calc-bar-amt{font-size:1rem;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
+.calc-bar-track{height:.65rem;border-radius:var(--radius-pill);background:rgba(255,255,255,.12);overflow:hidden}
+.calc-bar-fill{
+  display:block;height:100%;width:0;border-radius:var(--radius-pill);
+  background:rgba(255,255,255,.4);
+  transition:width .9s var(--ease-expo);
+}
+.calc-bar.is-ours .calc-bar-name{color:#fff;font-weight:500}
+.calc-bar.is-ours .calc-bar-fill{background:var(--accent-gold)}
+.calc-bar-note{font-size:.75rem;color:rgba(255,255,255,.55);margin-top:.4rem;line-height:1.45}
+
+/* the payoff line */
+.calc-payoff{
+  border-top:1px solid rgba(255,255,255,.15);padding-top:1.5rem;
+  display:flex;flex-direction:column;gap:.35rem;
+}
+.calc-payoff-main{font-size:1.0625rem;font-weight:500;line-height:1.45}
+.calc-payoff-main em{font-style:normal;color:var(--accent-gold)}
+.calc-payoff-sub{font-size:.8125rem;color:rgba(255,255,255,.65);line-height:1.55}
+.calc-cta{display:flex;flex-wrap:wrap;align-items:center;gap:1rem;margin-top:.35rem}
+.calc-plan-tag{font-size:.75rem;color:rgba(255,255,255,.6);line-height:1.5}
+.calc-plan-tag b{color:#fff;font-weight:500}
+
+/* what's at risk + working out */
+.calc-foot{display:grid;grid-template-columns:1fr;gap:1.25rem;margin-top:1.25rem}
+@media (min-width:1000px){.calc-foot{grid-template-columns:1fr 1.05fr;gap:1.5rem}}
+.calc-risk{background:var(--surface);border-radius:var(--radius-card);padding:1.75rem 1.5rem}
+@media (min-width:640px){.calc-risk{padding:2rem}}
+.calc-risk h3{font-size:1rem;font-weight:500;margin-top:.75rem}
+.calc-risk > p{font-size:.8125rem;color:var(--ink-soft);margin-top:.5rem;line-height:1.6}
+.calc-risk ul{margin-top:1.25rem;display:flex;flex-direction:column;gap:.75rem}
+.calc-risk li{
+  display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
+  font-size:.8125rem;line-height:1.5;padding-bottom:.75rem;border-bottom:1px solid var(--hairline);
+}
+.calc-risk li:last-child{border-bottom:0;padding-bottom:0}
+.calc-risk li b{font-weight:500;color:var(--brand-deep);white-space:nowrap;font-variant-numeric:tabular-nums}
+.calc-risk-src{font-size:.6875rem;color:var(--ink-soft);margin-top:1.25rem;line-height:1.5}
+
+.calc-working summary{
+  cursor:pointer;font-size:.8125rem;color:var(--ink-soft);list-style:none;
+  display:flex;align-items:center;gap:.5rem;padding:.5rem 0;
+}
+.calc-working summary::-webkit-details-marker{display:none}
+.calc-working summary:hover{color:var(--ink)}
+.calc-working summary svg{width:.9rem;height:.9rem;flex:none;transition:transform .35s var(--ease-expo)}
+.calc-working[open] summary svg{transform:rotate(90deg)}
+.calc-working summary:focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:.25rem}
+.calc-working-body{font-size:.8125rem;color:var(--ink-soft);line-height:1.7;padding:.5rem 0 0}
+.calc-working-body p + p{margin-top:.75rem}
+.calc-working-body b{color:var(--ink);font-weight:500}
+
+/* ============================================================
    8) FOOTER
    ============================================================ */
 .site-footer{
@@ -687,13 +857,43 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   position:absolute;inset:0;background:rgba(15,47,99,.55);opacity:0;
 }
 .modal-panel{
-  position:relative;width:100%;max-height:92svh;overflow-y:auto;
+  position:relative;width:100%;max-height:92svh;
+  display:flex;flex-direction:column;overflow:hidden;
   border-radius:var(--radius-card-lg);background:var(--surface-card);color:var(--ink);
   padding:1.5rem;opacity:0;
   box-shadow:0 2.5rem 5rem rgba(15,47,99,.35);
 }
 @media (min-width:640px){.modal-panel{max-width:32rem;padding:2rem}}
-.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex:none}
+
+/* the title and the close button stay put; only the form scrolls under them.
+   The negative margin lets the scrollbar sit in the panel's own padding so it
+   never crowds the fields or collides with the rounded corner. */
+.modal-body{
+  flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+  margin-top:1.75rem;padding-right:.85rem;margin-right:-.85rem;
+  scrollbar-width:thin;scrollbar-color:var(--ghost) transparent;
+}
+.modal-body::-webkit-scrollbar{width:.5rem}
+.modal-body::-webkit-scrollbar-track{background:transparent}
+.modal-body::-webkit-scrollbar-thumb{
+  background:var(--ghost);border-radius:var(--radius-pill);
+  transition:background-color .3s ease;
+}
+.modal-body::-webkit-scrollbar-thumb:hover{background:var(--ink-soft)}
+/* a soft edge so content fades out rather than being sliced off mid-word */
+.modal-body.can-scroll{
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 1.25rem,#000 calc(100% - 1.75rem),transparent 100%);
+  mask-image:linear-gradient(to bottom,transparent 0,#000 1.25rem,#000 calc(100% - 1.75rem),transparent 100%);
+}
+.modal-body.at-top{
+  -webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 1.75rem),transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 calc(100% - 1.75rem),transparent 100%);
+}
+.modal-body.at-bottom{
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 1.25rem);
+  mask-image:linear-gradient(to bottom,transparent 0,#000 1.25rem);
+}
 .modal-head h2{font-size:2.25rem;font-weight:500;line-height:.95;letter-spacing:-.02em;margin-top:.75rem}
 @media (min-width:640px){.modal-head h2{font-size:3rem}}
 .modal-head h2 .clip{display:block}
@@ -703,17 +903,22 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 }
 .modal-close:hover{background:var(--hairline)}
 .modal-close svg{width:1.1rem;height:1.1rem}
-.modal-form{margin-top:1.75rem;display:flex;flex-direction:column;gap:1rem}
+.modal-form{display:flex;flex-direction:column;gap:1rem;padding-bottom:.25rem}
 .field{display:flex;flex-direction:column;gap:.5rem}
-.field label{font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.18em;color:var(--ink-soft)}
-.field input,.field textarea{
+/* the uppercase treatment is for field captions only - never for the consent
+   sentence, which is a normal line of prose that happens to live in a label */
+.field > label:not(.consent){
+  font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.18em;color:var(--ink-soft);
+}
+.field input:not([type=checkbox]),.field textarea{
   width:100%;border-radius:var(--radius-xl);border:1px solid var(--hairline);
   background:var(--background);padding:.75rem 1rem;font-size:.875rem;resize:vertical;
   transition:border-color .2s ease,box-shadow .2s ease;
 }
-.field input:focus,.field textarea:focus{
+.field input:not([type=checkbox]):focus,.field textarea:focus{
   outline:none;border-color:var(--brand-light);box-shadow:0 0 0 2px rgba(87,144,230,.35);
 }
+.field input::placeholder,.field textarea::placeholder{color:var(--ink-soft);opacity:.65}
 .submit-btn{
   align-self:flex-start;border-radius:var(--radius-pill);background:var(--ink);color:#fff;
   padding:.875rem 1.75rem;font-size:.875rem;font-weight:500;text-transform:uppercase;letter-spacing:.05em;
@@ -721,8 +926,145 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 }
 .submit-btn:hover{background:var(--brand-deep)}
 .submit-btn[disabled]{opacity:.55;cursor:default}
+
+/* validation + send failures */
+.field-error{
+  font-size:.75rem;color:#c0392b;line-height:1.4;display:none;
+}
+.field.has-error .field-error{display:block}
+.field.has-error input,.field.has-error textarea{border-color:#c0392b}
+.field.has-error input:focus,.field.has-error textarea:focus{
+  border-color:#c0392b;box-shadow:0 0 0 2px rgba(192,57,43,.14);
+}
+.form-error{
+  display:none;font-size:.8125rem;line-height:1.55;color:#c0392b;
+  background:rgba(192,57,43,.07);border-radius:var(--radius-xl);padding:.85rem 1rem;
+}
+.form-error.show{display:block}
+/* selects are built to sit level with the text inputs above them - same
+   height, same radius, same focus ring - with the native arrow replaced by
+   one that matches the chevrons used elsewhere on the page */
+.field select{
+  width:100%;border:1px solid var(--hairline);border-radius:var(--radius-xl);
+  background-color:var(--background);
+  padding:.75rem 2.6rem .75rem 1rem;font:inherit;font-size:.875rem;color:var(--ink);
+  appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f2f63' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 1rem center;background-size:.95rem;
+  transition:border-color .2s ease,box-shadow .2s ease,background-color .2s ease;
+}
+.field select:hover{border-color:var(--ghost)}
+.field select:focus{
+  outline:none;border-color:var(--brand-light);box-shadow:0 0 0 2px rgba(87,144,230,.35);
+}
+/* A native <select> renders its open list as operating-system chrome that CSS
+   cannot reach - no radius, no brand colour, no spacing. So the two selects in
+   this form are progressively enhanced into the same listbox pattern the
+   currency switcher uses. The native element stays in the DOM, carrying the
+   value and the form data; if the script never runs, it is simply revealed
+   again and everything still works. */
+.cselect{position:relative}
+.cselect-native{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);border:0;
+}
+.cselect-btn{
+  width:100%;display:flex;align-items:center;gap:.6rem;text-align:left;
+  border:1px solid var(--hairline);border-radius:var(--radius-xl);
+  background:var(--background);padding:.75rem 1rem;font:inherit;font-size:.875rem;color:var(--ink);
+  cursor:pointer;
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+.cselect-btn:hover{border-color:var(--ghost)}
+.cselect-btn:focus-visible,.cselect.open .cselect-btn{
+  outline:none;border-color:var(--brand-light);box-shadow:0 0 0 2px rgba(87,144,230,.35);
+}
+.cselect-value{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cselect-chev{
+  width:.95rem;height:.95rem;flex:none;color:var(--brand-deep);
+  transition:transform .35s var(--ease-expo);
+}
+.cselect.open .cselect-chev{transform:rotate(180deg)}
+
+.cselect-menu{
+  position:absolute;z-index:40;top:calc(100% + .4rem);left:0;right:0;
+  border-radius:var(--radius-xl);background:var(--surface-card);border:1px solid var(--hairline);
+  box-shadow:0 1.25rem 2.5rem rgba(15,47,99,.18);padding:.35rem;
+  max-height:14rem;overflow-y:auto;overscroll-behavior:contain;
+  scrollbar-width:thin;scrollbar-color:var(--ghost) transparent;
+  opacity:0;transform:translateY(-.4rem);pointer-events:none;
+  transition:opacity .22s var(--ease-quart),transform .22s var(--ease-quart);
+}
+.cselect-menu::-webkit-scrollbar{width:.4rem}
+.cselect-menu::-webkit-scrollbar-thumb{background:var(--ghost);border-radius:var(--radius-pill)}
+/* flipped upward when there is not enough room below inside the dialog */
+.cselect.up .cselect-menu{top:auto;bottom:calc(100% + .4rem);transform:translateY(.4rem)}
+.cselect.open .cselect-menu{opacity:1;transform:translateY(0);pointer-events:auto}
+.cselect-menu li{
+  display:flex;align-items:center;gap:.6rem;border-radius:.55rem;padding:.6rem .65rem;
+  cursor:pointer;font-size:.875rem;line-height:1.35;
+  transition:background-color .18s ease;
+}
+.cselect-menu li:hover,.cselect-menu li.is-active{background:var(--surface)}
+.cselect-menu li[aria-selected="true"]{background:var(--surface);font-weight:500}
+.cselect-menu li:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+.cselect-opt-text{flex:1;min-width:0}
+.cselect-check{width:1rem;height:1rem;flex:none;color:var(--brand);opacity:0;transition:opacity .18s ease}
+.cselect-menu li[aria-selected="true"] .cselect-check{opacity:1}
+.field.has-error .cselect-btn{border-color:#c0392b}
+.field-optional{font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink-soft);opacity:.8}
+/* two short fields side by side once there is room */
+.field-pair{display:grid;grid-template-columns:1fr;gap:1rem}
+@media (min-width:480px){.field-pair{grid-template-columns:1fr 1fr}}
+/* consent - a whole tappable row rather than a lone 18px box, so it is easy
+   to hit on a phone and reads as a sentence, not a form caption */
+.consent{
+  display:flex;align-items:flex-start;gap:.85rem;cursor:pointer;
+  border:1px solid var(--hairline);border-radius:var(--radius-xl);
+  background:var(--background);padding:.85rem 1rem;
+  text-transform:none;letter-spacing:normal;
+  transition:border-color .25s ease,background-color .25s ease;
+}
+.consent:hover{border-color:var(--ghost)}
+.consent:has(input:checked){border-color:var(--brand-light);background:rgba(87,144,230,.06)}
+.consent input{
+  appearance:none;-webkit-appearance:none;flex:none;
+  width:1.25rem;height:1.25rem;margin:.1rem 0 0;padding:0;
+  border:1.5px solid var(--ghost);border-radius:.4rem;background:var(--surface-card);cursor:pointer;
+  display:grid;place-items:center;
+  transition:background-color .25s var(--ease-quart),border-color .25s var(--ease-quart);
+}
+.consent input::after{
+  content:"";width:.6rem;height:.33rem;
+  border-left:2px solid #fff;border-bottom:2px solid #fff;
+  transform:rotate(-45deg) scale(.4);opacity:0;margin-top:-.12rem;
+  transition:opacity .18s ease,transform .3s var(--ease-expo);
+}
+.consent input:checked{background:var(--brand-deep);border-color:var(--brand-deep)}
+.consent input:checked::after{opacity:1;transform:rotate(-45deg) scale(1)}
+.consent input:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.consent-text{
+  font-size:.8125rem;line-height:1.5;color:var(--ink-soft);
+  text-transform:none;letter-spacing:normal;font-weight:400;
+}
+.consent-text b{display:block;color:var(--ink);font-weight:500;margin-bottom:.15rem}
+.consent-text a{color:var(--brand);text-decoration:underline;text-underline-offset:.15em}
+.consent-text a:hover{color:var(--brand-deep)}
+.field.has-error .consent{border-color:#c0392b;background:rgba(192,57,43,.05)}
+.field.has-error .consent input{border-color:#c0392b}
+/* what happens next */
+.form-reassure{
+  font-size:.75rem;color:var(--ink-soft);line-height:1.55;margin-top:-.35rem;
+}
+.form-error a{text-decoration:underline}
+/* spam trap - never shown, never announced. Clipped rather than pushed off to
+   -9999px, so it can never widen the scrolling form area. */
+.hp-field{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);border:0;
+}
 .modal-success{
-  margin-top:2rem;border-radius:var(--radius-card);background:var(--surface);
+  border-radius:var(--radius-card);background:var(--surface);
   padding:1.5rem;text-align:center;display:none;flex-direction:column;align-items:center;gap:.75rem;
 }
 .modal-success.show{display:flex}
@@ -831,12 +1173,6 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 
   /* approach */
   .facilities{border-radius:1.5rem;padding:3.5rem 1.25rem 4rem}
-  .facilities h2{font-size:2.5rem;margin-top:1.25rem}
-  .approach-head{gap:1.5rem}
-  .fac-body{font-size:.875rem}
-  .process-rail{margin-top:2.5rem}
-  .process-card{padding:2rem 1.35rem 1.75rem;border-radius:1.5rem}
-  .process-card::before{left:1.35rem}
   .transform-block{margin-top:3.5rem}
   .transform-statement h3{font-size:1.85rem}
   .transform-statement p{font-size:.9375rem;margin-top:1.1rem}
@@ -846,6 +1182,16 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   .transform-arrow svg{width:1rem;height:1rem}
   .transform-mid-cap{font-size:.6rem}
   .shot-zoom{right:.65rem;bottom:.65rem;padding:.45rem .75rem;letter-spacing:.12em}
+
+  /* calculator */
+  .calc{padding:3.75rem 1.25rem}
+  .calc h2{font-size:2.5rem}
+  .calc-sub{font-size:.875rem}
+  .calc-grid{margin-top:2.5rem;gap:1rem}
+  .calc-panel{padding:1.75rem 1.25rem;gap:1.5rem;border-radius:1.5rem}
+  .calc-result{padding:1.75rem 1.25rem;gap:1.5rem;border-radius:1.5rem}
+  .calc-headline b{font-size:2.75rem}
+  .calc-risk{padding:1.5rem 1.25rem}
 
   /* pricing */
   .pricing{padding:3.75rem 1.25rem}
@@ -991,23 +1337,6 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 
   <!-- ============ APPROACH ============ -->
   <section class="facilities" id="approach">
-    <div class="approach-head">
-      <div class="approach-head-left">
-        <div class="fac-icon-box inview"
-             data-inview='{"from":{"opacity":0,"scale":0.85},"to":{"opacity":1,"scale":1},"config":{"tension":240,"friction":20}}'>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 6h7v7"/></svg>
-        </div>
-        <h2 id="facilities-title"></h2>
-      </div>
-
-      <div class="approach-head-right">
-        <span class="approach-rule"></span>
-        <p class="fac-body" id="facilities-body"></p>
-      </div>
-    </div>
-
-    <div class="process-rail" id="facCards"></div>
-
     <div class="transform-block" id="transformBlock">
       <div class="transform-statement">
         <h3>
@@ -1055,7 +1384,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
     <div class="pricing-head">
       <div class="pricing-head-left">
         <h2 id="pricing-title"></h2>
-        <p class="pricing-sub">Fixed monthly fees, agreed upfront. No surprise invoices. Every plan includes direct access to Arbab, not a call centre.</p>
+        <p class="pricing-sub" id="pricingSub"></p>
       </div>
 
       <div class="currency" id="currency">
@@ -1072,6 +1401,114 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 
     <div class="pricing-grid" id="pricingGrid"></div>
     <p class="pricing-note" id="pricingNote"></p>
+  </section>
+
+  <!-- ============ SAVINGS CALCULATOR ============ -->
+  <section class="calc" id="calculator">
+    <div class="calc-inner">
+      <div class="calc-head">
+        <h2 id="calc-title"></h2>
+        <p class="calc-sub">Most people never add it up. Put your own numbers in and see what your
+          books are really costing you each year - in your time, or in someone else's wages.</p>
+      </div>
+
+      <div class="calc-grid">
+        <!-- ---------- inputs ---------- -->
+        <div class="calc-panel inview"
+             data-inview='{"from":{"opacity":0,"y":40},"to":{"opacity":1,"y":0},"config":{"tension":180,"friction":26}}'>
+          <span class="calc-panel-title">Your numbers</span>
+
+          <div class="calc-q">
+            <span class="calc-q-label" id="calcTypeLabel">What kind of business do you run?</span>
+            <div class="calc-seg" role="radiogroup" aria-labelledby="calcTypeLabel" id="calcSeg"></div>
+          </div>
+
+          <div class="calc-q">
+            <div class="calc-row">
+              <label class="calc-q-label" for="calcHours">Hours a month you spend on the books</label>
+              <output class="calc-val" id="calcHoursOut" for="calcHours">8 hrs</output>
+            </div>
+            <input class="calc-range" type="range" id="calcHours" min="1" max="40" step="1" value="8" />
+            <p class="calc-hint">Categorising, reconciling, chasing receipts, invoicing, and the evening
+              before a deadline.</p>
+          </div>
+
+          <div class="calc-q">
+            <div class="calc-row">
+              <label class="calc-q-label" for="calcRate">What an hour of your time is worth</label>
+              <output class="calc-val" id="calcRateOut" for="calcRate"></output>
+            </div>
+            <input class="calc-range" type="range" id="calcRate" value="50" />
+            <p class="calc-hint">What you would earn putting that hour back into the business - billable
+              work, selling, or serving customers.</p>
+          </div>
+
+          <div class="calc-q">
+            <label class="calc-check" for="calcPaying">
+              <input type="checkbox" id="calcPaying" />
+              <span class="calc-check-text">I already pay a bookkeeper or accountant</span>
+            </label>
+            <div class="calc-sub-field" id="calcPayingField">
+              <label class="calc-hint" for="calcPaid">What you pay them a month</label>
+              <div class="calc-money-input">
+                <span id="calcPaidSymbol">&#163;</span>
+                <input type="number" id="calcPaid" min="0" max="20000" step="10" value="350"
+                       inputmode="numeric" aria-label="What you pay your current bookkeeper or accountant each month" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- result ---------- -->
+        <div class="calc-result inview" aria-live="polite"
+             data-inview='{"from":{"opacity":0,"y":40},"to":{"opacity":1,"y":0},"config":{"tension":180,"friction":26},"delayIn":120}'>
+          <div>
+            <span class="calc-kicker" id="calcKicker">Your books currently cost you about</span>
+            <div class="calc-headline">
+              <b id="calcHeadline">&#163;0</b>
+              <p id="calcHeadlineSub"></p>
+            </div>
+          </div>
+
+          <div class="calc-bars" id="calcBars"></div>
+
+          <div class="calc-payoff">
+            <p class="calc-payoff-main" id="calcPayoff"></p>
+            <p class="calc-payoff-sub" id="calcPayoffSub"></p>
+            <div class="calc-cta">
+              <button type="button" class="pill light" id="calcCta" data-open-modal>
+                Book a free consultation
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+              <span class="calc-plan-tag" id="calcPlanTag"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------- what is at risk + the working out ---------- -->
+      <div class="calc-foot">
+        <div class="calc-risk inview"
+             data-inview='{"from":{"opacity":0,"y":32},"to":{"opacity":1,"y":0},"config":{"tension":190,"friction":26}}'>
+          <div class="calc-risk-icon"
+               style="width:2.75rem;height:2.75rem;border-radius:var(--radius-xl);background:var(--brand-deep);color:#fff;display:grid;place-items:center">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1.15rem;height:1.15rem"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          </div>
+          <h3 id="calcRiskTitle">And this is what a missed deadline costs</h3>
+          <p id="calcRiskIntro"></p>
+          <ul id="calcRiskList"></ul>
+          <p class="calc-risk-src" id="calcRiskSrc"></p>
+        </div>
+
+        <details class="calc-working">
+          <summary>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+            How this is worked out
+          </summary>
+          <div class="calc-working-body" id="calcWorking"></div>
+        </details>
+      </div>
+    </div>
   </section>
 
   <!-- ============ FOOTER ============ -->
@@ -1105,7 +1542,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
           <li><a href="#services" data-scroll>Monthly Bookkeeping</a></li>
           <li><a href="#services" data-scroll>Financial Reporting</a></li>
           <li><a href="#services" data-scroll>Payroll Services</a></li>
-          <li><a href="#services" data-scroll>Tax &amp; VAT Returns</a></li>
+          <li><a href="#services" data-scroll id="footServiceTax"></a></li>
           <li><a href="#services" data-scroll>Business Advisory</a></li>
         </ul>
       </nav>
@@ -1116,6 +1553,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
           <li><a href="#services" data-scroll>Services</a></li>
           <li><a href="#approach" data-scroll>Approach</a></li>
           <li><a href="#pricing" data-scroll>Pricing</a></li>
+          <li><a href="#calculator" data-scroll>Savings calculator</a></li>
           <li><a href="#contact" data-scroll>Contact</a></li>
         </ul>
       </nav>
@@ -1127,7 +1565,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
         <a href="#linkedin">LinkedIn</a>
       </nav>
       <nav aria-label="Legal">
-        <a href="#privacy">Privacy</a><a href="#terms">Terms</a>
+        <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
       </nav>
     </div>
   </footer>
@@ -1153,6 +1591,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
         <a href="#services" data-scroll data-menu-link>Services</a>
         <a href="#approach" data-scroll data-menu-link>Approach</a>
         <a href="#pricing" data-scroll data-menu-link>Pricing</a>
+        <a href="#calculator" data-scroll data-menu-link>Calculator</a>
         <a href="#contact" data-scroll data-menu-link>Contact</a>
       </nav>
 
@@ -1194,34 +1633,94 @@ main{width:100%;overflow-x:clip;padding:.5rem}
       </button>
     </div>
 
-    <form class="modal-form" id="modalForm" novalidate>
-      <div class="field">
-        <label for="f-name">Full name</label>
-        <input id="f-name" name="name" type="text" placeholder="Alex Rivera" autocomplete="name" />
-      </div>
-      <div class="field">
-        <label for="f-email">Email</label>
-        <input id="f-email" name="email" type="email" placeholder="you@email.com" autocomplete="email" />
-      </div>
-      <div class="field">
-        <label for="f-msg">What do you need help with?</label>
-        <textarea id="f-msg" name="message" rows="3" placeholder="I need help getting my accounts and tax return sorted before the deadline…"></textarea>
-      </div>
-      <button type="submit" class="submit-btn" id="submitBtn">Request a consultation</button>
-    </form>
+    <div class="modal-body" id="modalBody" data-lenis-prevent>
+      <form class="modal-form" id="modalForm" novalidate>
+        <div class="field" id="field-name">
+          <label for="f-name">Full name</label>
+          <input id="f-name" name="name" type="text" placeholder="Alex Rivera" autocomplete="name"
+                 required aria-describedby="err-name" />
+          <span class="field-error" id="err-name">Please tell us your name.</span>
+        </div>
+        <div class="field" id="field-email">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" placeholder="you@email.com" autocomplete="email"
+                 required aria-describedby="err-email" />
+          <span class="field-error" id="err-email">Please enter an email we can reply to.</span>
+        </div>
+        <div class="field" id="field-phone">
+          <label for="f-phone">Phone number</label>
+          <input id="f-phone" name="phone" type="tel" placeholder="Best number to reach you"
+                 autocomplete="tel" required aria-describedby="err-phone" />
+          <span class="field-error" id="err-phone">Please add a number we can call you on.</span>
+        </div>
+        <div class="field-pair">
+          <div class="field">
+            <label for="f-country">Where are you based?</label>
+            <select id="f-country" name="country">
+              <option value="United States">United States</option>
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="Other">Somewhere else</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-when">Best time to call</label>
+            <select id="f-when" name="best_time">
+              <option value="Any time">Any time</option>
+              <option value="Morning">Morning</option>
+              <option value="Afternoon">Afternoon</option>
+              <option value="Evening">Evening</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-msg">What do you need help with? <span class="field-optional">(optional)</span></label>
+          <textarea id="f-msg" name="message" rows="3" placeholder="I need help getting my books and tax sorted before the deadline…"></textarea>
+        </div>
+        <!-- spam trap: a real person never fills this in -->
+        <div class="hp-field" aria-hidden="true">
+          <label for="f-company">Company (leave blank)</label>
+          <input id="f-company" name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+        <div class="field" id="field-consent">
+          <label class="consent" for="f-consent">
+            <input type="checkbox" id="f-consent" name="consent" required aria-describedby="err-consent" />
+            <span class="consent-text"><b>Yes, you can contact me about this enquiry.</b>
+              We only use your details to reply. No mailing lists, and we never pass them on —
+              see our <a href="privacy.html" target="_blank" rel="noopener">privacy policy</a>.</span>
+          </label>
+          <span class="field-error" id="err-consent">Please tick this so we can reply to you.</span>
+        </div>
+        <p class="form-error" id="formError" role="alert"></p>
+        <button type="submit" class="submit-btn" id="submitBtn">Request a consultation</button>
+        <p class="form-reassure">Free 30-minute call. No obligation, and no sales pitch —
+          we will tell you honestly if you do not need us.</p>
+      </form>
 
-    <div class="modal-success" id="modalSuccess">
-      <div class="success-check">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+      <div class="modal-success" id="modalSuccess">
+        <div class="success-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <h3>Request received</h3>
+        <p id="successText"></p>
+        <button type="button" class="pill solid" id="successDone">
+          Done
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
       </div>
-      <h3>Request received</h3>
-      <p id="successText"></p>
-      <button type="button" class="pill solid" id="successDone">
-        Done
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </button>
     </div>
   </div>
+</div>
+
+<!-- ============ REGION NOTICE ============ -->
+<div class="region-note" id="regionNote" role="status" aria-live="polite" hidden>
+  <span class="region-note-flag" id="regionNoteFlag">US</span>
+  <div class="region-note-body">
+    <span id="regionNoteText"></span>
+    <button type="button" id="regionNoteSwitch"></button>
+  </div>
+  <button type="button" class="region-note-close" id="regionNoteClose" aria-label="Dismiss region notice">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
 </div>
 
 <!-- ============ LOADER ============ -->
@@ -1514,81 +2013,197 @@ const PILLARS = [
   { word:'Timely',   desc:'Books maintained on an agreed monthly schedule, with reports delivered when promised.' },
 ];
 
+/* Every visitor-facing string that differs between regions is written as
+   { gbp, usd }. A plain string means it reads the same in both. The region
+   switcher swaps all of it together, so a US visitor never sees a dollar
+   price sitting next to British paperwork. */
 const SERVICES = [
-  { idx:'01', name:'Monthly Bookkeeping',         desc:'Accurate, up-to-date books maintained every month.' },
-  { idx:'02', name:'Financial Reporting',         desc:'Profit & Loss • Balance sheet • Cashflow • Management reports' },
-  { idx:'03', name:'Payroll Services',            desc:'Payroll processing, tax withholding, payroll tax payments, and payroll reporting.' },
-  { idx:'04', name:'Tax & VAT Returns (UK Only)', desc:'UK tax and VAT returns prepared from well-maintained books.' },
-  { idx:'05', name:'Business Advisory',           desc:'Budgeting • Forecasting • Cash-flow analysis • Profitability analysis • Financial controls' },
+  {
+    idx:'01',
+    name:'Monthly Bookkeeping',
+    desc:'Accurate, up-to-date books maintained every month.',
+  },
+  {
+    idx:'02',
+    name:'Financial Reporting',
+    desc:{
+      gbp:'Profit & Loss • Balance sheet • Cashflow • Management reports',
+      usd:'Profit & Loss • Balance sheet • Cash flow • Management reports',
+    },
+  },
+  {
+    idx:'03',
+    name:'Payroll Services',
+    desc:{
+      gbp:'Payroll processing, PAYE, pension auto-enrolment and RTI submissions.',
+      usd:'Payroll processing, tax withholding, payroll tax payments, and payroll reporting.',
+    },
+  },
+  {
+    idx:'04',
+    name:{ gbp:'Tax & VAT Returns', usd:'Tax-Ready Books & CPA Support' },
+    desc:{
+      gbp:'Self Assessment, Corporation Tax and VAT returns prepared from well-maintained books.',
+      usd:'Year-end books, schedules and workpapers prepared so your CPA can file quickly – and bill you for less time.',
+    },
+  },
+  {
+    idx:'05',
+    name:'Business Advisory',
+    desc:'Budgeting • Forecasting • Cash-flow analysis • Profitability analysis • Financial controls',
+  },
 ];
 
-const APPROACH_TILES = [
-  {
-    step:'Step 01',
-    name:'Fixed-Fee Clarity',
-    desc:'Every engagement is scoped and quoted upfront, so there are no surprises on your invoice.',
-    icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/>'
-  },
-  {
-    step:'Step 02',
-    name:'Deadlines, Owned',
-    desc:'Filing dates are tracked and chased on your behalf - you\'ll never miss a deadline again.',
-    icon:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M9 15l2 2 4-4"/>'
-  },
-];
+/* pick the right variant for the selected region */
+function rt(value, cur){
+  return (value && typeof value === 'object') ? value[cur] : value;
+}
 
 const CURRENCIES = [
   {
     id:'gbp', flag:'UK', name:'United Kingdom (\u00a3)', region:'United Kingdom',
     sub:'Billed monthly in GBP',
     note:'Figures are shown in pounds sterling.',
+    code:'GBP', symbol:'\u00a3',
   },
   {
     id:'usd', flag:'US', name:'United States ($)', region:'United States',
     sub:'Billed monthly in USD',
     note:'US pricing is shown in US dollars and billed monthly.',
+    code:'USD', symbol:'$',
   },
 ];
+
+/* one formatter for every price on the page, so the cards and the calculator
+   can never drift apart - change a number in PLANS and both follow */
+const MONEY_FMT = {};
+function formatMoney(curId, amount){
+  const c = CURRENCIES.find(x => x.id === curId) || CURRENCIES[0];
+  if (!MONEY_FMT[curId]){
+    MONEY_FMT[curId] = new Intl.NumberFormat('en-' + (curId === 'gbp' ? 'GB' : 'US'), {
+      style: 'currency', currency: c.code, maximumFractionDigits: 0,
+    });
+  }
+  return MONEY_FMT[curId].format(Math.round(amount));
+}
+
+/* ============================================================
+   REGION
+
+   Which region a visitor sees is worked out from their own browser's
+   timezone. No IP lookup, no third-party service, nothing leaves the
+   page - so there is nothing here that needs a consent banner.
+
+   Detection is a default, never a lock: the switcher in the pricing
+   section always wins, and once someone chooses we remember it and
+   stop guessing. Anything we cannot place falls back to US.
+   ============================================================ */
+const REGION_STORE_KEY = 'arbab-region';
+const DEFAULT_REGION = 'usd';
+
+function detectRegion(){
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    if (/^Europe\/(London|Belfast|Guernsey|Isle_of_Man|Jersey)$/.test(tz)) return 'gbp';
+    if (/^(America|US|Canada|Pacific\/Honolulu)/.test(tz)) return 'usd';
+  } catch (e) { /* old browser, or timezone unavailable - fall through */ }
+  return DEFAULT_REGION;
+}
+
+function storedRegion(){
+  try {
+    const v = localStorage.getItem(REGION_STORE_KEY);
+    return CURRENCIES.some(c => c.id === v) ? v : null;
+  } catch (e) { return null; }        /* private mode, or storage blocked */
+}
+function rememberRegion(id){
+  try { localStorage.setItem(REGION_STORE_KEY, id); } catch (e) { /* not important enough to fail over */ }
+}
+
+const chosenRegion = storedRegion();
+let currency = chosenRegion || detectRegion();
+
+/* anything that depends on the selected region subscribes here, so the UK/US
+   switcher drives the service list, the pricing cards, the savings calculator
+   and the enquiry form together */
+const currencySubs = [];
+function onCurrencyChange(fn){ currencySubs.push(fn); }
+function notifyCurrency(){ currencySubs.forEach(fn => fn(currency)); }
 
 const PRICING_NOTE = 'Every business is different. The figures above are a starting point, and final pricing is confirmed after a free consultation.';
 
 const PLANS = [
   {
-    name: 'Sole Trader',
-    price: { gbp: '£49', usd: '$65' }, period: '/mo',
-    desc: 'For freelancers and sole traders who just need the basics covered.',
-    features: [
-      'Bookkeeping (up to 100 transactions/mo)',
-      'Annual accounts',
-      'Self-assessment tax return',
-      'Email & phone support',
-    ],
+    id: 'sole',
+    name: { gbp: 'Sole Trader', usd: 'Sole Proprietor' },
+    price: { gbp: 49, usd: 65 }, period: '/mo',
+    desc: {
+      gbp: 'For freelancers and sole traders who just need the basics covered.',
+      usd: 'For freelancers and single-member LLCs who just need the basics covered.',
+    },
+    features: {
+      gbp: [
+        'Bookkeeping (up to 100 transactions/mo)',
+        'Annual accounts',
+        'Self Assessment tax return',
+        'Email & phone support',
+      ],
+      usd: [
+        'Bookkeeping (up to 100 transactions/mo)',
+        'Year-end financial statements',
+        'Schedule C pack, ready for your CPA',
+        'Email & phone support',
+      ],
+    },
     featured: false,
   },
   {
-    name: 'Limited Company',
-    price: { gbp: '£99', usd: '$129' }, period: '/mo',
-    desc: 'The most popular plan for small limited companies.',
-    features: [
-      'Everything in Sole Trader',
-      'Corporation tax return',
-      'Confirmation statement filing',
-      'VAT returns (quarterly)',
-      'Payroll for up to 3 employees',
-    ],
+    id: 'ltd',
+    name: { gbp: 'Limited Company', usd: 'LLC & S-Corp' },
+    price: { gbp: 99, usd: 129 }, period: '/mo',
+    desc: {
+      gbp: 'The most popular plan for small limited companies.',
+      usd: 'The most popular plan for small incorporated businesses.',
+    },
+    features: {
+      gbp: [
+        'Everything in Sole Trader',
+        'Corporation Tax return',
+        'Confirmation statement filing',
+        'VAT returns (quarterly)',
+        'Payroll for up to 3 employees',
+      ],
+      usd: [
+        'Everything in Sole Proprietor',
+        'Year-end close and workpapers for your CPA',
+        'Sales tax filings',
+        'Monthly reconciliations, reviewed line by line',
+        'Payroll for up to 3 employees',
+      ],
+    },
     featured: true,
   },
   {
+    id: 'growth',
     name: 'Growth & Advisory',
-    price: { gbp: '£199', usd: '$259' }, period: '/mo',
+    price: { gbp: 199, usd: 259 }, period: '/mo',
     desc: 'For growing businesses that want a finance partner, not just a filer.',
-    features: [
-      'Everything in Limited Company',
-      'Monthly management accounts',
-      'Quarterly strategy calls',
-      'Payroll for up to 10 employees',
-      'Priority turnaround on requests',
-    ],
+    features: {
+      gbp: [
+        'Everything in Limited Company',
+        'Monthly management accounts',
+        'Quarterly strategy calls',
+        'Payroll for up to 10 employees',
+        'Priority turnaround on requests',
+      ],
+      usd: [
+        'Everything in LLC & S-Corp',
+        'Monthly management reports',
+        'Quarterly strategy calls',
+        'Payroll for up to 10 employees',
+        'Priority turnaround on requests',
+      ],
+    },
     featured: false,
   },
 ];
@@ -1685,43 +2300,36 @@ function stackedHeading(el, lines, opts = {}){
   obs.observe(el);
 }
 stackedHeading(document.getElementById('programs-title'), ['Accounting,', 'Made Simple']);
-stackedHeading(document.getElementById('facilities-title'), ['A Process', 'Built Around', 'You'], { stagger: 120 });
 stackedHeading(document.getElementById('pricing-title'), ['Simple,', 'Fixed-Fee Pricing']);
+stackedHeading(document.getElementById('calc-title'), ['What Your Books', 'Are Really', 'Costing You']);
 stackedHeading(document.getElementById('footer-cta-title'), ['Ready to', 'get started']);
-
-/* facilities body word fade */
-const facBody = document.getElementById('facilities-body');
-buildClips(facBody, "From your first message to the moment your return is filed, every step is scoped, explained, and confirmed before it happens - no jargon, no surprise invoices.".split(' '), { soft: true });
-{
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      obs.unobserve(e.target);
-      playReveal(facBody, { stagger: 28, duration: 700, easing: EASE.quart, delay: 250, fromY: '18px' });
-    });
-  }, { threshold: 0.2 });
-  obs.observe(facBody);
-}
 
 /* ============================================================
    BUILD: SERVICES
    ============================================================ */
 const programList = document.getElementById('programList');
+const serviceEls = [];
 SERVICES.forEach((p, i) => {
   const li = document.createElement('li');
   /* no per-service pages exist, so each row opens the consultation form */
   li.innerHTML = `
     <div class="program-row">
-      <button type="button" data-open-modal aria-label="Enquire about ${p.name}">
+      <button type="button" data-open-modal>
         <span class="program-idx">${p.idx}</span>
         <span class="program-body">
-          <h3>${p.name}</h3>
-          <p>${p.desc}</p>
+          <h3></h3>
+          <p></p>
         </span>
         <span class="program-arrow">${ARROW_SVG}</span>
       </button>
     </div>`;
   programList.appendChild(li);
+  serviceEls.push({
+    btn: li.querySelector('button'),
+    nameEl: li.querySelector('h3'),
+    descEl: li.querySelector('.program-body p'),
+    service: p,
+  });
   const row = li.querySelector('.program-row');
   setupInview(row, {
     from: { opacity: 0, y: 26 }, to: { opacity: 1, y: 0 },
@@ -1731,31 +2339,18 @@ SERVICES.forEach((p, i) => {
   hoverSpring(li.querySelector('button'), arrow, { x: 0, opacity: 0.55 }, { x: 8, opacity: 1 }, { tension: 300, friction: 20 });
 });
 
-/* ============================================================
-   BUILD: APPROACH TILES
-   ============================================================ */
-const facCards = document.getElementById('facCards');
-APPROACH_TILES.forEach((t, i) => {
-  const fig = document.createElement('figure');
-  fig.className = 'fac-card';
-  fig.innerHTML = `
-    <div class="process-card">
-      <div class="process-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${t.icon}</svg>
-      </div>
-      <div class="process-body">
-        <span class="process-step">${t.step}</span>
-        <h3>${t.name}</h3>
-        <p>${t.desc}</p>
-      </div>
-    </div>`;
-  facCards.appendChild(fig);
-  setupInview(fig, {
-    from: { opacity: 0, y: 48 }, to: { opacity: 1, y: 0 },
-    config: { tension: 180, friction: 26 }, delayIn: i * 140
+/* text only - the elements themselves are never rebuilt, so the reveal
+   springs and hover springs attached to them survive a region switch */
+function paintServices(){
+  serviceEls.forEach(({ btn, nameEl, descEl, service }) => {
+    const name = rt(service.name, currency);
+    nameEl.textContent = name;
+    descEl.textContent = rt(service.desc, currency);
+    btn.setAttribute('aria-label', 'Ask about ' + name);
   });
-  hoverSpring(fig, fig.querySelector('.process-card'), { y: 0 }, { y: -8 }, { tension: 300, friction: 22 });
-});
+}
+paintServices();
+onCurrencyChange(paintServices);
 
 /* ============================================================
    BUILD: MESS -> PICTURE
@@ -1861,7 +2456,6 @@ const currencyBtn = document.getElementById('currencyBtn');
 const currencyMenu = document.getElementById('currencyMenu');
 const currencyFlag = document.getElementById('currencyFlag');
 const currencyCurrent = document.getElementById('currencyCurrent');
-let currency = CURRENCIES[0].id;
 const priceEls = [];
 
 PLANS.forEach((plan, i) => {
@@ -1869,23 +2463,56 @@ PLANS.forEach((plan, i) => {
   card.className = 'price-card' + (plan.featured ? ' featured' : '');
   card.innerHTML = `
     ${plan.featured ? '<span class="plan-badge">Most Popular</span>' : ''}
-    <h3>${plan.name}</h3>
-    <div class="price"><b>${plan.price[currency]}</b><span>${plan.period}</span></div>
-    <p class="plan-desc">${plan.desc}</p>
-    <ul>
-      ${plan.features.map(f => `<li>${CHECK_SVG}<span>${f}</span></li>`).join('')}
-    </ul>
+    <h3></h3>
+    <div class="price"><b></b><span>${plan.period}</span></div>
+    <p class="plan-desc"></p>
+    <ul></ul>
     <button type="button" class="pill ${plan.featured ? 'light' : 'solid'}" data-open-modal>
       Get Started
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </button>`;
   pricingGrid.appendChild(card);
-  priceEls.push({ el: card.querySelector('.price b'), plan });
+  priceEls.push({
+    el: card.querySelector('.price b'),
+    nameEl: card.querySelector('h3'),
+    descEl: card.querySelector('.plan-desc'),
+    listEl: card.querySelector('ul'),
+    plan,
+  });
   setupInview(card, {
     from: { opacity: 0, y: 40 }, to: { opacity: 1, y: 0 },
     config: { tension: 180, friction: 26 }, delayIn: i * 120
   });
 });
+
+/* the whole card, not just the price - a US visitor must never see a dollar
+   figure sitting next to VAT returns and Companies House filings */
+function paintPlans(){
+  priceEls.forEach(({ el, nameEl, descEl, listEl, plan }) => {
+    el.textContent   = formatMoney(currency, plan.price[currency]);
+    nameEl.textContent = rt(plan.name, currency);
+    descEl.textContent = rt(plan.desc, currency);
+    listEl.innerHTML = rt(plan.features, currency)
+      .map(f => `<li>${CHECK_SVG}<span>${f}</span></li>`).join('');
+  });
+}
+paintPlans();
+
+/* the one-line region copy that lives outside the plan cards */
+const pricingSub = document.getElementById('pricingSub');
+const footServiceTax = document.getElementById('footServiceTax');
+function paintRegionCopy(){
+  if (pricingSub){
+    pricingSub.textContent = 'Fixed monthly fees, agreed upfront. No surprise invoices. ' +
+      'Every plan includes direct access to Arbab, not a call ' +
+      (currency === 'gbp' ? 'centre.' : 'center.');
+  }
+  if (footServiceTax){
+    footServiceTax.textContent = rt(SERVICES[3].name, currency);
+  }
+}
+paintRegionCopy();
+onCurrencyChange(paintRegionCopy);
 
 /* ---------- currency switcher ---------- */
 const CURRENCY_CHECK_SVG = `<svg class="currency-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>`;
@@ -1933,14 +2560,60 @@ function selectCurrency(id){
   currencyBtn.focus();
   if (id === currency) return;
   currency = id;
+  rememberRegion(id);
   applyCurrencyLabel();
+  notifyCurrency();
   pricingGrid.classList.add('is-swapping');
   setTimeout(() => {
-    priceEls.forEach(({ el, plan }) => { el.textContent = plan.price[currency]; });
+    paintPlans();
     pricingGrid.classList.remove('is-swapping');
   }, 200);
 }
 applyCurrencyLabel();
+
+/* ---------- region notice ----------
+   Only ever shown when we guessed. If the visitor has chosen a region
+   before, or chooses one now, it never appears again. */
+const regionNote = document.getElementById('regionNote');
+if (regionNote && !chosenRegion){
+  const noteFlag   = document.getElementById('regionNoteFlag');
+  const noteText   = document.getElementById('regionNoteText');
+  const noteSwitch = document.getElementById('regionNoteSwitch');
+  let noteTimer = null;
+
+  function otherRegion(){ return currency === 'gbp' ? 'usd' : 'gbp'; }
+  function paintNote(){
+    const here  = currencyById(currency);
+    const there = currencyById(otherRegion());
+    noteFlag.textContent = here.flag;
+    noteText.textContent = 'Showing ' + here.region + ' pricing.';
+    noteSwitch.textContent = 'Switch to ' + there.region;
+  }
+  function hideNote(){
+    clearTimeout(noteTimer);
+    regionNote.classList.remove('show');
+    setTimeout(() => { regionNote.hidden = true; }, 500);
+  }
+
+  paintNote();
+  /* wait for the loader to clear before it slides in */
+  noteTimer = setTimeout(() => {
+    regionNote.hidden = false;
+    requestAnimationFrame(() => regionNote.classList.add('show'));
+    noteTimer = setTimeout(hideNote, 14000);
+  }, 2600);
+
+  noteSwitch.addEventListener('click', () => {
+    selectCurrency(otherRegion());
+    hideNote();
+  });
+  document.getElementById('regionNoteClose').addEventListener('click', () => {
+    rememberRegion(currency);          /* they saw it and kept it - stop asking */
+    hideNote();
+  });
+  /* choosing from the switcher itself also settles it */
+  onCurrencyChange(hideNote);
+}
 
 currencyBtn.addEventListener('click', (e) => {
   e.stopPropagation();
@@ -1952,6 +2625,320 @@ document.addEventListener('click', (e) => {
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && currencyOpen) closeCurrency();
 });
+
+/* ============================================================
+   BUILD: SAVINGS CALCULATOR
+
+   Everything the calculator says is derived from PLANS and CALC_CONFIG
+   below - there are no prices written into the markup. Change a plan price
+   once and the pricing cards, the comparison bars and the savings figure
+   all move together.
+
+   !! Arbab: the penalty figures in CALC_CONFIG[...].risks are the only
+   numbers on this page that come from outside your own pricing. Confirm
+   them against the current HMRC / IRS schedules before launch, and re-check
+   them each tax year. They are quoted, not calculated, and they are the
+   figures a prospect is most likely to challenge on a call.
+   ============================================================ */
+const CALC_CONFIG = {
+  gbp: {
+    /* what an hour of the owner's time is worth */
+    rate: { min: 15, max: 200, step: 5, def: 50 },
+    /* modelled cost of paying a bookkeeper to do the same work. Scaled to the
+       visitor's own workload, because a flat figure is indefensible for someone
+       spending two hours a month. A bookkeeper is quicker than the owner, so we
+       assume they need fewer hours, with a realistic monthly minimum. */
+    hire: { minHours: 4, efficiency: 0.75, hourly: 30, softwarePerYear: 360 },
+    /* published penalties - quoted figures, confirm before launch */
+    risks: [
+      { label: 'Self Assessment filed one day late', amount: '\u00a3100' },
+      { label: 'Still outstanding after three months', amount: '\u00a310 a day' },
+      { label: 'Company accounts up to a month late', amount: '\u00a3150' },
+      { label: 'Company accounts more than six months late', amount: '\u00a31,500' },
+      { label: 'Each late VAT return, once you hit the points threshold', amount: '\u00a3200' },
+    ],
+    riskIntro: 'These are not estimates. They are the published penalties, and they land ' +
+               'whether or not the tax itself was ever owed.',
+    riskSrc: 'Source: HMRC and Companies House published penalty schedules. Figures are ' +
+             'reviewed each tax year - confirm current rates with us before relying on them.',
+  },
+  usd: {
+    rate: { min: 20, max: 300, step: 5, def: 75 },
+    hire: { minHours: 4, efficiency: 0.75, hourly: 45, softwarePerYear: 480 },
+    risks: [
+      { label: 'Filing a return late', amount: '5% of the tax owed, per month' },
+      { label: 'Capped at', amount: '25% of the tax owed' },
+      { label: 'Paying late, on top of that', amount: '0.5% per month' },
+      { label: 'Late payroll deposits, depending on how late', amount: '2% to 15%' },
+    ],
+    riskIntro: 'These are the federal penalties for filing or paying late. State penalties ' +
+               'sit on top, and interest runs the whole time.',
+    riskSrc: 'Source: IRS published penalty rates. State and local penalties vary - confirm ' +
+             'current rates with us before relying on them.',
+  },
+};
+
+/* which plan we recommend for each answer, by PLANS id */
+const CALC_TYPES = [
+  {
+    id: 'sole', plan: 'sole',
+    title: { gbp: 'Sole trader', usd: 'Sole proprietor' },
+    blurb: { gbp: 'Self-employed or freelance', usd: 'Freelance or single-member LLC' },
+  },
+  {
+    id: 'ltd', plan: 'ltd',
+    title: { gbp: 'Limited company', usd: 'LLC or S-Corp' },
+    blurb: { gbp: 'Registered at Companies House', usd: 'Incorporated with your state' },
+  },
+  {
+    id: 'growth', plan: 'growth',
+    title: 'Growing team',
+    blurb: 'Staff on payroll',
+  },
+];
+
+const calcSection = document.getElementById('calculator');
+if (calcSection) {
+  const segWrap     = document.getElementById('calcSeg');
+  const hoursInput  = document.getElementById('calcHours');
+  const hoursOut    = document.getElementById('calcHoursOut');
+  const rateInput   = document.getElementById('calcRate');
+  const rateOut     = document.getElementById('calcRateOut');
+  const payingCheck = document.getElementById('calcPaying');
+  const payingField = document.getElementById('calcPayingField');
+  const paidInput   = document.getElementById('calcPaid');
+  const paidSymbol  = document.getElementById('calcPaidSymbol');
+
+  const kickerEl    = document.getElementById('calcKicker');
+  const headlineEl  = document.getElementById('calcHeadline');
+  const headSubEl   = document.getElementById('calcHeadlineSub');
+  const barsEl      = document.getElementById('calcBars');
+  const payoffEl    = document.getElementById('calcPayoff');
+  const payoffSubEl = document.getElementById('calcPayoffSub');
+  const planTagEl   = document.getElementById('calcPlanTag');
+  const riskIntroEl = document.getElementById('calcRiskIntro');
+  const riskListEl  = document.getElementById('calcRiskList');
+  const riskSrcEl   = document.getElementById('calcRiskSrc');
+  const workingEl   = document.getElementById('calcWorking');
+
+  let calcType = 'ltd';           /* limited company is the most common visitor */
+  let rateTouched = false;        /* once they move the rate slider we stop overwriting it */
+
+  /* ---------- business type control ---------- */
+  const segEls = [];
+  CALC_TYPES.forEach(t => {
+    const label = document.createElement('label');
+    label.className = 'calc-seg-opt' + (t.id === calcType ? ' is-on' : '');
+    label.innerHTML =
+      '<input type="radio" name="calc-type" value="' + t.id + '"' +
+      (t.id === calcType ? ' checked' : '') + ' />' +
+      '<b></b><span></span>';
+    label.querySelector('input').addEventListener('change', () => {
+      calcType = t.id;
+      [...segWrap.children].forEach(el => el.classList.toggle('is-on', el === label));
+      render();
+    });
+    segWrap.appendChild(label);
+    segEls.push({ label, type: t });
+  });
+  function paintSeg(){
+    segEls.forEach(({ label, type }) => {
+      label.querySelector('b').textContent = rt(type.title, currency);
+      label.querySelector('span').textContent = rt(type.blurb, currency);
+    });
+  }
+
+  /* ---------- the maths ---------- */
+  function planFor(typeId){
+    const wanted = (CALC_TYPES.find(t => t.id === typeId) || CALC_TYPES[1]).plan;
+    return PLANS.find(pl => pl.id === wanted) || PLANS[1];
+  }
+
+  function model(){
+    const cfg   = CALC_CONFIG[currency];
+    const hours = Number(hoursInput.value);
+    const rate  = Number(rateInput.value);
+    const plan  = planFor(calcType);
+
+    const diy = hours * rate * 12;
+
+    /* if they told us what they already pay, use that - their real number always
+       beats our modelled one */
+    const paying = payingCheck.checked;
+    const hireHours = Math.max(cfg.hire.minHours, hours * cfg.hire.efficiency);
+    const hire = paying
+      ? Math.max(0, Number(paidInput.value) || 0) * 12
+      : hireHours * 12 * cfg.hire.hourly + cfg.hire.softwarePerYear;
+
+    const ours = plan.price[currency] * 12;
+
+    return { cfg, hours, rate, plan, diy, hire, ours, paying, hireHours };
+  }
+
+  /* ---------- painting the result ---------- */
+  function render(){
+    const m = model();
+
+    /* headline: whichever of the two they are actually doing today */
+    const current = m.paying ? m.hire : m.diy;
+    kickerEl.textContent = m.paying
+      ? 'Your books currently cost you about'
+      : 'Doing it yourself costs you about';
+    headlineEl.textContent = formatMoney(currency, current);
+    headSubEl.innerHTML = m.paying
+      ? 'a year, in fees on top of the ' + '<strong>' + m.hours + ' hours a month</strong> you still spend on it.'
+      : 'a year - <strong>' + (m.hours * 12) + ' hours</strong> of your time, valued at what you say it is worth.';
+
+    /* three bars, scaled against the biggest one */
+    const rows = [
+      { name: m.paying ? 'What you pay now' : 'Hiring a bookkeeper',
+        amount: m.hire, ours: false,
+        note: m.paying
+          ? 'What you told us you pay, over a year.'
+          : 'About ' + Math.round(m.hireHours) + ' hours a month at ' +
+            formatMoney(currency, m.cfg.hire.hourly) + ' an hour, plus your software.' },
+      { name: 'Doing it yourself', amount: m.diy, ours: false,
+        note: m.hours + ' hours a month at ' + formatMoney(currency, m.rate) + ' an hour.' },
+      { name: 'With Arbab Advisory - ' + rt(m.plan.name, currency), amount: m.ours, ours: true,
+        note: formatMoney(currency, m.plan.price[currency]) + ' a month, fixed and agreed upfront.' },
+    ];
+    const top = Math.max(...rows.map(r => r.amount), 1);
+
+    /* the bars are built once and updated in place - rebuilding them on every
+       slider move would restart the width transition and make dragging stutter */
+    if (!barsEl.children.length){
+      barsEl.innerHTML = rows.map(() =>
+        '<div class="calc-bar">' +
+          '<div class="calc-bar-head">' +
+            '<span class="calc-bar-name"></span>' +
+            '<span class="calc-bar-amt"></span>' +
+          '</div>' +
+          '<div class="calc-bar-track"><span class="calc-bar-fill"></span></div>' +
+          '<p class="calc-bar-note"></p>' +
+        '</div>'
+      ).join('');
+    }
+    rows.forEach((r, i) => {
+      const bar = barsEl.children[i];
+      bar.classList.toggle('is-ours', r.ours);
+      bar.querySelector('.calc-bar-name').textContent = r.name;
+      bar.querySelector('.calc-bar-amt').textContent = formatMoney(currency, r.amount);
+      bar.querySelector('.calc-bar-note').textContent = r.note;
+      bar.querySelector('.calc-bar-fill').style.width = Math.max(2, (r.amount / top) * 100) + '%';
+    });
+
+    /* the payoff */
+    const saving = current - m.ours;
+    const hoursBack = m.hours * 12;
+    if (saving > 0){
+      payoffEl.innerHTML = 'You would be <em>' + formatMoney(currency, saving) +
+        ' a year</em> better off' + (m.paying ? '.' : ', and get ' + hoursBack + ' hours back.');
+      const hoursToPay = m.rate > 0 ? m.plan.price[currency] / m.rate : 0;
+      payoffSubEl.textContent = hoursToPay > 0 && hoursToPay <= m.hours
+        ? 'The ' + rt(m.plan.name, currency) + ' plan pays for itself in the first ' +
+          (hoursToPay < 1 ? 'hour' : (Math.round(hoursToPay * 10) / 10) + ' hours') +
+          ' you get back each month.'
+        : 'Fixed monthly fee, agreed upfront, with no surprise invoices.';
+    } else {
+      payoffEl.innerHTML = 'On these numbers you are already close to break-even.';
+      payoffSubEl.textContent = 'Worth a conversation anyway - most people undervalue their own ' +
+        'hours, and the plan covers filing and deadlines too.';
+    }
+    planTagEl.innerHTML = 'Based on your answers: <b>' + rt(m.plan.name, currency) + '</b>, ' +
+      formatMoney(currency, m.plan.price[currency]) + m.plan.period;
+
+    /* what is at risk */
+    riskIntroEl.textContent = m.cfg.riskIntro;
+    riskListEl.innerHTML = m.cfg.risks.map(r =>
+      '<li><span>' + r.label + '</span><b>' + r.amount + '</b></li>').join('');
+    riskSrcEl.textContent = m.cfg.riskSrc;
+
+    /* the working out, in full */
+    workingEl.innerHTML =
+      '<p><b>Doing it yourself.</b> ' + m.hours + ' hours a month \u00d7 ' +
+        formatMoney(currency, m.rate) + ' an hour \u00d7 12 months = ' +
+        formatMoney(currency, m.diy) + ' a year. This is the value of your time, not money ' +
+        'leaving your account - but it is time you could have spent earning.</p>' +
+      '<p><b>' + (m.paying ? 'What you pay now.' : 'Paying a bookkeeper.') + '</b> ' +
+        (m.paying
+          ? formatMoney(currency, Math.max(0, Number(paidInput.value) || 0)) +
+            ' a month \u00d7 12 = ' + formatMoney(currency, m.hire) + ' a year, as you told us.'
+          : (m.hireHours < m.hours
+              ? 'A bookkeeper works faster than you do, so we assume about ' +
+                Math.round(m.hireHours) + ' hours a month rather than your ' + m.hours + '. '
+              : 'Most bookkeepers will not take on less than ' + m.cfg.hire.minHours +
+                ' hours a month, so that is what we have costed. ') +
+            'At ' + formatMoney(currency, m.cfg.hire.hourly) + ' an hour that is ' +
+            formatMoney(currency, m.hireHours * 12 * m.cfg.hire.hourly) + ' a year, plus ' +
+            formatMoney(currency, m.cfg.hire.softwarePerYear) + ' for software = ' +
+            formatMoney(currency, m.hire) + '. Putting someone on the payroll instead costs ' +
+            'considerably more once you add ' + (currency === 'gbp'
+              ? 'employer national insurance, pension, holiday and cover.'
+              : 'employer payroll taxes, benefits, paid time off and cover.')) +
+        '</p>' +
+      '<p><b>With Arbab Advisory.</b> The ' + rt(m.plan.name, currency) + ' plan at ' +
+        formatMoney(currency, m.plan.price[currency]) + ' a month \u00d7 12 = ' +
+        formatMoney(currency, m.ours) + ' a year. Fixed, and agreed before any work starts.</p>' +
+      '<p>Penalties are shown separately and are <b>not</b> added into any of the figures above, ' +
+        'because a penalty is a risk you carry rather than a cost you pay every year. ' +
+        'Every figure here is a starting point for a conversation, not a quote - ' +
+        'your final fee is confirmed after a free consultation.</p>';
+  }
+
+  /* ---------- inputs ---------- */
+  function syncHoursLabel(){
+    const h = Number(hoursInput.value);
+    hoursOut.textContent = h + (h === 1 ? ' hr' : ' hrs');
+  }
+  function syncRateLabel(){
+    rateOut.textContent = formatMoney(currency, Number(rateInput.value)) + '/hr';
+  }
+
+  hoursInput.addEventListener('input', () => { syncHoursLabel(); render(); });
+  rateInput.addEventListener('input', () => { rateTouched = true; syncRateLabel(); render(); });
+  paidInput.addEventListener('input', render);
+  payingCheck.addEventListener('change', () => {
+    payingField.classList.toggle('show', payingCheck.checked);
+    render();
+  });
+
+  /* ---------- region switch drives the calculator too ---------- */
+  function applyCurrencyToCalc(){
+    const cfg = CALC_CONFIG[currency];
+    const cur = CURRENCIES.find(c => c.id === currency);
+    rateInput.min = cfg.rate.min;
+    rateInput.max = cfg.rate.max;
+    rateInput.step = cfg.rate.step;
+    if (!rateTouched) rateInput.value = cfg.rate.def;
+    else rateInput.value = Math.min(cfg.rate.max, Math.max(cfg.rate.min, Number(rateInput.value)));
+    paidSymbol.textContent = cur.symbol;
+    syncRateLabel();
+  }
+  onCurrencyChange(() => { applyCurrencyToCalc(); paintSeg(); render(); });
+
+  applyCurrencyToCalc();
+  paintSeg();
+  syncHoursLabel();
+  render();
+
+  /* ---------- hand the numbers to the enquiry form ---------- */
+  document.getElementById('calcCta').addEventListener('click', () => {
+    const m = model();
+    const current = m.paying ? m.hire : m.diy;
+    const saving = Math.max(0, current - m.ours);
+    const msg = document.getElementById('f-msg');
+    if (!msg) return;
+    msg.value =
+      'I used the savings calculator on your site.\n\n' +
+      'Business type: ' + rt((CALC_TYPES.find(t => t.id === calcType) || {}).title, currency) + '\n' +
+      'Hours a month on the books: ' + m.hours + '\n' +
+      'My time is worth: ' + formatMoney(currency, m.rate) + '/hr\n' +
+      (m.paying ? 'Currently paying: ' + formatMoney(currency, Number(paidInput.value) || 0) + '/mo\n' : '') +
+      'It suggested: ' + rt(m.plan.name, currency) + ' (' + formatMoney(currency, m.plan.price[currency]) + '/mo)\n' +
+      'Estimated saving: ' + formatMoney(currency, saving) + ' a year\n\n' +
+      'Please can we go through this properly?';
+  });
+}
 
 /* ============================================================
    PILL / ARROW HOVER SPRINGS
@@ -2045,6 +3032,7 @@ const successText = document.getElementById('successText');
 const submitBtn = document.getElementById('submitBtn');
 const nameInput = document.getElementById('f-name');
 let modalOpen = false;
+let modalOpenedAt = 0;          /* used by the spam time-trap on submit */
 
 stackedHeading(document.getElementById('modal-title'), ["Let's Talk", 'Numbers'], { stagger: 90, duration: 800 });
 
@@ -2054,15 +3042,40 @@ const modalPanelSpring = springGroup({ opacity: 0, y: 28, scale: 0.96 }, { tensi
 hoverSpring(document.getElementById('modalClose'), document.querySelector('#modalClose svg'), { rotate: 0 }, { rotate: 90 }, { tension: 300, friction: 18 });
 hoverSpring(document.getElementById('menuClose'), document.querySelector('#menuClose svg'), { rotate: 0 }, { rotate: 90 }, { tension: 300, friction: 18 });
 
+/* The form area fades at whichever edge has more content beyond it, so it is
+   always obvious there is more to scroll - and never fades an edge that is
+   already at the end. */
+const modalBody = document.getElementById('modalBody');
+function syncModalScroll(){
+  if (!modalBody) return;
+  const overflow = modalBody.scrollHeight - modalBody.clientHeight;
+  if (overflow < 4){
+    modalBody.classList.remove('can-scroll', 'at-top', 'at-bottom');
+    return;
+  }
+  const top = modalBody.scrollTop <= 2;
+  const bottom = modalBody.scrollTop >= overflow - 2;
+  modalBody.classList.toggle('can-scroll', !top && !bottom);
+  modalBody.classList.toggle('at-top', top);
+  modalBody.classList.toggle('at-bottom', bottom);
+}
+if (modalBody){
+  modalBody.addEventListener('scroll', syncModalScroll, { passive: true });
+  window.addEventListener('resize', syncModalScroll);
+}
+
 function openModal(){
   if (modalOpen) return;
   modalOpen = true;
+  modalOpenedAt = Date.now();
   lockScroll();
   showOverlay(modal);
   modal.setAttribute('aria-hidden', 'false');
   modalBackdropSpring.to({ opacity: 1 });
   modalPanelSpring.to({ opacity: 1, y: 0, scale: 1 });
   playReveal(document.getElementById('modal-title'), { stagger: 90, duration: 800, easing: EASE.expo });
+  if (modalBody) modalBody.scrollTop = 0;
+  requestAnimationFrame(syncModalScroll);
   setTimeout(() => nameInput.focus(), 120);
 }
 function closeModal(){
@@ -2079,6 +3092,14 @@ function closeModal(){
     modalSuccess.classList.remove('show');
     submitBtn.disabled = false;
     submitBtn.textContent = 'Request a consultation';
+    document.getElementById('formError').classList.remove('show');
+    ['field-name', 'field-email', 'field-phone', 'field-consent'].forEach(id => {
+      const f = document.getElementById(id);
+      if (f) f.classList.remove('has-error');
+    });
+    countryTouched = false;
+    applyCountryFromRegion();
+    if (whenSel._cselect) whenSel._cselect.refresh();
   }, 350);
 }
 document.querySelectorAll('[data-open-modal]').forEach(b => b.addEventListener('click', openModal));
@@ -2087,21 +3108,322 @@ modalBackdrop.addEventListener('click', closeModal);
 document.getElementById('successDone').addEventListener('click', closeModal);
 document.getElementById('menuBook').addEventListener('click', () => { closeMenu(); setTimeout(openModal, 220); });
 
-modalForm.addEventListener('submit', (e) => {
-  e.preventDefault();                       // stub: never hits a network
+/* ============================================================
+   CONTACT FORM SUBMISSION
+
+   !! Arbab: paste your Formspree endpoint below and the form goes live.
+   Create a free form at formspree.io, point it at abdur@arbabadvisory.com,
+   and it gives you a URL that looks like https://formspree.io/f/abcdwxyz
+
+   Until that is filled in, the form falls back to opening the visitor's
+   email client with everything pre-written, so no enquiry is ever lost -
+   but the fallback is a poor experience, so set the endpoint before launch.
+   ============================================================ */
+const FORM_ENDPOINT = '';                    // <-- paste your Formspree URL here
+const CONTACT_EMAIL = 'abdur@arbabadvisory.com';
+
+/* ============================================================
+   CUSTOM SELECT
+
+   Turns a native <select> into a listbox we can actually style, keeping the
+   original element as the source of truth so form data, validation and the
+   existing JS that reads .value all carry on working untouched.
+   ============================================================ */
+const CSELECT_CHECK = `<svg class="cselect-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>`;
+const CSELECT_CHEV = `<svg class="cselect-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
+const openSelects = [];
+
+function enhanceSelect(sel){
+  if (!sel || sel._cselect) return null;
+  const opts = [...sel.options].map(o => ({ value: o.value, label: o.textContent.trim() }));
+
+  const wrap = document.createElement('div');
+  wrap.className = 'cselect';
+  sel.parentNode.insertBefore(wrap, sel);
+  wrap.appendChild(sel);
+  sel.classList.add('cselect-native');
+  sel.setAttribute('tabindex', '-1');
+  sel.setAttribute('aria-hidden', 'true');
+
+  const btnId = sel.id + '-btn';
+  const menuId = sel.id + '-menu';
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'cselect-btn';
+  btn.id = btnId;
+  btn.setAttribute('aria-haspopup', 'listbox');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-controls', menuId);
+  btn.innerHTML = '<span class="cselect-value"></span>' + CSELECT_CHEV;
+
+  const menu = document.createElement('ul');
+  menu.className = 'cselect-menu';
+  menu.id = menuId;
+  menu.setAttribute('role', 'listbox');
+
+  /* The caption described the native select, which is now hidden. Point it at
+     the button by name rather than with `for`: activating a label re-fires the
+     click on its control, and that second click would bubble out to the
+     close-on-outside-click handler and shut the menu as it opened. */
+  const field = sel.closest('.field');
+  const label = field && field.querySelector('label');
+  if (label){
+    label.removeAttribute('for');
+    if (!label.id) label.id = sel.id + '-label';
+    btn.setAttribute('aria-labelledby', label.id + ' ' + btnId);
+    menu.setAttribute('aria-labelledby', label.id);
+  }
+
+  const items = opts.map((o, i) => {
+    const li = document.createElement('li');
+    li.setAttribute('role', 'option');
+    li.dataset.value = o.value;
+    li.tabIndex = -1;
+    li.innerHTML = '<span class="cselect-opt-text">' + o.label + '</span>' + CSELECT_CHECK;
+    li.addEventListener('click', () => { choose(i); });
+    menu.appendChild(li);
+    return li;
+  });
+
+  wrap.appendChild(btn);
+  wrap.appendChild(menu);
+
+  let open = false;
+  let active = Math.max(0, opts.findIndex(o => o.value === sel.value));
+
+  function paint(){
+    const cur = opts.find(o => o.value === sel.value) || opts[0];
+    btn.querySelector('.cselect-value').textContent = cur ? cur.label : '';
+    items.forEach((li, i) => {
+      li.setAttribute('aria-selected', String(opts[i].value === sel.value));
+      li.classList.toggle('is-active', i === active && open);
+    });
+  }
+
+  /* open upward when the menu would fall outside the dialog's scroll area */
+  function placeMenu(){
+    wrap.classList.remove('up');
+    const holder = sel.closest('.modal-body');
+    const limit = holder ? holder.getBoundingClientRect().bottom
+                         : (window.innerHeight || document.documentElement.clientHeight);
+    const top = holder ? holder.getBoundingClientRect().top : 0;
+    const r = btn.getBoundingClientRect();
+    const needed = Math.min(menu.scrollHeight + 12, 14 * 16 + 12);
+    if (r.bottom + needed > limit && r.top - needed > top) wrap.classList.add('up');
+  }
+
+  function openMenu(){
+    if (open) return;
+    closeAllSelects();
+    open = true;
+    active = Math.max(0, opts.findIndex(o => o.value === sel.value));
+    placeMenu();
+    wrap.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    paint();
+    items[active] && items[active].focus();
+  }
+  function closeMenu(focusBtn){
+    if (!open) return;
+    open = false;
+    wrap.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    paint();
+    if (focusBtn) btn.focus();
+  }
+  function choose(i){
+    if (!opts[i]) return;
+    active = i;
+    sel.value = opts[i].value;
+    /* let anything already listening to the native element react as before */
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+    paint();
+    closeMenu(true);
+  }
+  function move(delta){
+    active = (active + delta + items.length) % items.length;
+    paint();
+    items[active].focus();
+  }
+
+  btn.addEventListener('click', (e) => { e.stopPropagation(); open ? closeMenu(true) : openMenu(); });
+  btn.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter' || e.key === ' '){
+      e.preventDefault(); openMenu();
+    }
+  });
+  menu.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown'){ e.preventDefault(); move(1); }
+    else if (e.key === 'ArrowUp'){ e.preventDefault(); move(-1); }
+    else if (e.key === 'Home'){ e.preventDefault(); active = 0; paint(); items[0].focus(); }
+    else if (e.key === 'End'){ e.preventDefault(); active = items.length - 1; paint(); items[active].focus(); }
+    else if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); choose(active); }
+    else if (e.key === 'Escape'){
+      /* stop this reaching the window handler, which would close the dialog */
+      e.preventDefault(); e.stopPropagation(); closeMenu(true);
+    }
+    else if (e.key === 'Tab'){ closeMenu(false); }
+  });
+
+  const api = { refresh: paint, close: () => closeMenu(false), isOpen: () => open };
+  sel._cselect = api;
+  openSelects.push(api);
+  paint();
+  return api;
+}
+function closeAllSelects(){ openSelects.forEach(a => a.close()); }
+document.addEventListener('click', closeAllSelects);
+window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllSelects(); });
+
+const emailInput   = document.getElementById('f-email');
+const phoneInput   = document.getElementById('f-phone');
+const countrySel   = document.getElementById('f-country');
+const whenSel      = document.getElementById('f-when');
+const msgInput     = document.getElementById('f-msg');
+const consentInput = document.getElementById('f-consent');
+const hpInput      = document.getElementById('f-company');
+const formError    = document.getElementById('formError');
+
+/* the country dropdown follows the region we detected, until they change it
+   themselves - after that it is theirs and we leave it alone */
+enhanceSelect(countrySel);
+enhanceSelect(whenSel);
+
+let countryTouched = false;
+/* only a real interaction counts - the region sync sets .value directly */
+countrySel.addEventListener('change', () => { countryTouched = true; });
+function applyCountryFromRegion(){
+  if (countryTouched) return;
+  countrySel.value = currency === 'gbp' ? 'United Kingdom' : 'United States';
+  if (countrySel._cselect) countrySel._cselect.refresh();
+}
+applyCountryFromRegion();
+onCurrencyChange(applyCountryFromRegion);
+
+function setFieldError(fieldId, on){
+  const f = document.getElementById(fieldId);
+  if (!f) return;
+  f.classList.toggle('has-error', on);
+  const input = f.querySelector('input, textarea');
+  if (input) input.setAttribute('aria-invalid', String(on));
+}
+
+/* deliberately loose - the job is to catch typos, not to police addresses */
+const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+/* any 7+ digits, however they choose to punctuate it */
+const isPhone = v => (v.replace(/[^0-9]/g, '').length >= 7);
+
+const CHECKS = [
+  { field: 'field-name',    input: nameInput,    ok: v => v.trim().length > 0 },
+  { field: 'field-email',   input: emailInput,   ok: v => isEmail(v.trim()) },
+  { field: 'field-phone',   input: phoneInput,   ok: v => isPhone(v) },
+  { field: 'field-consent', input: consentInput, ok: (v, el) => el.checked },
+];
+
+/* tell them as they leave a field, not only when they hit submit - but never
+   scold an empty field they have not filled in yet */
+CHECKS.forEach(({ field, input, ok }) => {
+  input.addEventListener('input',  () => setFieldError(field, false));
+  input.addEventListener('change', () => setFieldError(field, false));
+  input.addEventListener('blur', () => {
+    if (input.type === 'checkbox') return;
+    if (!input.value.trim()) return;
+    setFieldError(field, !ok(input.value, input));
+  });
+});
+
+function validateForm(){
+  let firstBad = null;
+  CHECKS.forEach(({ field, input, ok }) => {
+    const good = ok(input.value, input);
+    setFieldError(field, !good);
+    if (!good && !firstBad) firstBad = input;
+  });
+  if (firstBad){ firstBad.focus(); return null; }
+  return {
+    name: nameInput.value.trim(),
+    email: emailInput.value.trim(),
+    phone: phoneInput.value.trim(),
+    country: countrySel.value,
+    best_time: whenSel.value,
+    message: msgInput.value.trim(),
+  };
+}
+
+function mailtoFallback(data){
+  const subject = 'Consultation request - ' + data.name;
+  const body = [
+    data.message,
+    data.message ? '' : null,
+    'Name: ' + data.name,
+    'Email: ' + data.email,
+    'Phone: ' + data.phone,
+    'Based in: ' + data.country,
+    'Best time to call: ' + data.best_time,
+  ].filter(l => l !== null).join('\n');
+  window.location.href = 'mailto:' + CONTACT_EMAIL +
+    '?subject=' + encodeURIComponent(subject) +
+    '&body=' + encodeURIComponent(body);
+}
+
+function showSuccess(name){
+  const first = name.split(/\s+/)[0] || 'there';
+  modalForm.style.display = 'none';
+  requestAnimationFrame(syncModalScroll);
+  successText.textContent = `Thanks, ${first}. I'll call you within one business day \u2014 ` +
+    `and if now is not a good time, just say so and we will find one that is.`;
+  modalSuccess.classList.add('show');
+}
+
+modalForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  formError.classList.remove('show');
+
+  const data = validateForm();
+  if (!data) return;
+
+  /* two quiet spam guards, so nobody has to solve a puzzle to hire us:
+     a field only a bot would fill, and a form nobody could honestly
+     complete in under a second and a half */
+  if (hpInput.value) return;
+  if (Date.now() - modalOpenedAt < 1500) return;
+
+  /* no endpoint configured yet - hand it to their email client instead */
+  if (!FORM_ENDPOINT){
+    mailtoFallback(data);
+    showSuccess(data.name);
+    return;
+  }
+
   submitBtn.disabled = true;
   submitBtn.textContent = 'Sending…';
-  const first = (nameInput.value.trim().split(/\s+/)[0]) || 'there';
-  setTimeout(() => {
-    modalForm.style.display = 'none';
-    successText.textContent = `Thanks, ${first}. I'll be in touch shortly to schedule your consultation.`;
-    modalSuccess.classList.add('show');
-  }, 700);
+
+  try {
+    const res = await fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        ...data,
+        _subject: 'Consultation request - ' + data.name + ' (' + data.country + ')',
+        region: currency === 'gbp' ? 'UK pricing' : 'US pricing',
+        page: window.location.href,
+      }),
+    });
+    if (!res.ok) throw new Error('Request failed with status ' + res.status);
+    showSuccess(data.name);
+  } catch (err) {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Request a consultation';
+    formError.innerHTML = 'Sorry, that did not send. Please email us directly at ' +
+      '<a href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a> and we will pick it up straight away.';
+    formError.classList.add('show');
+  }
 });
 
 /* ESC closes */
 window.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
+  if (openSelects.some(a => a.isOpen())) return;   /* a dropdown gets first refusal */
   if (modalOpen) closeModal();
   else if (menuOpen) closeMenu();
 });
