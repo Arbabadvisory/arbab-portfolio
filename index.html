@@ -547,6 +547,67 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 .price-card.featured li svg{color:var(--brand-light)}
 .price-card .pill{margin-top:auto;justify-content:center;width:100%;padding-left:1.5rem;padding-top:.55rem;padding-bottom:.55rem}
 
+/* ---------- price lock / companion product / add-ons ---------- */
+.extras-kicker{
+  display:block;font-size:.65rem;font-weight:500;text-transform:uppercase;
+  letter-spacing:.12em;color:var(--brand);
+}
+.pricing-extras{display:grid;grid-template-columns:1fr;gap:1.25rem;margin-top:1.25rem}
+@media (min-width:900px){
+  .pricing-extras{grid-template-columns:1.45fr 1fr}
+  .pricing-extras.solo{grid-template-columns:1fr}
+}
+.lock-card,.bko-card{
+  background:var(--surface-card);border-radius:var(--radius-card);padding:2rem;
+}
+.lock-lead{font-size:.875rem;line-height:1.6;margin-top:.85rem;max-width:34rem}
+.lock-steps{
+  margin-top:1.5rem;display:flex;flex-direction:column;gap:1rem;
+  counter-reset:lock;list-style:none;
+}
+.lock-steps li{
+  position:relative;padding-left:2.25rem;font-size:.8125rem;line-height:1.6;
+  color:var(--ink-soft);counter-increment:lock;
+}
+.lock-steps li::before{
+  content:counter(lock);position:absolute;left:0;top:-.05rem;
+  width:1.5rem;height:1.5rem;border-radius:var(--radius-pill);
+  background:var(--brand-deep);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.6875rem;font-weight:500;
+}
+.lock-steps strong{color:var(--ink);font-weight:500}
+
+.bko-card{
+  display:flex;flex-direction:column;
+  border:1px solid var(--hairline);
+}
+.bko-card[hidden]{display:none}
+.bko-card h3{font-size:1.125rem;font-weight:500;margin-top:.85rem}
+.bko-price{display:flex;align-items:baseline;gap:.35rem;margin-top:.5rem}
+.bko-price b{font-size:2rem;font-weight:500;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.bko-price span{font-size:.8125rem;color:var(--ink-soft)}
+.bko-card p{font-size:.8125rem;line-height:1.6;color:var(--ink-soft);margin-top:.85rem}
+.bko-foot{margin-top:auto;padding-top:1rem;font-size:.75rem!important;opacity:.85}
+
+.addons{
+  margin-top:1.25rem;background:var(--surface-card);
+  border-radius:var(--radius-card);padding:2rem;
+}
+.addons-head p{font-size:.875rem;line-height:1.6;margin-top:.85rem;max-width:38rem;color:var(--ink-soft)}
+.addon-list{
+  margin-top:1.75rem;display:grid;grid-template-columns:1fr;gap:0;list-style:none;
+}
+@media (min-width:768px){.addon-list{grid-template-columns:1fr 1fr;column-gap:2.5rem}}
+.addon-list li{
+  display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
+  padding:.85rem 0;border-top:1px solid var(--hairline);font-size:.8125rem;line-height:1.5;
+}
+.addon-name{color:var(--ink)}
+.addon-name small{display:block;font-size:.6875rem;color:var(--ink-soft);margin-top:.2rem}
+.addon-price{flex:none;font-variant-numeric:tabular-nums;color:var(--brand-deep);font-weight:500}
+.addons-scope{font-size:.75rem;color:var(--ink-soft);line-height:1.6;margin-top:1.75rem}
+
 /* ============================================================
    5c) SAVINGS CALCULATOR
    ============================================================ */
@@ -1205,6 +1266,11 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   .price-card .plan-badge{right:1.35rem}
   .price-card .price b{font-size:2.25rem}
   .price-card .pill{padding:.6rem .6rem .6rem 1.5rem}
+  .pricing-extras{gap:1rem;margin-top:1rem}
+  .lock-card,.bko-card,.addons{padding:1.65rem 1.35rem;border-radius:1.5rem}
+  .addons{margin-top:1rem}
+  .lock-steps{gap:.85rem}
+  .bko-price b{font-size:1.75rem}
 
   /* footer */
   .site-footer{border-radius:1.5rem;padding:3rem 1.25rem}
@@ -1400,6 +1466,38 @@ main{width:100%;overflow-x:clip;padding:.5rem}
     </div>
 
     <div class="pricing-grid" id="pricingGrid"></div>
+
+    <!-- price lock, companion product and add-ons: everything that makes the
+         three numbers above quotable without a caveat -->
+    <div class="pricing-extras">
+      <div class="lock-card inview"
+           data-inview='{"from":{"opacity":0,"y":30},"to":{"opacity":1,"y":0},"config":{"tension":180,"friction":26}}'>
+        <span class="extras-kicker">The price-lock guarantee</span>
+        <p class="lock-lead" id="lockLead"></p>
+        <ol class="lock-steps" id="lockSteps"></ol>
+      </div>
+
+      <!-- UK only: the client who already has an accountant and only wants
+           their records kept straight -->
+      <div class="bko-card inview" id="bkoCard" hidden
+           data-inview='{"from":{"opacity":0,"y":30},"to":{"opacity":1,"y":0},"config":{"tension":180,"friction":26},"delayIn":120}'>
+        <span class="extras-kicker">Already have an accountant?</span>
+        <h3 id="bkoName"></h3>
+        <div class="bko-price"><b id="bkoPrice"></b><span>/mo</span></div>
+        <p id="bkoDesc"></p>
+        <p class="bko-foot" id="bkoFoot"></p>
+      </div>
+    </div>
+
+    <div class="addons" id="addons">
+      <div class="addons-head">
+        <span class="extras-kicker">Add-ons, if you need them</span>
+        <p id="addonsLead"></p>
+      </div>
+      <ul class="addon-list" id="addonList"></ul>
+      <p class="addons-scope" id="addonsScope"></p>
+    </div>
+
     <p class="pricing-note" id="pricingNote"></p>
   </section>
 
@@ -2132,76 +2230,177 @@ function notifyCurrency(){ currencySubs.forEach(fn => fn(currency)); }
 
 const PRICING_NOTE = 'Every business is different. The figures above are a starting point, and final pricing is confirmed after a free consultation.';
 
+/* The promise that makes the three prices above safe to quote on a call:
+   a cap that stretches before it costs anything, and a fee that cannot move
+   for six months. Written per region because the example cap differs. */
+const PRICE_LOCK = {
+  lead: {
+    gbp: 'Your plan is chosen on the transaction volume and services you actually need - ' +
+         'and then the number stops moving.',
+    usd: 'Your plan is chosen on the transaction volume and services you actually need - ' +
+         'and then the number stops moving.',
+  },
+  steps: {
+    gbp: [
+      'You are placed on a plan based on your transaction volume and the services you need at sign-up.',
+      'Your monthly fee is <strong>fixed for 6 months</strong>, and your transaction cap flexes up by ' +
+      '<strong>20%</strong> during that time - Growth\u2019s 120 effectively allows up to 144 a month - ' +
+      'before the \u00a31 overage rate applies at all.',
+      'Only volume that is <strong>consistently</strong> above that buffered cap, confirmed at your ' +
+      '6-month review, moves you to the next plan for the following term.',
+    ],
+    usd: [
+      'You are placed on a plan based on your transaction volume and the services you need at sign-up.',
+      'Your monthly fee is <strong>fixed for 6 months</strong>, and your transaction cap flexes up by ' +
+      '<strong>20%</strong> during that time - Growth\u2019s 200 effectively allows up to 240 a month - ' +
+      'before the $2 overage rate applies at all.',
+      'Only volume that is <strong>consistently</strong> above that buffered cap, confirmed at your ' +
+      '6-month review, moves you to the next plan for the following term. Seasonal swings on their own ' +
+      'never re-price you.',
+    ],
+  },
+};
+
+/* UK only. Someone who already has an accountant does not need VAT, payroll or
+   tax from us - pushing them onto Starter (cap too low) or Growth (paying for
+   work they already have) loses the client instead of winning them. */
+const BOOKKEEPING_ONLY = {
+  gbp: {
+    name: 'Bookkeeping-Only',
+    price: 125,
+    desc: 'Up to 100 transactions a month (then \u00a31 each). Expense categorisation and monthly ' +
+          'bank reconciliation, nothing more - your accountant keeps VAT, payroll and tax. The same ' +
+          '6-month price lock and 20% cap buffer apply.',
+    foot: 'One-off migration from spreadsheets - backfilling history, setting up your chart of ' +
+          'accounts - is quoted separately at \u00a330 an hour, never folded into the monthly fee.',
+  },
+  usd: null,
+};
+
+const ADDONS = {
+  lead: {
+    gbp: 'Everything below sits outside the plans, so nobody pays a bigger monthly fee for something ' +
+         'they need once a year.',
+    usd: 'Everything below sits outside the plans, so nobody pays a bigger monthly fee for something ' +
+         'they need once a year.',
+  },
+  items: {
+    gbp: [
+      { name: 'Extra transactions beyond your cap', note: 'All plans, after the 20% buffer', price: '\u00a31 each' },
+      { name: 'Payroll, per employee beyond the plan', note: 'Minimum \u00a325 a month', price: '\u00a37 /employee' },
+      { name: 'Quarterly VAT return filing', note: 'Starter only - included in Growth and Complete', price: '\u00a375 /quarter' },
+      { name: 'CT600 corporation tax return', note: 'Starter and Growth - included in Complete', price: '\u00a3180 /year' },
+      { name: 'Annual tax computation', note: 'Starter and Growth - included in Complete', price: '\u00a3120 /year' },
+      { name: 'Tax consultancy and advisory', note: 'All plans, beyond any included hours', price: '\u00a365 /hour' },
+      { name: 'Director self-assessment return', note: 'All plans', price: '\u00a3150 /return' },
+      { name: 'One-off catch-up or clean-up bookkeeping', note: 'For new sign-ups with a backlog', price: '\u00a330 /hour' },
+    ],
+    usd: [
+      { name: 'Extra transactions beyond your cap', note: 'All plans, after the 20% buffer', price: '$2 each' },
+      { name: 'Payroll, per employee beyond the plan', note: 'Minimum $40 a month', price: '$10 /employee' },
+      { name: 'Payroll tax filings (941/940, state)', note: 'Starter and Growth - included in Complete', price: '$75 /quarter' },
+      { name: 'Sales tax return filing', note: 'Starter and Growth - included in Complete', price: '$60 /return' },
+      { name: 'Accounting software integration', note: 'Starter and Growth - included in Complete', price: '$75 /month' },
+      { name: 'Job and project profitability tracking', note: 'Starter only - included in Growth and Complete', price: '$100 /month' },
+      { name: '1099 contractor filings', note: 'All plans, as needed', price: '$10 /form' },
+      { name: 'One-off catch-up or clean-up bookkeeping', note: 'For new sign-ups with a backlog', price: '$50 /hour' },
+    ],
+  },
+  /* the US scope line is not a disclaimer, it is the pitch: clean books make
+     their existing CPA cheaper, so we are never selling against that person */
+  scope: {
+    gbp: '',
+    usd: 'Income tax return preparation - Forms 1120, 1120-S, 1065 and Schedule C - stays with your ' +
+         'CPA. That is deliberate. You get books that are clean and ready, so whoever files your return ' +
+         'can do it faster and bill you for less time. Payroll tax and sales tax filings are handled here.',
+  },
+};
+
 const PLANS = [
   {
-    id: 'sole',
-    name: { gbp: 'Sole Trader', usd: 'Sole Proprietor' },
-    price: { gbp: 49, usd: 65 }, period: '/mo',
+    id: 'starter',
+    name: 'Starter',
+    price: { gbp: 99, usd: 199 }, period: '/mo',
     desc: {
-      gbp: 'For freelancers and sole traders who just need the basics covered.',
-      usd: 'For freelancers and single-member LLCs who just need the basics covered.',
+      gbp: 'For sole traders and micro businesses who need the basics done properly.',
+      usd: 'For owner-operators and freelancers who need the basics done properly.',
     },
     features: {
       gbp: [
-        'Bookkeeping (up to 100 transactions/mo)',
-        'Annual accounts',
-        'Self Assessment tax return',
-        'Email & phone support',
+        'Up to 40 transactions a month (then &pound;1 each)',
+        'Monthly bank reconciliation',
+        'Expense categorisation',
+        'Monthly P&amp;L and balance sheet',
+        'Cloud software set-up (Xero or QuickBooks)',
+        'Email support, 2 business day response',
       ],
       usd: [
-        'Bookkeeping (up to 100 transactions/mo)',
-        'Year-end financial statements',
-        'Schedule C pack, ready for your CPA',
-        'Email & phone support',
+        'Up to 100 transactions a month (then $2 each)',
+        'Monthly bank and credit card reconciliation',
+        'Expense categorisation',
+        'Monthly P&amp;L and balance sheet',
+        'QuickBooks Online or Xero set-up',
+        'Email support, 2 business day response',
       ],
     },
     featured: false,
   },
   {
-    id: 'ltd',
-    name: { gbp: 'Limited Company', usd: 'LLC & S-Corp' },
-    price: { gbp: 99, usd: 129 }, period: '/mo',
+    id: 'growth',
+    name: 'Growth',
+    price: { gbp: 159, usd: 399 }, period: '/mo',
     desc: {
       gbp: 'The most popular plan for small limited companies.',
-      usd: 'The most popular plan for small incorporated businesses.',
+      usd: 'The most popular plan for growing small businesses.',
     },
     features: {
       gbp: [
-        'Everything in Sole Trader',
-        'Corporation Tax return',
-        'Confirmation statement filing',
-        'VAT returns (quarterly)',
-        'Payroll for up to 3 employees',
+        'Up to 120 transactions a month (then &pound;1 each)',
+        'Everything in Starter, plus:',
+        'Quarterly VAT returns, MTD-compliant',
+        'Payroll for up to 2 employees',
+        'Monthly cashflow statement',
+        'Monthly management report',
+        'Priority email support, 1 business day',
       ],
       usd: [
-        'Everything in Sole Proprietor',
-        'Year-end close and workpapers for your CPA',
-        'Sales tax filings',
-        'Monthly reconciliations, reviewed line by line',
-        'Payroll for up to 3 employees',
+        'Up to 200 transactions a month (then $2 each)',
+        'Everything in Starter, plus:',
+        'Job and project profitability tracking',
+        'Cost breakdown: materials, labor, subcontractors',
+        'Payroll processing for up to 5 employees',
+        'Monthly cashflow statement and management reports',
+        'Priority email support, 1 business day',
       ],
     },
     featured: true,
   },
   {
-    id: 'growth',
-    name: 'Growth & Advisory',
-    price: { gbp: 199, usd: 259 }, period: '/mo',
-    desc: 'For growing businesses that want a finance partner, not just a filer.',
+    id: 'complete',
+    name: 'Complete',
+    price: { gbp: 239, usd: 799 }, period: '/mo',
+    desc: {
+      gbp: 'For growing companies that want full compliance handled end to end.',
+      usd: 'For established operations that want a finance partner, not just a filer.',
+    },
     features: {
       gbp: [
-        'Everything in Limited Company',
-        'Monthly management accounts',
-        'Quarterly strategy calls',
-        'Payroll for up to 10 employees',
-        'Priority turnaround on requests',
+        'Up to 250 transactions a month (then &pound;1 each)',
+        'Everything in Growth, plus:',
+        'Payroll for up to 5 employees',
+        'Annual CT600 corporation tax return',
+        'Annual tax computation',
+        'One hour of tax advice a month',
+        'Dedicated monthly review call',
       ],
       usd: [
-        'Everything in LLC & S-Corp',
-        'Monthly management reports',
-        'Quarterly strategy calls',
-        'Payroll for up to 10 employees',
-        'Priority turnaround on requests',
+        'Up to 400 transactions a month (then $2 each)',
+        'Everything in Growth, plus:',
+        'Financial planning and analysis',
+        'Payroll for up to 15 employees, with 941/940 and state filings',
+        'Sales tax return filing where required',
+        'Accounting and operations software integration',
+        'Dedicated monthly review call',
       ],
     },
     featured: false,
@@ -2514,6 +2713,49 @@ function paintRegionCopy(){
 paintRegionCopy();
 onCurrencyChange(paintRegionCopy);
 
+/* ---------- price lock, companion product, add-ons ----------
+   All three follow the region switcher with the cards. The UK-only
+   companion product is removed from the page entirely on US, rather than
+   greyed out - a visitor should never see an offer they cannot take. */
+const lockLead   = document.getElementById('lockLead');
+const lockSteps  = document.getElementById('lockSteps');
+const bkoCard    = document.getElementById('bkoCard');
+const addonList  = document.getElementById('addonList');
+const addonsLead = document.getElementById('addonsLead');
+const addonsScope= document.getElementById('addonsScope');
+
+function paintPricingExtras(){
+  if (lockLead)  lockLead.textContent = rt(PRICE_LOCK.lead, currency);
+  if (lockSteps) lockSteps.innerHTML = rt(PRICE_LOCK.steps, currency)
+    .map(step => `<li>${step}</li>`).join('');
+
+  const bko = BOOKKEEPING_ONLY[currency];
+  const extrasWrap = document.querySelector('.pricing-extras');
+  if (extrasWrap) extrasWrap.classList.toggle('solo', !bko);
+  if (bkoCard){
+    bkoCard.hidden = !bko;
+    if (bko){
+      document.getElementById('bkoName').textContent  = bko.name;
+      document.getElementById('bkoPrice').textContent = formatMoney(currency, bko.price);
+      document.getElementById('bkoDesc').textContent  = bko.desc;
+      document.getElementById('bkoFoot').textContent  = bko.foot;
+    }
+  }
+
+  if (addonsLead) addonsLead.textContent = rt(ADDONS.lead, currency);
+  if (addonList) addonList.innerHTML = rt(ADDONS.items, currency).map(a =>
+    `<li><span class="addon-name">${a.name}<small>${a.note}</small></span>` +
+    `<span class="addon-price">${a.price}</span></li>`).join('');
+
+  if (addonsScope){
+    const scope = rt(ADDONS.scope, currency);
+    addonsScope.textContent = scope;
+    addonsScope.hidden = !scope;
+  }
+}
+paintPricingExtras();
+onCurrencyChange(paintPricingExtras);
+
 /* ---------- currency switcher ---------- */
 const CURRENCY_CHECK_SVG = `<svg class="currency-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>`;
 
@@ -2681,17 +2923,17 @@ const CALC_CONFIG = {
 /* which plan we recommend for each answer, by PLANS id */
 const CALC_TYPES = [
   {
-    id: 'sole', plan: 'sole',
+    id: 'sole', plan: 'starter',
     title: { gbp: 'Sole trader', usd: 'Sole proprietor' },
     blurb: { gbp: 'Self-employed or freelance', usd: 'Freelance or single-member LLC' },
   },
   {
-    id: 'ltd', plan: 'ltd',
+    id: 'ltd', plan: 'growth',
     title: { gbp: 'Limited company', usd: 'LLC or S-Corp' },
     blurb: { gbp: 'Registered at Companies House', usd: 'Incorporated with your state' },
   },
   {
-    id: 'growth', plan: 'growth',
+    id: 'growth', plan: 'complete',
     title: 'Growing team',
     blurb: 'Staff on payroll',
   },
@@ -3111,15 +3353,16 @@ document.getElementById('menuBook').addEventListener('click', () => { closeMenu(
 /* ============================================================
    CONTACT FORM SUBMISSION
 
-   !! Arbab: paste your Formspree endpoint below and the form goes live.
-   Create a free form at formspree.io, point it at abdur@arbabadvisory.com,
-   and it gives you a URL that looks like https://formspree.io/f/abcdwxyz
+   The form posts to our own serverless function at /api/contact, which
+   sends the email through Resend. See api/contact.mjs for the why - the short
+   version is that the API key has to stay on the server, so the browser
+   never sees anything more secret than this path.
 
-   Until that is filled in, the form falls back to opening the visitor's
-   email client with everything pre-written, so no enquiry is ever lost -
-   but the fallback is a poor experience, so set the endpoint before launch.
+   Set FORM_ENDPOINT to '' to fall back to opening the visitor's email client
+   with everything pre-written. That fallback is a poor experience, but it is
+   there so an enquiry is never simply lost.
    ============================================================ */
-const FORM_ENDPOINT = '';                    // <-- paste your Formspree URL here
+const FORM_ENDPOINT = '/api/contact';
 const CONTACT_EMAIL = 'abdur@arbabadvisory.com';
 
 /* ============================================================
@@ -3404,9 +3647,12 @@ modalForm.addEventListener('submit', async (e) => {
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({
         ...data,
-        _subject: 'Consultation request - ' + data.name + ' (' + data.country + ')',
+        /* the function builds its own subject line - it does not trust ours */
         region: currency === 'gbp' ? 'UK pricing' : 'US pricing',
         page: window.location.href,
+        /* sent on purpose: a bot that fills every field, honeypot included,
+           is caught server-side too rather than only in the page */
+        _gotcha: hpInput.value,
       }),
     });
     if (!res.ok) throw new Error('Request failed with status ' + res.status);
