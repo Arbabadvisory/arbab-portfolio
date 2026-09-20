@@ -58,7 +58,15 @@ required to send, but it measurably improves the odds of landing in the inbox
 rather than spam — which matters when the email is a confirmation somebody is
 waiting on.
 
-## 4. Testing it
+## 4. Logo in the emails
+
+Both templates load the header logo from `https://arbabadvisory.com/images/logo.png`
+(see `LOGO_URL` in `contact.mjs`). That URL only resolves once the domain itself
+is pointed at this Vercel deployment — until then the logo will show as a
+broken image in any email sent. Not a blocker for verifying Resend or sending
+mail, just something to know about if a test email looks logo-less.
+
+## 5. Testing it
 
 - **Locally:** `npx vercel dev` runs the function on your machine. It reads a
   `.env.local` file in the project root — same three variables. Do not commit

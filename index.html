@@ -206,7 +206,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
 }
 @media (min-width:640px){.hero{height:calc(100svh - 1.5rem)}}
 .hero-bg{position:absolute;inset:0;z-index:-10;overflow:hidden}
-.hero-plate{position:absolute;left:0;right:0;top:-14%;height:112%;width:100%;will-change:transform}
+.hero-plate{position:absolute;left:0;right:0;top:-4%;height:108%;width:100%;will-change:transform}
 .hero-plate img{width:100%;height:100%;object-fit:cover}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,47,99,.1),rgba(15,47,99,0) 35%,rgba(15,47,99,.5))}
 
@@ -2415,11 +2415,11 @@ const heroTagline = document.getElementById('hero-tagline');
 buildClips(heroTitle, 'Numbers, Handled'.split(' '));
 buildClips(heroTagline, ['From daily transactions to', '<span class="tagline-highlight">$32M+</span> yearly businesses'], { block: true });
 
-/* hero parallax plate: 0% -> 12% */
+/* hero parallax plate: 0% -> 4% */
 const heroSection = document.getElementById('hero');
 const heroPlate = document.getElementById('heroPlate');
 registerParallax(heroSection, (p) => {
-  heroPlate.style.transform = `translateY(${(p * 12).toFixed(3)}%)`;
+  heroPlate.style.transform = `translateY(${(p * 4).toFixed(3)}%)`;
 });
 
 /* ============================================================
@@ -3200,6 +3200,10 @@ document.querySelectorAll('a[data-scroll]').forEach(a => {
     const target = document.querySelector(a.getAttribute('href'));
     if (!target) return;
     e.preventDefault();
+    /* links inside the menu overlay close it first - closing unlocks and
+       restarts Lenis, which must happen before scrollTo or the scroll
+       request is dropped while the page is still locked/stopped */
+    if (a.hasAttribute('data-menu-link') && typeof menuOpen !== 'undefined' && menuOpen) closeMenu();
     lenis.scrollTo(target, { offset: 0 });
   });
 });

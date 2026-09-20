@@ -27,6 +27,26 @@
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const DEFAULT_TO = 'abdur@arbabadvisory.com';
+const LOGO_URL = 'https://arbabadvisory.com/images/logo.png';
+
+/* shared shell: the site's surface/card/hairline palette, so a transactional
+   email still reads as Arbab Advisory rather than a generic notification */
+function emailShell(bodyHtml){
+  return (
+    '<div style="background:#f4f4f4;padding:40px 16px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif">' +
+      '<div style="max-width:520px;margin:0 auto">' +
+        '<img src="' + LOGO_URL + '" width="132" alt="Arbab Advisory" ' +
+          'style="display:block;margin:0 auto 28px;width:132px;height:auto" />' +
+        '<div style="background:#ffffff;border:1px solid #e6e8ec;border-radius:24px;padding:36px 32px">' +
+          bodyHtml +
+        '</div>' +
+        '<p style="margin:24px 0 0;text-align:center;color:#a3a9b3;font-size:11px;letter-spacing:.04em">' +
+          '&copy; ' + new Date().getFullYear() + ' Arbab Advisory' +
+        '</p>' +
+      '</div>' +
+    '</div>'
+  );
+}
 
 /* everything the visitor typed ends up inside an HTML email, so it is escaped
    before it reaches the markup - their name is not our markup */
@@ -94,16 +114,15 @@ function notificationEmail(d, from, to){
     /* hitting reply in the mail client answers the enquirer, not ourselves */
     reply_to: d.email,
     subject: 'Consultation request - ' + d.name + ' (' + d.country + ')',
-    html:
-      '<div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">' +
-        '<p style="margin:0 0 4px;color:#2563c9;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase">New enquiry</p>' +
-        '<h1 style="margin:0 0 24px;color:#0f2f63;font-size:22px;font-weight:600">' + esc(d.name) + ' would like a call</h1>' +
-        '<table style="width:100%;border-collapse:collapse">' + rows + '</table>' +
-        message +
-        '<p style="margin:28px 0 0;padding-top:20px;border-top:1px solid #e6e8ec;color:#717784;font-size:12px">' +
-          'Sent from the enquiry form at arbabadvisory.com. Reply to this email to answer ' + esc(d.name) + ' directly.' +
-        '</p>' +
-      '</div>',
+    html: emailShell(
+      '<p style="margin:0 0 4px;color:#2563c9;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase">New enquiry</p>' +
+      '<h1 style="margin:0 0 24px;color:#0f2f63;font-size:22px;font-weight:600">' + esc(d.name) + ' would like a call</h1>' +
+      '<table style="width:100%;border-collapse:collapse">' + rows + '</table>' +
+      message +
+      '<p style="margin:28px 0 0;padding-top:20px;border-top:1px solid #e6e8ec;color:#717784;font-size:12px">' +
+        'Sent from the enquiry form at arbabadvisory.com. Reply to this email to answer ' + esc(d.name) + ' directly.' +
+      '</p>'
+    ),
     text: [
       'New enquiry from ' + d.name, '',
       'Email: ' + d.email,
@@ -125,24 +144,22 @@ function autoReplyEmail(d, from){
     to: [d.email],
     reply_to: process.env.CONTACT_TO || DEFAULT_TO,
     subject: 'We have got your enquiry - Arbab Advisory',
-    html:
-      '<div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">' +
-        '<p style="margin:0 0 4px;color:#2563c9;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase">Arbab Advisory</p>' +
-        '<h1 style="margin:0 0 20px;color:#0f2f63;font-size:22px;font-weight:600">Thanks, ' + esc(first) + '.</h1>' +
-        '<p style="margin:0 0 16px;color:#0a0a0a;font-size:15px;line-height:1.65">' +
-          'Your request has come through and I have it in front of me. I will call you within ' +
-          'one business day, ' + esc(when) + ' as you asked.' +
-        '</p>' +
-        '<p style="margin:0 0 16px;color:#0a0a0a;font-size:15px;line-height:1.65">' +
-          'It is a free 30-minute call with no obligation. If it turns out you do not need us, ' +
-          'I will tell you that honestly rather than sell you something.' +
-        '</p>' +
-        '<p style="margin:0 0 24px;color:#0a0a0a;font-size:15px;line-height:1.65">' +
-          'If anything changes in the meantime, just reply to this email.' +
-        '</p>' +
-        '<p style="margin:0;padding-top:20px;border-top:1px solid #e6e8ec;color:#0f2f63;font-size:14px;font-weight:600">Arbab Abdur Rahman</p>' +
-        '<p style="margin:2px 0 0;color:#717784;font-size:13px">ACCA-qualified &middot; Arbab Advisory</p>' +
-      '</div>',
+    html: emailShell(
+      '<h1 style="margin:0 0 20px;color:#0f2f63;font-size:22px;font-weight:600">Thanks, ' + esc(first) + '.</h1>' +
+      '<p style="margin:0 0 16px;color:#0a0a0a;font-size:15px;line-height:1.65">' +
+        'Your request has come through and I have it in front of me. I will call you within ' +
+        'one business day, ' + esc(when) + ' as you asked.' +
+      '</p>' +
+      '<p style="margin:0 0 16px;color:#0a0a0a;font-size:15px;line-height:1.65">' +
+        'It is a free 30-minute call with no obligation. If it turns out you do not need us, ' +
+        'I will tell you that honestly rather than sell you something.' +
+      '</p>' +
+      '<p style="margin:0 0 24px;color:#0a0a0a;font-size:15px;line-height:1.65">' +
+        'If anything changes in the meantime, just reply to this email.' +
+      '</p>' +
+      '<p style="margin:0;padding-top:20px;border-top:1px solid #e6e8ec;color:#0f2f63;font-size:14px;font-weight:600">Arbab Abdur Rahman</p>' +
+      '<p style="margin:2px 0 0;color:#717784;font-size:13px">Founder &middot; Arbab Advisory</p>'
+    ),
     text:
       'Thanks, ' + first + '.\n\n' +
       'Your request has come through and I have it in front of me. I will call you within ' +
@@ -150,7 +167,7 @@ function autoReplyEmail(d, from){
       'It is a free 30-minute call with no obligation. If it turns out you do not need us, ' +
       'I will tell you that honestly rather than sell you something.\n\n' +
       'If anything changes in the meantime, just reply to this email.\n\n' +
-      'Arbab Abdur Rahman\nACCA-qualified - Arbab Advisory',
+      'Arbab Abdur Rahman\nFounder - Arbab Advisory',
   };
 }
 
