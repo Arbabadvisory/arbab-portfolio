@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Update <lastmod> on a page whenever its content meaningfully changes,
+     and add a <url> entry for every new public page. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://arbabadvisory.com/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <image:image>
+      <image:loc>https://arbabadvisory.com/images/og-image.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://arbabadvisory.com/privacy.html</loc>
+    <lastmod>2026-10-16</lastmod>
+  </url>
+  <url>
+    <loc>https://arbabadvisory.com/terms.html</loc>
+    <lastmod>2026-10-16</lastmod>
+  </url>
+</urlset>
