@@ -350,8 +350,10 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   position:relative;overflow:hidden;border-radius:var(--radius-card-lg);
   height:26rem;display:flex;align-items:flex-end;
 }
-@media (min-width:640px){.services-banner{height:36rem}}
-.services-banner-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+/* height follows width so a wide screen sees more of the photo rather than a
+   magnified strip of it - the source is only 1672px wide */
+@media (min-width:640px){.services-banner{height:clamp(30rem,52vw,46rem)}}
+.services-banner-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:65% 25%}
 .services-banner-overlay{
   position:absolute;inset:0;
   background:linear-gradient(to top, rgba(15,47,99,.55), rgba(15,47,99,.1) 55%, rgba(15,47,99,0));
@@ -1221,8 +1223,13 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   /* services */
   .programs{padding:3.75rem 1.25rem}
   .programs h2{font-size:2.5rem}
-  .services-banner{height:24rem;border-radius:1.5rem}
-  .services-banner-content{padding:1.75rem 1.35rem}
+  /* too narrow to lay text over the photo without hiding it, so the card
+     stacks: photo on top, uncovered, and the copy beneath on brand blue */
+  .services-banner{height:auto;flex-direction:column;align-items:stretch;border-radius:1.5rem;background:var(--brand-deep)}
+  .services-banner-img{position:static;height:auto;aspect-ratio:4/3;object-position:78% 25%}
+  .services-banner-overlay{display:none}
+  .services-banner-content{padding:1.75rem 1.35rem 2rem}
+  .services-banner-content h2{text-shadow:none}
   .services-banner-sub{margin-top:1.35rem;font-size:.875rem}
   .program-list{margin-top:2.5rem}
   .program-row button{gap:.85rem;padding:1.35rem 0}
@@ -1391,7 +1398,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
   <section class="programs" id="services">
     <div class="services-banner inview"
          data-inview='{"from":{"opacity":0,"scale":0.97},"to":{"opacity":1,"scale":1},"config":{"tension":200,"friction":24}}'>
-      <img class="services-banner-img" src="images/arbab4.webp" width="1536" height="1024" alt="Accounting concepts illustrated around Arbab Abdur Rahman" loading="lazy" decoding="async" />
+      <img class="services-banner-img" src="images/arbab7.webp" width="1672" height="941" alt="Arbab Abdur Rahman against a city skyline with financial charts" loading="lazy" decoding="async" />
       <div class="services-banner-overlay"></div>
       <div class="services-banner-content">
         <h2 id="programs-title"></h2>
@@ -1507,7 +1514,7 @@ main{width:100%;overflow-x:clip;padding:.5rem}
       <div class="calc-head">
         <h2 id="calc-title"></h2>
         <p class="calc-sub">Most people never add it up. Put your own numbers in and see what your
-          books are really costing you each year - in your time, or in someone else's wages.</p>
+          books are really costing you each year - and which plan would actually fit.</p>
       </div>
 
       <div class="calc-grid">
@@ -1519,6 +1526,16 @@ main{width:100%;overflow-x:clip;padding:.5rem}
           <div class="calc-q">
             <span class="calc-q-label" id="calcTypeLabel">What kind of business do you run?</span>
             <div class="calc-seg" role="radiogroup" aria-labelledby="calcTypeLabel" id="calcSeg"></div>
+          </div>
+
+          <div class="calc-q">
+            <div class="calc-row">
+              <label class="calc-q-label" for="calcTx">Transactions a month</label>
+              <output class="calc-val" id="calcTxOut" for="calcTx">60</output>
+            </div>
+            <input class="calc-range" type="range" id="calcTx" min="10" max="500" step="10" value="60" />
+            <p class="calc-hint">Every line on your bank and card statements - sales, bills, card
+              payments, transfers. This is what decides your plan.</p>
           </div>
 
           <div class="calc-q">
@@ -2319,6 +2336,7 @@ const ADDONS = {
 const PLANS = [
   {
     id: 'starter',
+    cap: { gbp: 40, usd: 100 },   /* monthly transactions - keep in step with the features list */
     name: 'Starter',
     price: { gbp: 99, usd: 199 }, period: '/mo',
     desc: {
@@ -2347,6 +2365,7 @@ const PLANS = [
   },
   {
     id: 'growth',
+    cap: { gbp: 120, usd: 200 },   /* monthly transactions - keep in step with the features list */
     name: 'Growth',
     price: { gbp: 159, usd: 399 }, period: '/mo',
     desc: {
@@ -2377,6 +2396,7 @@ const PLANS = [
   },
   {
     id: 'complete',
+    cap: { gbp: 250, usd: 400 },   /* monthly transactions - keep in step with the features list */
     name: 'Complete',
     price: { gbp: 239, usd: 799 }, period: '/mo',
     desc: {
@@ -2886,11 +2906,8 @@ const CALC_CONFIG = {
   gbp: {
     /* what an hour of the owner's time is worth */
     rate: { min: 15, max: 200, step: 5, def: 50 },
-    /* modelled cost of paying a bookkeeper to do the same work. Scaled to the
-       visitor's own workload, because a flat figure is indefensible for someone
-       spending two hours a month. A bookkeeper is quicker than the owner, so we
-       assume they need fewer hours, with a realistic monthly minimum. */
-    hire: { minHours: 4, efficiency: 0.75, hourly: 30, softwarePerYear: 360 },
+    /* per-transaction rate once volume is above even the largest plan's cap */
+    overage: 1,
     /* published penalties - quoted figures, confirm before launch */
     risks: [
       { label: 'Self Assessment filed one day late', amount: '\u00a3100' },
@@ -2906,7 +2923,7 @@ const CALC_CONFIG = {
   },
   usd: {
     rate: { min: 20, max: 300, step: 5, def: 75 },
-    hire: { minHours: 4, efficiency: 0.75, hourly: 45, softwarePerYear: 480 },
+    overage: 2,
     risks: [
       { label: 'Filing a return late', amount: '5% of the tax owed, per month' },
       { label: 'Capped at', amount: '25% of the tax owed' },
@@ -2920,7 +2937,8 @@ const CALC_CONFIG = {
   },
 };
 
-/* which plan we recommend for each answer, by PLANS id */
+/* the lowest plan each business type needs for its paperwork, by PLANS id.
+   Transaction volume can push the recommendation higher, never lower. */
 const CALC_TYPES = [
   {
     id: 'sole', plan: 'starter',
@@ -2942,6 +2960,8 @@ const CALC_TYPES = [
 const calcSection = document.getElementById('calculator');
 if (calcSection) {
   const segWrap     = document.getElementById('calcSeg');
+  const txInput     = document.getElementById('calcTx');
+  const txOut       = document.getElementById('calcTxOut');
   const hoursInput  = document.getElementById('calcHours');
   const hoursOut    = document.getElementById('calcHoursOut');
   const rateInput   = document.getElementById('calcRate');
@@ -2991,30 +3011,36 @@ if (calcSection) {
   }
 
   /* ---------- the maths ---------- */
-  function planFor(typeId){
+  /* the same rule the pricing section promises: the plan is set by the work
+     the business type needs AND the transaction volume - whichever is higher.
+     Volume above the largest cap stays on that plan and pays the overage rate. */
+  function planFor(typeId, tx){
     const wanted = (CALC_TYPES.find(t => t.id === typeId) || CALC_TYPES[1]).plan;
-    return PLANS.find(pl => pl.id === wanted) || PLANS[1];
+    const floor  = Math.max(0, PLANS.findIndex(pl => pl.id === wanted));
+    let i = floor;
+    while (i < PLANS.length - 1 && tx > PLANS[i].cap[currency]) i++;
+    return { plan: PLANS[i], byVolume: i > floor };
   }
 
   function model(){
     const cfg   = CALC_CONFIG[currency];
+    const tx    = Number(txInput.value);
     const hours = Number(hoursInput.value);
     const rate  = Number(rateInput.value);
-    const plan  = planFor(calcType);
+    const { plan, byVolume } = planFor(calcType, tx);
 
     const diy = hours * rate * 12;
 
-    /* if they told us what they already pay, use that - their real number always
-       beats our modelled one */
+    /* what they already pay, only if they told us - we never guess at
+       someone else's fees */
     const paying = payingCheck.checked;
-    const hireHours = Math.max(cfg.hire.minHours, hours * cfg.hire.efficiency);
-    const hire = paying
-      ? Math.max(0, Number(paidInput.value) || 0) * 12
-      : hireHours * 12 * cfg.hire.hourly + cfg.hire.softwarePerYear;
+    const paid = paying ? Math.max(0, Number(paidInput.value) || 0) * 12 : 0;
 
-    const ours = plan.price[currency] * 12;
+    const extraTx = Math.max(0, tx - plan.cap[currency]);
+    const monthly = plan.price[currency] + extraTx * cfg.overage;
+    const ours = monthly * 12;
 
-    return { cfg, hours, rate, plan, diy, hire, ours, paying, hireHours };
+    return { cfg, tx, hours, rate, plan, byVolume, extraTx, monthly, diy, paid, ours, paying };
   }
 
   /* ---------- painting the result ---------- */
@@ -3022,7 +3048,7 @@ if (calcSection) {
     const m = model();
 
     /* headline: whichever of the two they are actually doing today */
-    const current = m.paying ? m.hire : m.diy;
+    const current = m.paying ? m.paid : m.diy;
     kickerEl.textContent = m.paying
       ? 'Your books currently cost you about'
       : 'Doing it yourself costs you about';
@@ -3031,24 +3057,26 @@ if (calcSection) {
       ? 'a year, in fees on top of the ' + '<strong>' + m.hours + ' hours a month</strong> you still spend on it.'
       : 'a year - <strong>' + (m.hours * 12) + ' hours</strong> of your time, valued at what you say it is worth.';
 
-    /* three bars, scaled against the biggest one */
-    const rows = [
-      { name: m.paying ? 'What you pay now' : 'Hiring a bookkeeper',
-        amount: m.hire, ours: false,
-        note: m.paying
-          ? 'What you told us you pay, over a year.'
-          : 'About ' + Math.round(m.hireHours) + ' hours a month at ' +
-            formatMoney(currency, m.cfg.hire.hourly) + ' an hour, plus your software.' },
+    /* the bars, scaled against the biggest one. "What you pay now" only
+       appears when they have given us their real figure. */
+    const rows = [];
+    if (m.paying) rows.push({ name: 'What you pay now', amount: m.paid, ours: false,
+      note: 'What you told us you pay, over a year.' });
+    rows.push(
       { name: 'Doing it yourself', amount: m.diy, ours: false,
         note: m.hours + ' hours a month at ' + formatMoney(currency, m.rate) + ' an hour.' },
       { name: 'With Arbab Advisory - ' + rt(m.plan.name, currency), amount: m.ours, ours: true,
-        note: formatMoney(currency, m.plan.price[currency]) + ' a month, fixed and agreed upfront.' },
-    ];
+        note: m.extraTx
+          ? formatMoney(currency, m.plan.price[currency]) + ' a month plus ' + m.extraTx +
+            ' transactions over the cap at ' + formatMoney(currency, m.cfg.overage) + ' each.'
+          : formatMoney(currency, m.plan.price[currency]) + ' a month, fixed and agreed upfront.' },
+    );
     const top = Math.max(...rows.map(r => r.amount), 1);
 
     /* the bars are built once and updated in place - rebuilding them on every
-       slider move would restart the width transition and make dragging stutter */
-    if (!barsEl.children.length){
+       slider move would restart the width transition and make dragging stutter.
+       Only ticking "already paying" changes how many there are. */
+    if (barsEl.children.length !== rows.length){
       barsEl.innerHTML = rows.map(() =>
         '<div class="calc-bar">' +
           '<div class="calc-bar-head">' +
@@ -3075,7 +3103,7 @@ if (calcSection) {
     if (saving > 0){
       payoffEl.innerHTML = 'You would be <em>' + formatMoney(currency, saving) +
         ' a year</em> better off' + (m.paying ? '.' : ', and get ' + hoursBack + ' hours back.');
-      const hoursToPay = m.rate > 0 ? m.plan.price[currency] / m.rate : 0;
+      const hoursToPay = m.rate > 0 ? m.monthly / m.rate : 0;
       payoffSubEl.textContent = hoursToPay > 0 && hoursToPay <= m.hours
         ? 'The ' + rt(m.plan.name, currency) + ' plan pays for itself in the first ' +
           (hoursToPay < 1 ? 'hour' : (Math.round(hoursToPay * 10) / 10) + ' hours') +
@@ -3087,7 +3115,8 @@ if (calcSection) {
         'hours, and the plan covers filing and deadlines too.';
     }
     planTagEl.innerHTML = 'Based on your answers: <b>' + rt(m.plan.name, currency) + '</b>, ' +
-      formatMoney(currency, m.plan.price[currency]) + m.plan.period;
+      formatMoney(currency, m.plan.price[currency]) + m.plan.period +
+      (m.byVolume ? ' - your ' + m.tx + ' transactions a month need its higher cap' : '');
 
     /* what is at risk */
     riskIntroEl.textContent = m.cfg.riskIntro;
@@ -3101,25 +3130,26 @@ if (calcSection) {
         formatMoney(currency, m.rate) + ' an hour \u00d7 12 months = ' +
         formatMoney(currency, m.diy) + ' a year. This is the value of your time, not money ' +
         'leaving your account - but it is time you could have spent earning.</p>' +
-      '<p><b>' + (m.paying ? 'What you pay now.' : 'Paying a bookkeeper.') + '</b> ' +
-        (m.paying
-          ? formatMoney(currency, Math.max(0, Number(paidInput.value) || 0)) +
-            ' a month \u00d7 12 = ' + formatMoney(currency, m.hire) + ' a year, as you told us.'
-          : (m.hireHours < m.hours
-              ? 'A bookkeeper works faster than you do, so we assume about ' +
-                Math.round(m.hireHours) + ' hours a month rather than your ' + m.hours + '. '
-              : 'Most bookkeepers will not take on less than ' + m.cfg.hire.minHours +
-                ' hours a month, so that is what we have costed. ') +
-            'At ' + formatMoney(currency, m.cfg.hire.hourly) + ' an hour that is ' +
-            formatMoney(currency, m.hireHours * 12 * m.cfg.hire.hourly) + ' a year, plus ' +
-            formatMoney(currency, m.cfg.hire.softwarePerYear) + ' for software = ' +
-            formatMoney(currency, m.hire) + '. Putting someone on the payroll instead costs ' +
-            'considerably more once you add ' + (currency === 'gbp'
-              ? 'employer national insurance, pension, holiday and cover.'
-              : 'employer payroll taxes, benefits, paid time off and cover.')) +
+      (m.paying
+        ? '<p><b>What you pay now.</b> ' +
+            formatMoney(currency, Math.max(0, Number(paidInput.value) || 0)) +
+            ' a month \u00d7 12 = ' + formatMoney(currency, m.paid) + ' a year, as you told us.</p>'
+        : '') +
+      '<p><b>Choosing your plan.</b> The paperwork for your business type (' +
+        rt((CALC_TYPES.find(t => t.id === calcType) || {}).title, currency) +
+        ') starts on the ' + rt(planFor(calcType, 0).plan.name, currency) + ' plan. ' +
+        (m.byVolume
+          ? 'Your ' + m.tx + ' transactions a month are over that plan\u2019s cap, so we have moved you up to ' +
+            rt(m.plan.name, currency) + ', which covers ' + m.plan.cap[currency] + '. '
+          : 'Your ' + m.tx + ' transactions a month fit within its cap of ' + m.plan.cap[currency] + '. ') +
+        (m.extraTx
+          ? 'That is our largest plan, so the ' + m.extraTx + ' transactions above it are charged at ' +
+            formatMoney(currency, m.cfg.overage) + ' each. The 20% buffer in your price lock is not ' +
+            'counted here, so the real figure may be lower.'
+          : '') +
         '</p>' +
       '<p><b>With Arbab Advisory.</b> The ' + rt(m.plan.name, currency) + ' plan at ' +
-        formatMoney(currency, m.plan.price[currency]) + ' a month \u00d7 12 = ' +
+        formatMoney(currency, m.monthly) + ' a month \u00d7 12 = ' +
         formatMoney(currency, m.ours) + ' a year. Fixed, and agreed before any work starts.</p>' +
       '<p>Penalties are shown separately and are <b>not</b> added into any of the figures above, ' +
         'because a penalty is a risk you carry rather than a cost you pay every year. ' +
@@ -3136,6 +3166,12 @@ if (calcSection) {
     rateOut.textContent = formatMoney(currency, Number(rateInput.value)) + '/hr';
   }
 
+  function syncTxLabel(){
+    const t = Number(txInput.value);
+    txOut.textContent = t >= Number(txInput.max) ? t + '+' : String(t);
+  }
+
+  txInput.addEventListener('input', () => { syncTxLabel(); render(); });
   hoursInput.addEventListener('input', () => { syncHoursLabel(); render(); });
   rateInput.addEventListener('input', () => { rateTouched = true; syncRateLabel(); render(); });
   paidInput.addEventListener('input', render);
@@ -3160,23 +3196,25 @@ if (calcSection) {
 
   applyCurrencyToCalc();
   paintSeg();
+  syncTxLabel();
   syncHoursLabel();
   render();
 
   /* ---------- hand the numbers to the enquiry form ---------- */
   document.getElementById('calcCta').addEventListener('click', () => {
     const m = model();
-    const current = m.paying ? m.hire : m.diy;
+    const current = m.paying ? m.paid : m.diy;
     const saving = Math.max(0, current - m.ours);
     const msg = document.getElementById('f-msg');
     if (!msg) return;
     msg.value =
       'I used the savings calculator on your site.\n\n' +
       'Business type: ' + rt((CALC_TYPES.find(t => t.id === calcType) || {}).title, currency) + '\n' +
+      'Transactions a month: ' + m.tx + '\n' +
       'Hours a month on the books: ' + m.hours + '\n' +
       'My time is worth: ' + formatMoney(currency, m.rate) + '/hr\n' +
       (m.paying ? 'Currently paying: ' + formatMoney(currency, Number(paidInput.value) || 0) + '/mo\n' : '') +
-      'It suggested: ' + rt(m.plan.name, currency) + ' (' + formatMoney(currency, m.plan.price[currency]) + '/mo)\n' +
+      'It suggested: ' + rt(m.plan.name, currency) + ' (' + formatMoney(currency, m.monthly) + '/mo)\n' +
       'Estimated saving: ' + formatMoney(currency, saving) + ' a year\n\n' +
       'Please can we go through this properly?';
   });
